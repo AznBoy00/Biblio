@@ -49,6 +49,7 @@ Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Start
   [@Legendary-Griffin](https://github.com/Legendary-Griffin)  
   M.nizar.belhassan@gmail.com  
   27519443  
-- Nour El Natour  
+- Nour El Natour
+  [@nourelnatour] (https://github.com/nourelnatour)
   nour_elnatour@hotmail.com  
   40013102  
