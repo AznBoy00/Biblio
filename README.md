@@ -16,7 +16,7 @@ Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for information on how to get the project up and running. Or just visit the [website](https://soen343t5.herokuapp.com) to see the implementation.  
 
 ### Team Information:
-- Abdullah Alhaj Zen  
+- Abdulla Alhaj Zin  
   [@abdullahzen](https://github.com/abdullahzen)  
   abdullah.hzen@gmail.com  
   40013496  
