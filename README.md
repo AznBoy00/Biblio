@@ -6,7 +6,7 @@ Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 - Course Name: Software Architecture and Design I   
 - Website: [soen343t5.herokuapp.com](https://soen343t5.herokuapp.com)  
 - Framework: [Node.js](https://nodejs.org/en/) | [Express.js](https://expressjs.com)
-- Database: ?
+- Database: [MySQL] (https://www.mysql.com/)
 - Front-end Framework: [Bootstrap](https://getbootstrap.com)
 - Templating Engine: [Pug](https://pugjs.org/)
 - Hosting: [Heroku](https://www.heroku.com)  
