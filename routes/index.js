@@ -14,6 +14,14 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/login', function(req, res, next) {
+        res.render('components/login/login.ejs', { title: 'Express' });
+});
+
+router.get('/signup', function(req, res, next) {
+        res.render('components/login/signup.ejs', { title: 'Express' });
+});
+
 /* GET db page */
 router.get('/db', async (req, res) => {
 	try {
