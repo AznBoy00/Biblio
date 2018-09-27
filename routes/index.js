@@ -30,7 +30,7 @@ router.get('/usercp', function(req, res, next) {
 router.get('/manageusers', async (req, res) => {
 	try {
                 const client = await pool.connect()
-                const result = await client.query('SELECT * FROM users');
+                const result = await client.query('SELECT * FROM users ORDER BY userid');
                 const results = { 'results': (result) ? result.rows : null};
                 res.render('manageusers.ejs', results );
                 client.release();
@@ -38,19 +38,33 @@ router.get('/manageusers', async (req, res) => {
                 console.error(err);
                 res.send("Error " + err);
 	}
-})
+});
 
-// promote users to admin page
-router.get('/manageusers/promote/:userid', function(req, res, next) {
+// promote/demote users to admin page
+router.get('/manageusers/promote/:userid', async (req, res) => {
 	try {
                 const client = await pool.connect()
-                const result = await client.query("UPDATE users SET is_admin = 't' WHERE userid = ?" . userid);
-                res.redirect('/manageusers')
+                const result = await client.query("UPDATE users SET is_admin = 't' WHERE userid = ($1)", [req.params.userid]);
+                const fname = req.params.fname;
+                res.redirect('/manageusers');
                 client.release();
 	} catch (err) {
                 console.error(err);
                 res.send("Error " + err);
-        }
+	}
+});
+
+router.get('/manageusers/demote/:userid', async (req, res) => {
+	try {
+                const client = await pool.connect()
+                const result = await client.query("UPDATE users SET is_admin = 'f' WHERE userid = ($1)", [req.params.userid]);
+                const fname = req.params.fname;
+                res.redirect('/manageusers');
+                client.release();
+	} catch (err) {
+                console.error(err);
+                res.send("Error " + err);
+	}
 });
 
 // GET db page
@@ -65,6 +79,6 @@ router.get('/db', async (req, res) => {
                 console.error(err);
                 res.send("Error " + err);
 	}
-})
+});
 
 module.exports = router;
