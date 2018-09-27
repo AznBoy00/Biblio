@@ -14,10 +14,8 @@
 
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">Sign Up</div>
-                    <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="/login">Sign
-                            In</a></div>
-                    <div style="float:right; font-size: 85%; position:relative; top:-10px"><a id="usercplink" href="/usercp">UserCp|</a></div>
+                    <div class="panel-title">Personal</div>
+                    <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="manage_userlink" href="/manageusers">Manage Users(admin)</a></div>
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="post" action="/signup" onSubmit="return checkblank(this);">
@@ -29,13 +27,13 @@
                         <div class="form-group">
                             <label for="first_name" class="col-md-3 control-label">First Name</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="first_name" placeholder="First Name">
+                                <input type="text" class="form-control" name="first_name" placeholder="User First Name" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="last_name" class="col-md-3 control-label">Last Name</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="last_name" placeholder="Last Name">
+                                <input type="text" class="form-control" name="last_name" placeholder="User Last Name" disabled>
                             </div>
                         </div>
                         <div class="form-group">
@@ -51,9 +49,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="col-md-3 control-label">Password</label>
+                            <label for="password" class="col-md-3 control-label">New Password</label>
                             <div class="col-md-9">
-                                <input type="password" class="form-control" name="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password" placeholder="Enter new password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-md-3 control-label">Confirm New Password</label>
+                            <div class="col-md-9">
+                                <input type="password" class="form-control" name="password" placeholder="Re-enter new password">
                             </div>
                         </div>
 
@@ -61,7 +65,7 @@
                             <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
                                 <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i>
-                                    &nbsp Sign Up</button>
+                                    &nbsp Save</button>
                             </div>
                         </div>
                     </form>

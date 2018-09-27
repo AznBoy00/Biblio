@@ -22,6 +22,14 @@ router.get('/signup', function(req, res, next) {
         res.render('components/login/signup.ejs', { title: 'Express' });
 });
 
+router.get('/usercp', function(req, res, next) {
+		    res.render('components/login/usercp.ejs', { title: 'Express'});
+});
+
+router.get('/manageusers', function(req, res, next) {
+        res.render('components/login/manageusers.ejs', { title: 'Express'})
+})
+
 // GET db page
 router.get('/db', async (req, res) => {
 	try {

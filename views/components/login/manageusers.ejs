@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Site</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container col-sm-12" id="mainform">
+        <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Manage Users</div>
+                    <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="manage_userlink" href="/usercp">Personal</a></div>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="post" action="/signup" onSubmit="return checkblank(this);">
+
+                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                            <p>Error:</p>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name" class="col-md-3 control-label">Promote</label><br>
+                            <div class="col-md-9">
+                                <div>
+                                <fieldset>
+                                <div>
+                                    <legend>Select User(s) to promote</legend>
+                                    <select name="user_list" size="5" style="width:100px;" multiple>
+                                        <option value="nizar">Nizar</option>
+                                        <option value="kayne">Kayne</option>
+                                        <option value="kc">KevinC</option>
+                                        <option value="kl">KevinL</option>
+                                        <option value="ky">KevinY</option>
+                                        <option value="kenza">Kenza</option>
+                                        <option value="nour">Nour</option>
+                                        <option value="dave">Dave</option>
+                                        <option value="abdulla">Abdulla</option>
+                                        <option value="giovanny">Giovanny</option>
+                                    </select>
+                                </div>
+                                <div><button type="button" style="float:right; top:-50px;left: -400px; position:relative">Promote</button>
+                                    </div>
+                                </fieldset>
+                                </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-3 col-md-9">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
