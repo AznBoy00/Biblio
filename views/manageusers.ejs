@@ -32,8 +32,8 @@
                                     <%
                                         for(var i = 0; i<results.length; i++) {
                                     %>
-                                            <div><li value="name"><%= results[i].fname %> <%= results[i].lname %> | <%= results[i].email %> | <%= results[i].numpermitteditems %>
-                                                        <a href="/manageusers/promote/<%= results[i].userid %>" style="float: right">Promote <%= results[i].fname %> to Admin</button>
+                                            <div><li value="name"><%= results[i].fname %> <%= results[i].lname %> | <%= results[i].email %> | <%= results[i].address %> | <%= results[i].numpermitteditems %>
+                                                        <a href="/manageusers/promote/<%= results[i].userid %>" style="float: right">Promote <%= results[i].fname %> to Admin</a>
                                                 </li>
                                             </div>
                                     <% } %>
@@ -45,8 +45,8 @@
                         </div>
                         <div class="form-group">
                             <!-- Button -->
-                            <div class="col-md-offset-3 col-md-9">
-                            </div>
+                            <!-- <div class="col-md-offset-3 col-md-9">
+                            </div> -->
                         </div>
                     </form>
                 </div>

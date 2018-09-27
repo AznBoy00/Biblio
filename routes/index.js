@@ -26,7 +26,7 @@ router.get('/usercp', function(req, res, next) {
         res.render('usercp.ejs', { title: 'UserCP'});
 });
 
-// GET db page
+// manageusers page
 router.get('/manageusers', async (req, res) => {
 	try {
                 const client = await pool.connect()
@@ -39,6 +39,19 @@ router.get('/manageusers', async (req, res) => {
                 res.send("Error " + err);
 	}
 })
+
+// promote users to admin page
+router.get('/manageusers/promote/:userid', function(req, res, next) {
+	try {
+                const client = await pool.connect()
+                const result = await client.query("UPDATE users SET is_admin = 't' WHERE userid = ?" . userid);
+                res.redirect('/manageusers')
+                client.release();
+	} catch (err) {
+                console.error(err);
+                res.send("Error " + err);
+        }
+});
 
 // GET db page
 router.get('/db', async (req, res) => {
