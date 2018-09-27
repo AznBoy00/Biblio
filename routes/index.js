@@ -11,23 +11,23 @@ const pool = new Pool({
 
 // GET homepage
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Home' });
 });
 
 router.get('/login', function(req, res, next) {
-        res.render('components/login/login.ejs', { title: 'Express' });
+        res.render('login.ejs', { title: 'Login' });
 });
 
 router.get('/signup', function(req, res, next) {
-        res.render('components/login/signup.ejs', { title: 'Express' });
+        res.render('signup.ejs', { title: 'Register' });
 });
 
 router.get('/usercp', function(req, res, next) {
-		    res.render('components/login/usercp.ejs', { title: 'Express'});
+        res.render('usercp.ejs', { title: 'UserCP'});
 });
 
 router.get('/manageusers', function(req, res, next) {
-        res.render('components/login/manageusers.ejs', { title: 'Express'})
+        res.render('manageusers.ejs', { title: 'Manage Users'})
 })
 
 // GET db page

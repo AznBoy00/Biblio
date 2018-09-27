@@ -1,11 +1,10 @@
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Sample Site</title>
+    <title>Manage Users</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-
+    <% include navbar %>
 </head>
 
 <body>
@@ -30,27 +29,18 @@
                                 <div>
                                 <fieldset>
                                 <div>
-                                    <legend>Select User(s) to promote</legend>
-                                    <select name="user_list" size="5" style="width:100px;" multiple>
+                                    <legend>Select User to promote</legend>
+                                    <select name="user_list" size="10" style="width:100%;" multiple>
                                         <option value="nizar">Nizar</option>
                                         <option value="kayne">Kayne</option>
                                         <option value="kc">KevinC</option>
-                                        <option value="kl">KevinL</option>
-                                        <option value="ky">KevinY</option>
-                                        <option value="kenza">Kenza</option>
-                                        <option value="nour">Nour</option>
-                                        <option value="dave">Dave</option>
-                                        <option value="abdulla">Abdulla</option>
-                                        <option value="giovanny">Giovanny</option>
                                     </select>
                                 </div>
-                                <div><button type="button" style="float:right; top:-50px;left: -400px; position:relative">Promote</button>
+                                    <div><button type="button">Promote</button>
                                     </div>
                                 </fieldset>
-                                </div>
+                            </div>
                         </div>
-
-
                         <div class="form-group">
                             <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
