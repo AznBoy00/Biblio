@@ -1,9 +1,15 @@
 var express = require('express');
 var user = require('../models/users');
 var expressValidator = require('express-validator');
+var session = require('express-session');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 router.use(expressValidator());
+router.use(session({
+    secret : '2C44-4D44-WppQ38S',
+    resave : true,
+    saveUninitialized : true
+}));
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -42,5 +48,50 @@ router.post('/signup', function (req, res) {
     }
     res.render('index', { title: 'Home' });
 });
+
+//post for login
+router.post('/login', async function (req, res) {
+
+    var email = req.body.email;
+    var password = req.body.password;
+
+    req.checkBody('email', 'Email is required').notEmpty();
+    req.checkBody('password', 'Password is required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.render('login.ejs', { errors: errors});
+    }
+    else {
+        var userExists  = await user.userExists(email);
+        if (userExists){
+            var passwordIsCorrect = await user.checkPassword(email, password);
+            if (passwordIsCorrect){
+                var userRaw = await user.findUserByEmail(email);
+                var userInfo = await userRaw.rows[0];
+                req.session.logged = true;
+                req.session.fname = userInfo.fname;
+                req.session.phone = userInfo.phone;
+                req.session.address = userInfo.address;
+                req.session.email = userInfo.email;
+                req.session.is_admin = userInfo.is_admin;
+                res.redirect('/');
+            } else {
+                res.render('login.ejs', {msg: "Password Incorrect"});
+            }
+        } else {
+            res.render('login.ejs', {msg: "No such account"});
+        }
+    }
+
+});
+
+router.get("/logout", function(req, res){
+    console.log(req.session);
+    req.session.destroy();
+    console.log(req.session);
+    res.redirect('/');
+});
+
 
 module.exports = router;
