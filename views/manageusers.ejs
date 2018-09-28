@@ -13,37 +13,47 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="panel-title">Manage Users</div>
-                    <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="manage_userlink" href="/usercp">Personal</a></div>
+                    <div style="float:right; font-size: 85%; position: relative; top:-10px"></div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="post" action="/signup" onSubmit="return checkblank(this);">
+                    <form class="form-horizontal" role="form">
 
                         <div id="signupalert" style="display:none" class="alert alert-danger">
                             <p>Error:</p>
                             <span></span>
                         </div>
                         <div class="form-group">
-                            <label for="first_name" class="col-md-3 control-label">Promote</label><br>
                             <div class="col-md-9">
                                 <div>
                                 <fieldset>
                                 <div>
-                                    <legend>Select User to promote</legend>
-                                    <select name="user_list" size="10" style="width:100%;" multiple>
-                                        <option value="nizar">Nizar</option>
-                                        <option value="kayne">Kayne</option>
-                                        <option value="kc">KevinC</option>
-                                    </select>
+                                    <legend>Select User to Promote to Admin</legend>
+                                    <%
+                                        for(var i = 0; i < results.length; i++) {
+                                    %>
+                                            <div>
+                                                <li value="name"><%= results[i].userid %> | <%= results[i].fname %> <%= results[i].lname %> | <%= results[i].email %>
+                                                        <br /> <%= results[i].address %> | <%= results[i].numpermitteditems %> <br /> isAdmin: <%= results[i].is_admin %>
+                                                        <!-- USES BOOLEAN -->
+                                                        <% if(results[i].is_admin == false) { %>
+                                                            <a href="/manageusers/promote/<%= results[i].userid %>" style= "float: right">Promote <%= results[i].fname %> to Admin</a>
+                                                        <% } else { %>
+                                                            <a href="/manageusers/demote/<%= results[i].userid %>" style= "float: right">Demote <%= results[i].fname %> to Regular User</a>
+                                                        <% } %>
+                                                </li>
+                                                <br />
+                                            </div>
+                                    <% } %>
                                 </div>
-                                    <div><button type="button">Promote</button>
+                                    <!-- <div><button type="button">Promote</button> -->
                                     </div>
                                 </fieldset>
                             </div>
                         </div>
                         <div class="form-group">
                             <!-- Button -->
-                            <div class="col-md-offset-3 col-md-9">
-                            </div>
+                            <!-- <div class="col-md-offset-3 col-md-9">
+                            </div> -->
                         </div>
                     </form>
                 </div>
