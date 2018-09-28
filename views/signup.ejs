@@ -20,7 +20,7 @@
                     <div style="float:right; font-size: 85%; position:relative; top:-10px"><a id="usercplink" href="/usercp">UserCp|</a></div>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="post" action="/signup" onSubmit="return checkblank(this);">
+                    <form class="form-horizontal" role="form" method="post" action="/users/signup" onSubmit="return checkblank(this);">
 
                         <div id="signupalert" style="display:none" class="alert alert-danger">
                             <p>Error:</p>
@@ -39,15 +39,21 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="mob_no" class="col-md-3 control-label">Mobile Number</label>
+                            <label for="mobile_number" class="col-md-3 control-label">Mobile Number</label>
                             <div class="col-md-9">
-                                <input type="number" class="form-control" name="mob_no" placeholder="Mobile Number">
+                                <input type="number" class="form-control" name="mobile_number" placeholder="Mobile Number">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_name" class="col-md-3 control-label">User Name</label>
+                            <label for="address" class="col-md-3 control-label">Address</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="user_name" placeholder="User Name">
+                                <input type="text" class="form-control" name="address" placeholder="Address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-md-3 control-label">Email</label>
+                            <div class="col-md-9">
+                                <input type="email" class="form-control" name="email" placeholder="Email">
                             </div>
                         </div>
                         <div class="form-group">
