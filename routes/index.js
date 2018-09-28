@@ -1,3 +1,4 @@
+
 var express = require('express');
 var router = express.Router();
 
@@ -28,13 +29,13 @@ router.get('/usercp', function(req, res, next) {
 
 router.get('/manageusers', function(req, res, next) {
         res.render('manageusers.ejs', { title: 'Manage Users'})
-})
+});
 
 // GET db page
 router.get('/db', async (req, res) => {
 	try {
-                const client = await pool.connect()
-                const result = await client.query('SELECT * FROM test_table');
+                const client = await pool.connect();
+                const result = await client.query('SELECT * FROM Users');
                 const results = { 'results': (result) ? result.rows : null};
                 res.render('db', results );
                 client.release();
@@ -42,6 +43,6 @@ router.get('/db', async (req, res) => {
                 console.error(err);
                 res.send("Error " + err);
 	}
-})
+});
 
 module.exports = router;
