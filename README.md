@@ -24,7 +24,8 @@ Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Start
   [@WolfOfTheNorth](https://github.com/WolfOfTheNorth)  
   davebhardwaj1@gmail.com  
   40000679  
-- Giovanni Gebran  
+- Giovanni Gebran
+  [@ggebran](https://github.com/ggebran)
   ggebran95@gmail.com  
   40018637  
 - Kayne Herrmann  
