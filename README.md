@@ -28,14 +28,15 @@ Visit the [website](https://soen343t5.herokuapp.com) to see the project.
   davebhardwaj1@gmail.com  
   40000679  
 - Giovanni Gebran  
-  [@ggebran](https://github.com/ggebran)
+  [@ggebran](https://github.com/ggebran)  
   ggebran95@gmail.com  
   40018637  
-- Kayne Herrmann
+- Kayne Herrmann  
   [@kkhh001](https://github.com/kkhh001)  
   kh_group@outlook.com  
   40007153  
 - Kenza Boulisfane  
+  [@bkenza](https://github.com/bkenza)   
   kenza.boulisfane@gmail.com  
   40043521  
 - Kevin Camellini  
