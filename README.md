@@ -8,12 +8,15 @@ Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 - Framework: [Node.js](https://nodejs.org/en/) | [Express.js](https://expressjs.com)
 - Database: [MySQL] (https://www.mysql.com/)
 - Front-end Framework: [Bootstrap](https://getbootstrap.com)
-- Templating Engine: [Pug](https://pugjs.org/)
-- Hosting: [Heroku](https://www.heroku.com)  
-- CI: [Travis CI](https://travis-ci.com)   
+- Templating Engine: [EJS](http://www.ejs.co)
+- Hosting: [Heroku](https://dashboard.heroku.com/apps/soen343t5)  
+- CI: [Circle CI](https://circleci.com/gh/AznBoy00/soen343team5)  
+- [![CircleCI](https://circleci.com/gh/AznBoy00/soen343team5/tree/master.svg?style=svg&circle-token=8b92e6b3f8f6994e99d8be7c73902e9a46cada38)](https://circleci.com/gh/AznBoy00/soen343team5/tree/master)
 
 ### Getting Started
-Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for information on how to get the project up and running. Or just visit the [website](https://soen343t5.herokuapp.com) to see the implementation.  
+Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for information on how to get the project up and running.  
+
+Visit the [website](https://soen343t5.herokuapp.com) to see the project.  
 
 ### Team Information:
 - Abdulla Alhaj Zin  
@@ -24,14 +27,16 @@ Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Start
   [@WolfOfTheNorth](https://github.com/WolfOfTheNorth)  
   davebhardwaj1@gmail.com  
   40000679  
-- Giovanni Gebran
-  [@ggebran](https://github.com/ggebran)
+- Giovanni Gebran  
+  [@ggebran](https://github.com/ggebran)  
   ggebran95@gmail.com  
   40018637  
 - Kayne Herrmann  
+  [@kkhh001](https://github.com/kkhh001)  
   kh_group@outlook.com  
   40007153  
 - Kenza Boulisfane  
+  [@bkenza](https://github.com/bkenza)   
   kenza.boulisfane@gmail.com  
   40043521  
 - Kevin Camellini  
