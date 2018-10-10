@@ -5,7 +5,7 @@ const pool = new Pool({
     connectionString: connString,
     ssl: true
 });
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports.insertNewUser = async function(newUser) {
     try {

@@ -3,7 +3,7 @@ var user = require('../models/users');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 router.use(expressValidator());
 router.use(session({
     secret : '2C44-4D44-WppQ38S',
