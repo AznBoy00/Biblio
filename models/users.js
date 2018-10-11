@@ -32,14 +32,14 @@ module.exports.insertNewUser = async function(newUser) {
 };
 
 async function findUserByEmail(email){
-        try {
-            const client = await pool.connect();
-            const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
-            return await result;
-        } catch (err) {
-            console.error(err);
-            res.send("Error " + err);
-        }
+    try {
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+        return await result;
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
 };
 
 
