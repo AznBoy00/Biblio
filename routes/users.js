@@ -41,7 +41,7 @@ router.post('/signup', function (req, res) {
         res.render('signup.ejs', { errors: errors});
     }
     else {
-        let hash = bcrypt.hashSync(newUser.password, 10);
+        let hash = bcrypt.hashSync(newUser.password);
         newUser.password = hash;
         console.log(hash);
         user.insertNewUser(newUser);

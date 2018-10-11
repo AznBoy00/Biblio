@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 
@@ -28,7 +27,7 @@ router.get('/usercp', function(req, res, next) {
 });
 
 // manageusers page
-router.get('/manageusers', async (req, res) => {
+router.get('/admincp/manageusers', async (req, res) => {
 	try {
                 const client = await pool.connect()
                 const result = await client.query('SELECT * FROM users ORDER BY userid');
