@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <% include navbar %>
+</head>
+
+<body>
+    <div class="container col-sm-12" id="mainform">
+        <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Biblio -Printed and Media Items Catalog</div>
+                    <div style="float:right; font-size: 85%; position: relative; top:-10px"></div>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+
+                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                            <p>Error:</p>
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-9">
+                              <table style="width: 100%">
+                                <thead>
+                                  <tr>
+                                    <th>Item Name</th>
+                                    <th>Item Type</th>
+                                    <th>Available Quantity</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                <%
+                                    for(var i = 0; i < itemList.length; i++) { // to be changed to whatever the List or Array name
+                                %>
+                                  <tr>
+                                        <td><%= itemList[i].title %> </td>
+                                        <td><%= itemList[i].discriminator %> </td>
+                                        <td><%= itemList[i].quantity %> </td>
+                                    <tr>
+                                  </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Button -->
+                            <!-- <div class="col-md-offset-3 col-md-9">
+                            </div> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
