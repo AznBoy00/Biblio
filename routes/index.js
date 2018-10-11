@@ -26,6 +26,10 @@ router.get('/usercp', function(req, res, next) {
         res.render('usercp.ejs', { title: 'UserCP'});
 });
 
+router.get('/createitems', function(req, res, next) {
+        res.render('createitem.ejs', { title: 'CreateItem'});
+});
+
 // manageusers page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
