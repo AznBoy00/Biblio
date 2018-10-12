@@ -45,12 +45,12 @@ router.get('/admincp/manageusers', async (req, res) => {
 });
 
 // promote/demote users to admin page
-router.get('/manageusers/promote/:userid', async (req, res) => {
+router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
 	try {
                 const client = await pool.connect()
                 const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
                 const fname = req.params.fname;
-                res.redirect('/manageusers');
+                res.redirect('/admincp/manageusers');
                 client.release();
 	} catch (err) {
                 console.error(err);
@@ -58,12 +58,12 @@ router.get('/manageusers/promote/:userid', async (req, res) => {
 	}
 });
 
-router.get('/manageusers/demote/:userid', async (req, res) => {
+router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
 	try {
                 const client = await pool.connect()
                 const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
                 const fname = req.params.fname;
-                res.redirect('/manageusers');
+                res.redirect('/admincp/manageusers');
                 client.release();
 	} catch (err) {
                 console.error(err);
