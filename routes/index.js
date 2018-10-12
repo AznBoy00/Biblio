@@ -53,6 +53,10 @@ router.get('/catalog', async (req, res) => {
                 console.error(err);
                 res.send("Error " + err);
         }
+
+router.get('/createitems', function(req, res, next) {
+        res.render('createitem.ejs', { title: 'CreateItem'});
+
 });
 
 // manageusers page
