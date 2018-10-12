@@ -56,6 +56,10 @@ router.get('/catalog', async (req, res) => {
 
 });
 
+router.get('/createitems', function(req, res, next) {
+        res.render('createitem.ejs', { title: 'Create Item'});
+});
+
 router.get('/createitems/createBook', function(req, res, next) {
         res.render('createBook.ejs', { title: 'CreateBook'});
 });
