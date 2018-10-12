@@ -10,9 +10,16 @@
 </head>
 
 <body>
-  <div>
-    <% include selectItemType %>
-  </div>
+  <script>
+    $(function(){
+      var includes = $('[data-include]');
+      jQuery.each(includes, function(){
+        var file = 'views/' + $(this).data('include') + '.html';
+        $(this).load(file);
+      });
+    });
+  </script>
+  <div data-include="selectItemType"></div>
   <div class="container col-sm-12" id="mainform">
     <div id="createMusic" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
