@@ -14,3 +14,27 @@ var itemsList = [];
 
 //below is an example of using the constructor of the object
 // item.constructor(item_id, discriminator, properties (as an object));
+
+module.exports.insertNewUser = async function(newUser) {
+    try {
+        const client = await pool.connect();
+            const result = await client.query("INSERT INTO Users (password, phone, email, address, f_name, l_name) VALUES ('"
+                + newUser.password + "','"
+                + newUser.phone + "','"
+                + newUser.email+ "','"
+                + newUser.address + "','"
+                + newUser.fname + "','"
+                + newUser.lname + "')" ,function(err, result){
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log(result);
+                }
+            });
+
+    } catch (err) {
+        console.error(err);
+        res.send(err);
+    }
+};
