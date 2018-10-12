@@ -33,15 +33,46 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                <%
-                                    for(var i = 0; i < itemList.length; i++) { // to be changed to whatever the List or Array name
-                                %>
-                                  <tr>
-                                        <td><%= itemList[i].title %> </td>
-                                        <td><%= itemList[i].discriminator %> </td>
-                                        <td><%= itemList[i].quantity %> </td>
-                                    <tr>
+                                      <% console.log(lists.resultMagazines) %>
+                                        <%
+                                            for(var i = 0; i < list.resultMagazines.length; i++) { 
+                                        %>
+                                          <tr>
+                                                <td><%= list.resultMagazines[i].title %> </td>
+                                                <td><%= list.resultMagazines[i].discriminator %> </td>
+                                                <td><%= list.resultMagazines[i].quantity %> </td>
+                                            <tr>
+                                                <a href="/update/<%= list.resultMagazines[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMagazines[i].userid %>" style= "float: right">Delete</a>
+                                        <% } %>
                                   </tbody>
+                                  <tbody>
+                                        <%
+                                            for(var i = 0; i < list.resultMovies.length; i++) { 
+                                        %>
+                                          <tr>
+                                                <td><%= list.resultMovies[i].title %> </td>
+                                                <td><%= list.resultMovies[i].discriminator %> </td>
+                                                <td><%= list.resultMovies[i].quantity %> </td>
+                                            <tr>
+                                                <a href="/update/<%= list.resultMovies[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMovies[i].userid %>" style= "float: right">Delete</a>
+                                        <% } %>
+                                     </tbody>
+                                    <tbody>
+                                        <%
+                                            for(var i = 0; i < list.resultMusics.length; i++) { 
+                                        %>
+                                            <tr>
+                                                <td><%= list.resultMusics[i].title %> </td>
+                                                <td><%= list.resultMusics[i].discriminator %> </td>
+                                                <td><%= list.resultMusics[i].quantity %> </td>
+                                            <tr>
+                                                <a href="/update/<%= list.resultMusics[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMusics[i].userid %>" style= "float: right">Delete</a>
+                                        <% } %>
+                                    </tbody>
+
                                 </table>
                             </div>
                         </div>
