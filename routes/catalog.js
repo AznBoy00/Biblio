@@ -145,7 +145,7 @@ router.post('/update/:item_id/modify', async (req, res) => {
             ", isbn10 = " + newItem.isbn10 +
             ", isbn13 = " + newItem.isbn13 +
             " WHERE book_id = ($1)", [req.params.item_id]);
-        res.redirect('/catalog');
+        res.redirect('/');
         client.release();
     } catch (err) {
         console.error(err);
