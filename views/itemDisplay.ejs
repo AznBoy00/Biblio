@@ -33,50 +33,57 @@
                                   </tr>
                                   </thead>
                                   <tbody>
-                                      <% console.log(lists.resultMagazines) %>
-                                        <%
-                                            for(var i = 0; i < list.resultMagazines.length; i++) { 
-                                        %>
+                                        <% for(var i in list.resultMagazines.resultMagazines) { %>
                                           <tr>
-                                                <td><%= list.resultMagazines[i].title %> </td>
-                                                <td><%= list.resultMagazines[i].discriminator %> </td>
-                                                <td><%= list.resultMagazines[i].quantity %> </td>
+                                                
+                                                <td><%= list.resultMagazines.resultMagazines[i].title %> </td>
+                                                <td><%= list.resultMagazines.resultMagazines[i].discriminator %> </td>
+                                                <td><%= list.resultMagazines.resultMagazines[i].quantity %> </td>
                                             <tr>
-                                                <a href="/update/<%= list.resultMagazines[i].userid %>" style= "float: right">Update</a>
-                                                <a href="/delete/<%= list.resultMagazines[i].userid %>" style= "float: right">Delete</a>
+                                                <a href="/update/<%= list.resultMagazines.resultMagazines[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMagazines.resultMagazines[i].userid %>" style= "float: right">Delete</a>
                                         <% } %>
                                   </tbody>
                                   <tbody>
-                                        <%
-                                            for(var i = 0; i < list.resultMovies.length; i++) { 
-                                        %>
+                                        <% for(var i in list.resultMovies.resultMovies) { %>
                                           <tr>
-                                                <td><%= list.resultMovies[i].title %> </td>
-                                                <td><%= list.resultMovies[i].discriminator %> </td>
-                                                <td><%= list.resultMovies[i].quantity %> </td>
+                                                
+                                                <td><%= list.resultMovies.resultMovies[i].title %> </td>
+                                                <td><%= list.resultMovies.resultMovies[i].discriminator %> </td>
+                                                <td><%= list.resultMovies.resultMovies[i].quantity %> </td>
                                             <tr>
-                                                <a href="/update/<%= list.resultMovies[i].userid %>" style= "float: right">Update</a>
-                                                <a href="/delete/<%= list.resultMovies[i].userid %>" style= "float: right">Delete</a>
+                                                <a href="/update/<%= list.resultMovies.resultMovies[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMovies.resultMovies[i].userid %>" style= "float: right">Delete</a>
                                         <% } %>
-                                     </tbody>
-                                    <tbody>
-                                        <%
-                                            for(var i = 0; i < list.resultMusics.length; i++) { 
-                                        %>
+                                  </tbody>
+                                  <tbody>
+                                        <% for(var i in list.resultMusics.resultMusics) { %>
+                                          <tr>
+                                                
+                                                <td><%= list.resultMusics.resultMusics[i].title %> </td>
+                                                <td><%= list.resultMusics.resultMusics[i].discriminator %> </td>
+                                                <td><%= list.resultMusics.resultMusics[i].quantity %> </td>
                                             <tr>
-                                                <td><%= list.resultMusics[i].title %> </td>
-                                                <td><%= list.resultMusics[i].discriminator %> </td>
-                                                <td><%= list.resultMusics[i].quantity %> </td>
-                                            <tr>
-                                                <a href="/update/<%= list.resultMusics[i].userid %>" style= "float: right">Update</a>
-                                                <a href="/delete/<%= list.resultMusics[i].userid %>" style= "float: right">Delete</a>
+                                                <a href="/update/<%= list.resultMusics.resultMusics[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultMusics.resultMusics[i].userid %>" style= "float: right">Delete</a>
                                         <% } %>
-                                    </tbody>
-
+                                  </tbody>
+                                  <tbody>
+                                        <% for(var i in list.resultBooks.resultBooks) { %>
+                                          <tr>
+                                                
+                                                <td><%= list.resultBooks.resultBooks[i].title %> </td>
+                                                <td><%= list.resultBooks.resultBooks[i].discriminator %> </td>
+                                                <td><%= list.resultBooks.resultBooks[i].quantity %> </td>
+                                            <tr>
+                                                <a href="/update/<%= list.resultBooks.resultBooks[i].userid %>" style= "float: right">Update</a>
+                                                <a href="/delete/<%= list.resultBooks.resultBooks[i].userid %>" style= "float: right">Delete</a>
+                                        <% } %>
+                                  </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
                             <!-- Button -->
                             <!-- <div class="col-md-offset-3 col-md-9">
                             </div> -->
