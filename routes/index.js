@@ -37,13 +37,13 @@ router.get('/catalog', async (req, res) => {
                 const resultMusic = await client.query('SELECT * FROM music ');
                 
                 
-                resultBooks = { 'results': (resultBook) ? resultBook.rows : null};
+                list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
                 list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
                 list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
                 list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
                 
-                let lists = list;
-                res.render('itemDisplay.ejs', list);
+                // var lists = JSON.stringify(list)
+                res.render('itemDisplay.ejs', {list: list});
                 client.release();
                 // console.log(list.resultBooks);
                 // console.log(list.resultMagazines);
