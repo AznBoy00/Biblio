@@ -31,6 +31,7 @@ module.exports.insertNewUser = async function(newUser) {
     }
 };
 
+
 async function findUserByEmail(email){
     try {
         const client = await pool.connect();

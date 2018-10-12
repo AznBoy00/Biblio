@@ -1,0 +1,117 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Create Movie</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script>function redirect(){window.location="/";}</script>
+  <% include navbar %>
+</head>
+
+<body>
+
+  <div class="container col-sm-12" id="mainform">
+    <div id="createMovie" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <div class="panel-title">Create Movies</div>
+        </div>
+        <div class="panel-body">
+          <form class="form-horizontal" role="form" method="post" action="/signup" onSubmit="return checkblank(this);">
+
+            <div>
+              <div class="form-group">
+                <label for="movie_id" class="col-md-3 control-label"> Movie ID </label>
+                <div class="col-md-9">
+                  <input type="number" class="form-control" name="movieid" placeholder=" ID of the movie">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="quantity" class="col-md-3 control-label"> Quantity </label>
+                <div class="col-md-9">
+                  <input type="number" class="form-control" name="quantity" placeholder="quantity">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="title" class="col-md-3 control-label"> Title </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="title" placeholder="Title">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="director" class="col-md-3 control-label"> Director </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="director" placeholder="Director">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="producers" class="col-md-3 control-label"> Producers </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="producers" placeholder="Producers">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="language" class="col-md-3 control-label"> Language </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="language" placeholder="language">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="dubbed" class="col-md-3 control-label"> Dubbed </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="dubbed" placeholder="dubbed">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="subtitles" class="col-md-3 control-label"> Subtitles </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="subtitles" placeholder="subtitles">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="actors" class="col-md-3 control-label"> Actors </label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="actors" placeholder="actors">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="release_date" class="col-md-3 control-label"> Release date </label>
+                <div class="col-md-9">
+                  <input type="date" class="form-control" name="releaseDate" placeholder="YYYY-MM-DD">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="run_time" class="col-md-3 control-label"> Run time </label>
+                <div class="col-md-9">
+                  <input type="time" class="form-control" name="run_time" placeholder="38:59:59">
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <!-- Button -->
+                <div class="col-md-offset-3 col-md-9">
+                  <button id="btn-createmovies" type="submit" class="btn btn-info"><i class="icon-hand-right"></i>
+                    &nbsp Create</button>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
