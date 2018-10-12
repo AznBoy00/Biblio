@@ -1,4 +1,4 @@
-var item = require('./models/item');
+var item = require('../models/item');
 
 
 // DB connection
@@ -39,6 +39,5 @@ module.exports.insertNewBook = async function(newbook) {
 
     } catch (err) {
         console.error(err);
-        res.send(err);
     }
 };
