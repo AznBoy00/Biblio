@@ -32,13 +32,13 @@
                                         for(var i = 0; i < results.length; i++) {
                                     %>
                                             <div>
-                                                <li value="name"><%= results[i].userid %> | <%= results[i].fname %> <%= results[i].lname %> | <%= results[i].email %>
-                                                        <br /> <%= results[i].address %> | <%= results[i].numpermitteditems %> <br /> isAdmin: <%= results[i].is_admin %>
+                                                <li value="name"><%= results[i].user_id %> | <%= results[i].f_name %> <%= results[i].l_name %> | <%= results[i].email %>
+                                                        <br /> <%= results[i].address %> | <%= results[i].num_permitted_items %> <br /> isAdmin: <%= results[i].is_admin %>
                                                         <!-- USES BOOLEAN -->
                                                         <% if(results[i].is_admin == false) { %>
-                                                            <a href="/manageusers/promote/<%= results[i].userid %>" style= "float: right">Promote <%= results[i].fname %> to Admin</a>
+                                                            <a href="/admincp/manageusers/promote/<%= results[i].user_id %>" style= "float: right">Promote <%= results[i].f_name %> to Admin</a>
                                                         <% } else { %>
-                                                            <a href="/manageusers/demote/<%= results[i].userid %>" style= "float: right">Demote <%= results[i].fname %> to Regular User</a>
+                                                            <a href="/admincp/manageusers/demote/<%= results[i].user_id %>" style= "float: right">Demote <%= results[i].f_name %> to Regular User</a>
                                                         <% } %>
                                                 </li>
                                                 <br />
