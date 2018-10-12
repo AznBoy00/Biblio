@@ -10,11 +10,13 @@
 <style>
   .custom-select {
     margin: auto;
-    width: 400px;
-    height: 100px;
     position: absolute;
     top: 25%;
     left: 50%;
+}
+.options {
+  width: 400px;
+  height: 100px;
 }
 </style>
 </head>
@@ -22,8 +24,8 @@
 <body>
   <div class="custom-select">
     <h4>Select the item type to create</h4>
-    <select>
-
+    <select class=options>
+      <option value="type">SELECT ITEM TYPE</option>
       <option value="1">Book</option>
       <option value="2">Magazine</option>
       <option value="3">Music</option>
