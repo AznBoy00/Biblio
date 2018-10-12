@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt-nodejs');
 module.exports.insertNewUser = async function(newUser) {
     try {
         const client = await pool.connect();
-            const result = await client.query("INSERT INTO Users (password, phone, email, address, fname, lname) VALUES ('"
+            const result = await client.query("INSERT INTO Users (password, phone, email, address, f_name, l_name) VALUES ('"
                 + newUser.password + "','"
                 + newUser.phone + "','"
                 + newUser.email+ "','"

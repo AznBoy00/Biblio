@@ -34,7 +34,7 @@ router.get('/createitems', function(req, res, next) {
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
                 const client = await pool.connect()
-                const result = await client.query('SELECT * FROM users ORDER BY userid');
+                const result = await client.query('SELECT * FROM users ORDER BY user_id');
                 const results = { 'results': (result) ? result.rows : null};
                 res.render('manageusers.ejs', results );
                 client.release();
@@ -48,7 +48,7 @@ router.get('/admincp/manageusers', async (req, res) => {
 router.get('/manageusers/promote/:userid', async (req, res) => {
 	try {
                 const client = await pool.connect()
-                const result = await client.query("UPDATE users SET is_admin = 't' WHERE userid = ($1)", [req.params.userid]);
+                const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
                 const fname = req.params.fname;
                 res.redirect('/manageusers');
                 client.release();
@@ -61,7 +61,7 @@ router.get('/manageusers/promote/:userid', async (req, res) => {
 router.get('/manageusers/demote/:userid', async (req, res) => {
 	try {
                 const client = await pool.connect()
-                const result = await client.query("UPDATE users SET is_admin = 'f' WHERE userid = ($1)", [req.params.userid]);
+                const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
                 const fname = req.params.fname;
                 res.redirect('/manageusers');
                 client.release();
