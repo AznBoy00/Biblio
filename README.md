@@ -14,9 +14,19 @@ Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 - [![CircleCI](https://circleci.com/gh/AznBoy00/soen343team5/tree/master.svg?style=svg&circle-token=8b92e6b3f8f6994e99d8be7c73902e9a46cada38)](https://circleci.com/gh/AznBoy00/soen343team5/tree/master)
 
 ### Getting Started
-Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for information on how to get the project up and running.  
 
-Visit the [website](https://soen343t5.herokuapp.com) to see the project.  
+1. Clone the [repo](https://github.com/AznBoy00/soen343team5.git)
+1. `$ cd into/project/directory`
+1. `$ npm install`
+1. `$ npm start`
+1. visit [localhost:3000](http://localhost:3000) in your browser  
+
+or
+
+1. Visit [soen343t5.herokuapp.com](https://soen343t5.herokuapp.com) to view the live production website.  
+
+Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for more information on getting started.  
+
 
 ### Team Information:
 
