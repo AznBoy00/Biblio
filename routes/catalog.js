@@ -9,6 +9,7 @@ const pool = new Pool({
   	connectionString: connString,
   	ssl: true
 });
+
 // manageusers page
 router.get('/update/:item_id', async (req, res) => {
 	try {
@@ -61,7 +62,6 @@ router.post('/update/:item_id/modify', async (req, res) => {
         res.send("Error " + err);
     }
 });
-
 
 //keep the next line at the end of this script
 module.exports = router;
