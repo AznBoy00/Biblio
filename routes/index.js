@@ -30,6 +30,22 @@ router.get('/createitems', function(req, res, next) {
         res.render('createitem.ejs', { title: 'CreateItem'});
 });
 
+router.get('/createitems/createBook', function(req, res, next) {
+        res.render('createBook.ejs', { title: 'CreateBook'});
+});
+
+router.get('/createitems/createMagazine', function(req, res, next) {
+        res.render('createMagazine.ejs', { title: 'CreateMagazine'});
+});
+
+router.get('/createitems/createMusic', function(req, res, next) {
+        res.render('createMusic.ejs', { title: 'CreateMusic'});
+});
+
+router.get('/createitems/createMovie', function(req, res, next) {
+        res.render('createMovie.ejs', { title: 'CreateMovie'});
+});
+
 // manageusers page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
