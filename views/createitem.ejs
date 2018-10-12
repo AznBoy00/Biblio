@@ -7,32 +7,11 @@
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script>function redirect(){window.location="/";}</script>
   <% include navbar %>
-<style>
-  .custom-select {
-    margin: auto;
-    position: absolute;
-    top: 15%;
-    left: 40%;
-}
-.options {
-  width: 200px;
-  height: 50px;
-}
-</style>
+
 </head>
 
 <body>
-  <div class="custom-select">
-    <h5>Select the item type to create</h5>
-    <select class=options onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-      <option value="">Select type</option>
-      <option value="http://localhost:3000/createitems/createBook">Book</option>
-      <option value="http://localhost:3000/createitems/createMagazine">Magazine</option>
-      <option value="http://localhost:3000/createitems/createMusic">Music</option>
-      <option value="http://localhost:3000/createitems/createMovie">Movie</option>
-    </select>
-  </div>
-
+<% include selectItemType %>
 </body>
 
 </html>
