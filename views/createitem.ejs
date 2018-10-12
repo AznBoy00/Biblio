@@ -5,6 +5,7 @@
     <title>Create Item</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script>function redirect(){window.location="/";}</script>
     <% include navbar %>
 </head>
 
@@ -83,10 +84,10 @@
                     </div>
 
                         <div class="form-group">
-                            <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
-                                <button id="btn-signup" type="submit" class="btn btn-info"><i class="icon-hand-right"></i>
-                                    &nbsp Create</button>
+                                <button id="btn-signup" type="submit" class="btn btn-info" onclick="redirect()"><i class="icon-hand-right"></i>
+                                    &nbsp Create
+                                    </button>
                             </div>
                         </div>
                     </form>
