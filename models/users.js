@@ -32,40 +32,6 @@ module.exports.insertNewUser = async function(newUser) {
 };
 
 
-module.exports.insertNewBook = async function(newBook) {
-    try {
-        const client = await pool.connect();
-            const result = await client.query("INSERT INTO Books (book_id,discriminator,quantity,loand_period,loanable,title,author,format,pages,language,isbn10,isbn13) VALUES ('"
-                + newBook.book_id + "','"
-                + newBook.discriminator + "','"
-                + newBook.quantity+ "','"
-                + newBook.loand_period + "','"
-                + newBook.loanable + "','"
-                + newBook.title + "')"
-                + newBook.author + "','"
-                + newBook.format + "','"
-                + newBook.pages + "','"
-                + newBook.language + "','"
-                + newBook.isbn10 + "','"
-                + newBook.isbn13 + "','" ,function(err, result){
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    console.log(result);
-                }
-            });
-
-    } catch (err) {
-        console.error(err);
-        res.send(err);
-    }
-};
-
-
-
-
-
 async function findUserByEmail(email){
     try {
         const client = await pool.connect();
