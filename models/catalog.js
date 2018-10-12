@@ -15,23 +15,27 @@ var itemsList = [];
 //below is an example of using the constructor of the object
 // item.constructor(item_id, discriminator, properties (as an object));
 
-module.exports.insertNewUser = async function(newUser) {
+//insert new book
+module.exports.insertNewBook = async function(newbook) {
     try {
         const client = await pool.connect();
-            const result = await client.query("INSERT INTO Users (password, phone, email, address, f_name, l_name) VALUES ('"
-                + newUser.password + "','"
-                + newUser.phone + "','"
-                + newUser.email+ "','"
-                + newUser.address + "','"
-                + newUser.fname + "','"
-                + newUser.lname + "')" ,function(err, result){
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    console.log(result);
-                }
-            });
+        const result = await client.query("INSERT INTO Books (quantity, title, author, format, pages, publisher, language, isbn10, isbn13) VALUES ('"
+            + newbook.quantity + "','"
+            + newbook.title + "','"
+            + newbook.author+ "','"
+            + newbook.format + "','"
+            + newbook.pages + "','"
+            + newbook.publisher + "','"
+            + newbook.language + "','"
+            + newbook.isbn10 + "','"
+            + newbook.isbn13 + "')" ,function(err, result){
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(result);
+            }
+        });
 
     } catch (err) {
         console.error(err);
