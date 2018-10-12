@@ -26,8 +26,34 @@ router.get('/usercp', function(req, res, next) {
         res.render('usercp.ejs', { title: 'UserCP'});
 });
 
-router.get('/createitems', function(req, res, next) {
-        res.render('createitem.ejs', { title: 'CreateItem'});
+router.get('/catalog', async (req, res) => {
+        try {
+                const client = await pool.connect();
+
+                let list = [];
+                const resultBook = await client.query('SELECT * FROM books');
+                const resultMagazine = await client.query('SELECT * FROM magazines ');
+                const resultMovie = await client.query('SELECT * FROM movies ');
+                const resultMusic = await client.query('SELECT * FROM music ');
+                
+                
+                list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
+                list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
+                list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
+                list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
+                
+                // var lists = JSON.stringify(list)
+                res.render('itemDisplay.ejs', {list: list});
+                client.release();
+                // console.log(list.resultBooks);
+                // console.log(list.resultMagazines);
+                // console.log(list.resultMovies);
+                // console.log(list.resultMusics);
+        } catch (err) {
+                console.error(err);
+                res.send("Error " + err);
+        }
+
 });
 
 router.get('/createitems/createBook', function(req, res, next) {
