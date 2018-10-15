@@ -110,8 +110,7 @@ router.post('/login', async function (req, res) {
     var errors = req.validationErrors();
     if (errors) {
         res.render('login.ejs', { errors: errors});
-    }
-    else {
+    } else {
         var userExists  = await user.userExists(email);
         if (userExists){
             var passwordIsCorrect = await user.checkPassword(email, password);
