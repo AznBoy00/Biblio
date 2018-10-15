@@ -11,7 +11,7 @@ const pool = new Pool({
 
 // GET homepage
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home' });
+        res.render('index', { title: 'Home' });
 });
 
 router.get('/login', function(req, res, next) {
