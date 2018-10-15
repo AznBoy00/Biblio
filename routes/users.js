@@ -24,49 +24,64 @@ const pool = new Pool({
     ssl: true
 });
 
-// manageusers page
+// manageu sers page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
         const client = await pool.connect()
         const result = await client.query('SELECT * FROM users ORDER BY user_id');
         const results = { 'results': (result) ? result.rows : null};
-        res.render('manageusers.ejs', results );
+        res.render('manageusers', results );
         client.release();
 	} catch (err) {
-                console.error(err);
-                res.send("Error " + err);
+        console.error(err);
+        res.send("partials/_error" + err);
 	}
 });
 
 // promote/demote users to admin page
 router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
 	try {
-                const client = await pool.connect()
-                const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
-                const fname = req.params.fname;
-                res.redirect('/users/admincp/manageusers');
-                client.release();
+        const client = await pool.connect()
+        const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
+        const fname = req.params.fname;
+        res.redirect('/users/admincp/manageusers');
+        client.release();
 	} catch (err) {
-                console.error(err);
-                res.send("Error " + err);
+        console.error(err);
+        res.send("partials/_error" + err);
 	}
 });
 
 router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
 	try {
-                const client = await pool.connect()
-                const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
-                const fname = req.params.fname;
-                res.redirect('/users/admincp/manageusers');
-                client.release();
+        const client = await pool.connect()
+        const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
+        const fname = req.params.fname;
+        res.redirect('/users/admincp/manageusers');
+        client.release();
 	} catch (err) {
-                console.error(err);
-                res.send("Error " + err);
+        console.error(err);
+        res.send("partials/_error " + err);
 	}
 });
 
-//Post for Sign Up
-router.post('/signup', function (req, res) {
+// User/Admin login page
+router.get('/login', function(req, res, next) {
+    res.render('login.ejs', { title: 'Login' });
+});
+
+// User control panel page
+router.get('/usercp', function(req, res, next) {
+    res.render('usercp', { title: 'UserCP'});
+});
+
+// Registering a new user GET for request
+router.get('/register', function(req, res, next) {
+    res.render('register', { title: 'Register' });
+});
+
+// Registering a new user POST for request
+router.post('/register', function (req, res) {
 
     const newUser =
         {
@@ -87,7 +102,7 @@ router.post('/signup', function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('signup.ejs', { errors: errors});
+        res.render('register', { errors: errors, title: "Register"});
     }
     else {
         let hash = bcrypt.hashSync(newUser.password);
@@ -109,7 +124,7 @@ router.post('/login', async function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('login.ejs', { errors: errors});
+        res.render('login', { errors: errors});
     }
     else {
         var userExists  = await user.userExists(email);
@@ -126,10 +141,10 @@ router.post('/login', async function (req, res) {
                 req.session.is_admin = userInfo.is_admin;
                 res.redirect('/');
             } else {
-                res.render('login.ejs', {msg: "Password Incorrect"});
+                res.render('login', {msg: "Password Incorrect"});
             }
         } else {
-            res.render('login.ejs', {msg: "No such account"});
+            res.render('login', {msg: "No such account"});
         }
     }
 

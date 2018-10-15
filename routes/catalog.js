@@ -4,7 +4,6 @@ var router = express.Router();
 var expressValidator = require('express-validator');
 router.use(expressValidator());
 var catalog = require('../models/catalog');
-
 // DB connection
 var connString = 'postgres://hizxyalrympljm:3f4cd73544ce42e3aade5131e9d72f3d4032b8e69ac8fc37d8b8186cf3de4a3d@ec2-54-83-27-165.compute-1.amazonaws.com:5432/d6a0flgsl8bp0c' || process.env.DATABASE_URL;
 const { Pool } = require('pg');
@@ -13,58 +12,55 @@ const pool = new Pool({
   	ssl: true
 });
 
+// Catalog Page
 router.get('/', async (req, res) => {
     try {
-            const client = await pool.connect();
+        const title = 'catalog';
+        const client = await pool.connect();
 
-            let list = [];
-            const resultBook = await client.query('SELECT * FROM books');
-            const resultMagazine = await client.query('SELECT * FROM magazines ');
-            const resultMovie = await client.query('SELECT * FROM movies ');
-            const resultMusic = await client.query('SELECT * FROM music ');
-            
-            
-            list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
-            list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
-            list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
-            list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
-            
-            // var lists = JSON.stringify(list)
-            res.render('itemDisplay.ejs', {list: list});
-            client.release();
-            // console.log(list.resultBooks);
-            // console.log(list.resultMagazines);
-            // console.log(list.resultMovies);
-            // console.log(list.resultMusics);
+        let list = [];
+        const resultBook = await client.query('SELECT * FROM books');
+        const resultMagazine = await client.query('SELECT * FROM magazines ');
+        const resultMovie = await client.query('SELECT * FROM movies ');
+        const resultMusic = await client.query('SELECT * FROM music ');
+        
+        
+        list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
+        list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
+        list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
+        list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
+        
+        res.render('catalog', {list: list, title: 'Catalog'});
+        client.release();
     } catch (err) {
-            console.error(err);
-            res.send("Error " + err);
+        console.error(err);
+        res.send("partials/_error " + err);
     }
 
 });
 
+// Create a new item page
 router.get('/createitems', function(req, res, next) {
-    res.render('createitem.ejs', { title: 'Create Item'});
+    res.render('createitem', { title: 'Create Item'});
 });
-
+// Create a new book 
 router.get('/createitems/createBook', function(req, res, next) {
-    res.render('createBook.ejs', { title: 'CreateBook'});
+    res.render('createBook', { title: 'Create Book'});
 });
-
+// Create a new magazine 
 router.get('/createitems/createMagazine', function(req, res, next) {
-    res.render('createMagazine.ejs', { title: 'CreateMagazine'});
+    res.render('createMagazine', { title: 'Create Magazine'});
 });
-
+// Create a music 
 router.get('/createitems/createMusic', function(req, res, next) {
-    res.render('createMusic.ejs', { title: 'CreateMusic'});
+    res.render('createMusic', { title: 'CreateMusic'});
 });
-
+// Create a new movie 
 router.get('/createitems/createMovie', function(req, res, next) {
-    res.render('createMovie.ejs', { title: 'CreateMovie'});
+    res.render('createMovie', { title: 'Create Movie'});
 });
 
-
-//Post for create book
+// Create a new book: Post request
 router.post('/createitems/createbook', function (req, res) {
 
     const newbook =
@@ -92,12 +88,12 @@ router.post('/createitems/createbook', function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('createBook.ejs', { errors: errors});
+        res.render('createBook', { errors: errors});
     } else {
         console.log(newbook);
         catalog.insertNewBook(newbook);
     }
-    res.redirect('/catalog');
+    res.render('catalog', {title: 'Catalog'});
 });
 
 // update book
@@ -106,11 +102,11 @@ router.get('/update/:item_id', async (req, res) => {
         const client = await pool.connect()
         const result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [req.params.item_id]);
         const results = { 'results': (result) ? result.rows : null};
-        res.render('updateitem.ejs', results );
+        res.render('updateitem', results );
         client.release();
 	} catch (err) {
         console.error(err);
-        res.send("Error " + err);
+        res.send("partials/_error " + err);
 	}
 });
 //Post method for updating an item
@@ -149,7 +145,7 @@ router.post('/update/:item_id/modify', async (req, res) => {
         client.release();
     } catch (err) {
         console.error(err);
-        res.send("Error " + err);
+        res.send("partials/_error " + err);
     }
 });
 

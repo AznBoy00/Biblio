@@ -14,30 +14,4 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Home' });
 });
 
-router.get('/login', function(req, res, next) {
-        res.render('login.ejs', { title: 'Login' });
-});
-
-router.get('/signup', function(req, res, next) {
-        res.render('signup.ejs', { title: 'Register' });
-});
-
-router.get('/usercp', function(req, res, next) {
-        res.render('usercp.ejs', { title: 'UserCP'});
-});
-
-// test DB
-router.get('/db', async (req, res) => {
-	try {
-                const client = await pool.connect();
-                const result = await client.query('SELECT * FROM Users');
-                const results = { 'results': (result) ? result.rows : null};
-                res.render('db', results );
-                client.release();
-	} catch (err) {
-                console.error(err);
-                res.send("Error " + err);
-	}
-});
-
 module.exports = router;

@@ -1,0 +1,21 @@
+<!-- Page that gets generated with errors -->
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <%- include('_header'); -%>
+</head>
+
+<body>
+    <%- include('_navbar'); -%>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1><%= message %></h1>
+                <h2 class="text-danger"><%= error.status %></h2>
+                <pre><%= error.stack %></pre>
+            </div>
+        </div>
+    </div>
+    <%- include('_footer'); -%>        
+</body>
+</html>
