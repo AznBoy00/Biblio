@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('../partials/_navbar'); -%>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <h2>List of Items in the Catalog</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Type</th>
+                            <th>Available Quantity</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i in list.resultMagazines.resultMagazines) { %>
+                            <tr>
+                                <td><%= list.resultMagazines.resultMagazines[i].title %></td>
+                                <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
+                                <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
+                                <td><a href="catalog/update/<%= list.resultMagazines.resultMagazines[i].magazine_id %>" style= "float: right">Update</a></td>
+                                <td><a href="catalog/delete/<%= list.resultMagazines.resultMagazines[i].magazine_id %>" style= "float: right">Delete</a></td>
+                            </tr>
+                        <% } %>
+
+                        <% for(var i in list.resultMovies.resultMovies) { %>
+                            <tr>
+                                <td><%= list.resultMovies.resultMovies[i].title %></td>
+                                <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
+                                <td><%= list.resultMovies.resultMovies[i].quantity %></td>
+                                <td><a href="catalog/update/<%= list.resultMovies.resultMovies[i].movie_id %>" style= "float: right">Update</a></td>
+                                <td><a href="catalog/delete/<%= list.resultMovies.resultMovies[i].movie_id %>" style= "float: right">Delete</a></td>
+                                </tr>   
+                        <% } %>
+
+                        <% for(var i in list.resultMusics.resultMusics) { %>
+                            <tr>
+                                
+                                <td><%= list.resultMusics.resultMusics[i].title %></td>
+                                <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
+                                <td><%= list.resultMusics.resultMusics[i].quantity %></td>
+                                <td><a href="catalog/update/<%= list.resultMusics.resultMusics[i].music_id %>" style= "float: right">Update</a></td>
+                                <td><a href="catalog/delete/<%= list.resultMusics.resultMusics[i].music_id %>" style= "float: right">Delete</a></td>
+                            </tr>
+                        <% } %>
+
+                        <% for(var i in list.resultBooks.resultBooks) { %>
+                            <tr> 
+                                <td><%= list.resultBooks.resultBooks[i].title %></td>
+                                <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
+                                <td><%= list.resultBooks.resultBooks[i].quantity %></td>
+                                <td><a href="catalog/updatebook/<%= list.resultBooks.resultBooks[i].book_id %>" style= "float: right">Update</a></td>
+                                <td><a href="catalog/delete/<%= list.resultBooks.resultBooks[i].book_id %>" style= "float: right">Delete</a></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+			</div>
+			<!-- ./ end col -->
+		</div>
+		<!-- ./ end row -->
+
+	</div>
+	<!-- ./ end container -->
+	<%- include('../partials/_footer') -%>   
+</body>
+
+</html>

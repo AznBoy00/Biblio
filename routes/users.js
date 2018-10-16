@@ -1,3 +1,4 @@
+// Config Variables
 var express = require('express');
 var user = require('../models/users');
 var expressValidator = require('express-validator');
@@ -10,12 +11,6 @@ router.use(session({
     resave : true,
     saveUninitialized : true
 }));
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
-});
-
 // DB connection
 var connString = 'postgres://hizxyalrympljm:3f4cd73544ce42e3aade5131e9d72f3d4032b8e69ac8fc37d8b8186cf3de4a3d@ec2-54-83-27-165.compute-1.amazonaws.com:5432/d6a0flgsl8bp0c' || process.env.DATABASE_URL;
 const { Pool } = require('pg');
@@ -24,17 +19,22 @@ const pool = new Pool({
     ssl: true
 });
 
-// manageu sers page
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+    res.send('respond with a resource');
+});
+
+// manage users page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
         const client = await pool.connect()
-        const result = await client.query('SELECT * FROM users ORDER BY user_id');
+        const result = await client.query('SELECT * FROM users ORDER BY user_id ASC');
         const results = { 'results': (result) ? result.rows : null};
-        res.render('manageusers', results );
+        res.render('users/manageusers', {results, title: 'Admin CP'} );
         client.release();
 	} catch (err) {
         console.error(err);
-        res.send("partials/_error" + err);
+        res.send("error" + err);
 	}
 });
 
@@ -48,7 +48,7 @@ router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
         client.release();
 	} catch (err) {
         console.error(err);
-        res.send("partials/_error" + err);
+        res.send("error" + err);
 	}
 });
 
@@ -61,37 +61,36 @@ router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
         client.release();
 	} catch (err) {
         console.error(err);
-        res.send("partials/_error " + err);
+        res.send("error " + err);
 	}
 });
 
 // User/Admin login page
 router.get('/login', function(req, res, next) {
-    res.render('login.ejs', { title: 'Login' });
+    res.render('users/login', { title: 'Login' });
 });
 
 // User control panel page
 router.get('/usercp', function(req, res, next) {
-    res.render('usercp', { title: 'UserCP'});
+    res.render('users/usercp', { title: 'User CP'});
 });
 
 // Registering a new user GET for request
 router.get('/register', function(req, res, next) {
-    res.render('register', { title: 'Register' });
+    res.render('users/register', { title: 'Register' });
 });
 
 // Registering a new user POST for request
 router.post('/register', function (req, res) {
 
-    const newUser =
-        {
-            "fname": req.body.first_name,
-            "lname": req.body.last_name,
-            "phone": req.body.mobile_number,
-            "address": req.body.address,
-            "email": req.body.email,
-            "password": req.body.password
-        };
+    const newUser ={
+        "fname": req.body.first_name,
+        "lname": req.body.last_name,
+        "phone": req.body.mobile_number,
+        "address": req.body.address,
+        "email": req.body.email,
+        "password": req.body.password
+    };
 
     req.checkBody('first_name', 'First Name is required').notEmpty();
     req.checkBody('last_name', 'Last Name is required').notEmpty();
@@ -102,7 +101,7 @@ router.post('/register', function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('register', { errors: errors, title: "Register"});
+        res.render('users/register', { errors: errors, title: "Register"});
     }
     else {
         let hash = bcrypt.hashSync(newUser.password);
@@ -141,13 +140,12 @@ router.post('/login', async function (req, res) {
                 req.session.is_admin = userInfo.is_admin;
                 res.redirect('/');
             } else {
-                res.render('login', {msg: "Password Incorrect"});
+                res.render('users/login', {msg: "Password Incorrect", title: "Login"});
             }
         } else {
-            res.render('login', {msg: "No such account"});
+            res.render('users/login', {msg: "No such account", title: "Login"});
         }
     }
-
 });
 
 router.get("/logout", function(req, res){

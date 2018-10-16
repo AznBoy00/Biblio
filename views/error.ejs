@@ -2,20 +2,21 @@
 <!DOCTYPE html>
 <html lang="en"> 
 <head>
-    <%- include('_header'); -%>
+    <% title = 'Error' %>
+    <%- include('partials/_header'); -%>
 </head>
 
 <body>
-    <%- include('_navbar'); -%>
+    <%- include('partials/_navbar'); -%>
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1><%= message %></h1>
+                <h1><%= error.message %></h1>
                 <h2 class="text-danger"><%= error.status %></h2>
                 <pre><%= error.stack %></pre>
             </div>
         </div>
     </div>
-    <%- include('_footer'); -%>        
+    <%- include('partials/_footer'); -%>        
 </body>
 </html>
