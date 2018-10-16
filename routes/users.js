@@ -135,10 +135,10 @@ router.post('/login', async function (req, res) {
                 req.session.is_admin = userInfo.is_admin;
                 res.redirect('/');
             } else {
-                res.render('users/login', {msg: "Password Incorrect", title: "Login"});
+                res.render('users/login', {msg: "Incorrect Password", title: "Login"});
             }
         } else {
-            res.render('users/login', {msg: "No such account", title: "Login"});
+            res.render('users/login', {msg: "Account does not exist", title: "Login"});
         }
     }
 });

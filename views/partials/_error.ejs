@@ -1,0 +1,15 @@
+<% title = 'Error' %>
+<!-- Page that gets generated with errors -->
+<% if (typeof msg !== 'undefined') { %>
+    <div class="alert alert-danger" role="alert">
+        <%= msg %>
+    </div>
+<% } %>
+
+<% if (typeof errors !== 'undefined') { %>
+    <div class="alert alert-danger" role="alert">
+        <h2><%= errors[1].toString() %></h2>
+        <h3 class="text-danger"><%= errors[0].status %></h3>
+        <pre><%= errors[0].stack %></pre>
+    </div>
+<% } %>
