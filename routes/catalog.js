@@ -14,7 +14,6 @@ const pool = require('../db');
 router.get('/', async (req, res) => {
     try {
         let list = await catalog.getCatalog();
-        console.log(list);
         res.render('catalog/catalog', {list, title: 'Catalog'});
     } catch (err) {
         console.error(err);
@@ -92,11 +91,8 @@ router.post('/createitems/createbook', function (req, res) {
 // ====================================== //
 router.get('/updatebook/:item_id', async (req, res) => {
 	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
+        let results = await catalog.getItem(req.params.item_id, 1);
         res.render('catalog/updateBook', {results, title: 'Catalog'});
-        client.release();
 	} catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -105,11 +101,8 @@ router.get('/updatebook/:item_id', async (req, res) => {
 
 router.get('/updatemagazine/:item_id', async (req, res) => {
 	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM magazines WHERE magazine_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
+        let results = await catalog.getItem(req.params.item_id, 2);
         res.render('catalog/updateMagazine', {results, title: 'Catalog'});
-        client.release();
 	} catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -118,11 +111,8 @@ router.get('/updatemagazine/:item_id', async (req, res) => {
 
 router.get('/updatemovie/:item_id', async (req, res) => {
 	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM movies WHERE movie_id = ($1) ", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
+        let results = await catalog.getItem(req.params.item_id, 3);
         res.render('catalog/updateMovie', {results, title: 'Catalog'});
-        client.release();
 	} catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -131,11 +121,8 @@ router.get('/updatemovie/:item_id', async (req, res) => {
 
 router.get('/updatemusic/:item_id', async (req, res) => {
 	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM music WHERE music_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
+        let results = await catalog.getItem(req.params.item_id, 4);
         res.render('catalog/updateMusic', {results, title: 'Catalog'});
-        client.release();
 	} catch (err) {
         console.error(err);
         res.render('error', { error: err });
