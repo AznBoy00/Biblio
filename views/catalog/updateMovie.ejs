@@ -12,14 +12,19 @@
 
 		<div class="row">
 			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-				<h2>Update a Book</h2>
+				<h2>Update a Movie</h2>
 			</div>
         </div>
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <form method="POST" action="/catalog/updatebook/<%= results.results[0].book_id %>/modify" onSubmit="return checkblank(this);">
+                <form method="POST" action="/catalog/updatemovie/<%= results.results[0].movie_id %>/modify" onSubmit="return checkblank(this);">
 
-                    <%- include('_updateBookForm') -%>
+                    <div style="display:none" class="alert alert-danger">
+                        <p>Error:</p>
+                        <span id="error"></span>
+                    </div>
+
+                    <%- include('_updateMovieForm') -%>
 
 					<button class="btn btn-success" type="submit">Submit</button>
 					<a class="btn btn-danger" href="/catalog">Cancel</a>	
