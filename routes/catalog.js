@@ -124,9 +124,9 @@ router.get('/updatebook/:item_id', async (req, res) => {
 router.get('/updatemagazine/:item_id', async (req, res) => {
 	try {
         const client = await pool.connect()
-        const result = await client.query("SELECT * FROM magazine WHERE magazine_id = ($1)", [req.params.item_id]);
+        const result = await client.query("SELECT * FROM magazines WHERE magazine_id = ($1)", [req.params.item_id]);
         const results = { 'results': (result) ? result.rows : null};
-        res.render('catalog/updateMgazine', {results, title: 'Catalog'});
+        res.render('catalog/updateMagazine', {results, title: 'Catalog'});
         client.release();
 	} catch (err) {
         console.error(err);
@@ -137,7 +137,7 @@ router.get('/updatemagazine/:item_id', async (req, res) => {
 router.get('/updatemovie/:item_id', async (req, res) => {
 	try {
         const client = await pool.connect()
-        const result = await client.query("SELECT * FROM movie WHERE movie_id = ($1)", [req.params.item_id]);
+        const result = await client.query("SELECT * FROM movies WHERE movie_id = ($1) ", [req.params.item_id]);
         const results = { 'results': (result) ? result.rows : null};
         res.render('catalog/updateMovie', {results, title: 'Catalog'});
         client.release();
@@ -165,8 +165,7 @@ router.get('/updatemusic/:item_id', async (req, res) => {
 // == POST Requests for Updating Items === //
 // ====================================== //
 router.post('/updatebook/:item_id/modify', async (req, res) => {
-    const newItem =
-    {
+    const newItem = {
         "title": req.body.title,
         "author": req.body.author,
         "format": req.body.format,
@@ -175,25 +174,26 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
         "language": req.body.language,
         "isbn10": req.body.isbn10,
         "isbn13": req.body.isbn13,
-        "loand_period": req.body.loand_period,
         "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
         "quantity": req.body.quantity
     };
     try {
         const client = await pool.connect();
         const result = await client.query(
-            "UPDATE books SET title = '" + newItem.title +
-            "', author = '" + newItem.author + "'" +
-            ", format = '" + newItem.format  + "'" +
-            ", pages = " + newItem.pages +
-            ", publisher = '" + newItem.publisher + "'" +
-            ", language = '" + newItem.language + "'" +
-            ", isbn10 = " + newItem.isbn10 +
-            ", isbn13 = " + newItem.isbn13 +
-            ", loanable = " + newItem.loanable +
-            ", loand_period = " + newItem.loand_period +
-            ", quantity = " + newItem.quantity +
-            " WHERE book_id = ($1)", [req.params.item_id]);
+            "UPDATE books SET " +
+            "title = '"+ newItem.title + "', " +
+            "author = '" + newItem.author + "', " +
+            "format = '" + newItem.format + "', " +
+            "pages = " + newItem.pages + ", " +
+            "language = '" + newItem.language + "', " +
+            "isbn10 = " + newItem.isbn10 + ", " +
+            "isbn13 = " + newItem.isbn13 + ", " +
+            "loanable = '" + newItem.loanable + "', " +
+            "loand_period = " + newItem.loand_period + ", " + 
+            "quantity = "+ newItem.quantity +
+            " WHERE book_id = ($1);", [req.params.item_id]  
+        );
         res.redirect('/catalog');
         client.release();
     } catch (err) {
@@ -204,10 +204,30 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
 
 
 router.post('/updatemagazine/:item_id/modify', async (req, res) => {
+    const newItem = {
+        "title": req.body.title,
+        "publisher": req.body.publisher,
+        "language": req.body.language,
+        "isbn10": req.body.isbn10,
+        "isbn13": req.body.isbn13,
+        "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
+        "quantity": req.body.quantity
+    };
     try {
         const client = await pool.connect();
-
-        // ========= TO DO ========= //
+        const result = await client.query(
+            "UPDATE magazines SET " +
+            "title = '"+ newItem.title + "', " +
+            "publisher = '" + newItem.publisher + "', " +
+            "language = '" + newItem.language + "', " +
+            "isbn10 = " + newItem.isbn10 + ", " +
+            "isbn13 = " + newItem.isbn13 + ", " +
+            "loanable = '" + newItem.loanable + "', " +
+            "loand_period = " + newItem.loand_period + ", " + 
+            "quantity = "+ newItem.quantity +
+            " WHERE magazine_id = ($1);", [req.params.item_id]  
+        );
         
         res.redirect('/catalog');
         client.release();
@@ -218,10 +238,38 @@ router.post('/updatemagazine/:item_id/modify', async (req, res) => {
 });
 
 router.post('/updatemovie/:item_id/modify', async (req, res) => {
+    const newItem = {
+        "title": req.body.title,
+        "Publisher": req.body.director,
+        "producers": req.body.producers,
+        "language": req.body.language,
+        "dubbed": req.body.dubbed,
+        "subtitles": req.body.subtitles,
+        "actors": req.body.actors,
+        "release_date": req.body.release_date,
+        "run_time": req.body.run_time,
+        "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
+        "quantity": req.body.quantity
+    };
     try {
         const client = await pool.connect();
-
-        // ========= TO DO ========= //
+        const result = await client.query(
+            "UPDATE movies SET " +
+            "title = '"+ newItem.title + "', " +
+            "director = '" + newItem.director + "', " +
+            "producers = '" + newItem.producers + "', " +
+            "language = '" + newItem.language + "', " +
+            "dubbed = '" + newItem.dubbed + "', " +
+            "subtitles = '" + newItem.subtitles + "', " +
+            "actors = '" + newItem.actors + "', " +
+            "release_date = '" + newItem.release_date + "', " +
+            "run_time = " + newItem.run_time + ", " +
+            "loanable = '" + newItem.loanable + "', " +
+            "loand_period = " + newItem.loand_period + ", " + 
+            "quantity = "+ newItem.quantity +
+            " WHERE movie_id = ($1);", [req.params.item_id]
+        );
         
         res.redirect('/catalog');
         client.release();
@@ -232,11 +280,32 @@ router.post('/updatemovie/:item_id/modify', async (req, res) => {
 });
 
 router.post('/updatemusic/:item_id/modify', async (req, res) => {
+    const newItem = {
+        "title": req.body.title,
+        "artist": req.body.artist,
+        "label": req.body.label,
+        "release_date": req.body.release_date,
+        "asin": req.body.asin,
+        "run_time": req.body.run_time,
+        "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
+        "quantity": req.body.quantity
+    };
     try {
         const client = await pool.connect();
+        const result = await client.query(
+            "UPDATE music SET " +
+            "title = '"+ newItem.title + "', " +
+            "artist = '" + newItem.artist + "', " +
+            "label = '" + newItem.label + "', " +
+            "release_date = '" + newItem.release_date + "', " +
+            "asin = '" + newItem.asin + "', " +
+            "loanable = '" + newItem.loanable + "', " +
+            "loand_period = " + newItem.loand_period + ", " + 
+            "quantity = "+ newItem.quantity +
+            " WHERE music_id = ($1);", [req.params.item_id]  
+        );
 
-        // ========= TO DO ========= //
-        
         res.redirect('/catalog');
         client.release();
     } catch (err) {
