@@ -13,22 +13,9 @@ const pool = require('../db');
 // ====================================== //
 router.get('/', async (req, res) => {
     try {
-        const client = await pool.connect();
-
-        let list = [];
-        const resultBook = await client.query('SELECT * FROM books');
-        const resultMagazine = await client.query('SELECT * FROM magazines ');
-        const resultMovie = await client.query('SELECT * FROM movies ');
-        const resultMusic = await client.query('SELECT * FROM music ');
-        
-        
-        list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
-        list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
-        list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
-        list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
-        
+        let list = await catalog.getCatalog();
+        console.log(list);
         res.render('catalog/catalog', {list, title: 'Catalog'});
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });

@@ -8,6 +8,29 @@ var itemsList = [];
 //below is an example of using the constructor of the object
 // item.constructor(item_id, discriminator, properties (as an object));
 
+//Get list of catalog items
+module.exports.getCatalog = async function() {
+    try {
+        const client = await pool.connect();
+        let result = [];
+        const resultBook = await client.query('SELECT * FROM books');
+        const resultMagazine = await client.query('SELECT * FROM magazines ');
+        const resultMovie = await client.query('SELECT * FROM movies ');
+        const resultMusic = await client.query('SELECT * FROM music ');
+
+        result.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
+        result.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
+        result.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
+        result.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
+        client.release();
+        //console.log(list);
+        return await result;
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+}
+
 //insert new book
 module.exports.insertNewBook = async function(newbook) {
     try {
@@ -55,7 +78,20 @@ module.exports.insertNewBook = async function(newbook) {
         //             console.log(result);
         //         }
         //     });
-        } catch (err) {
-            console.error(err);
-        }
+    } catch (err) {
+        console.error(err);
+    }
 };
+
+// module.exports.getBook = function (item_id) {
+//     try {
+//         const client = await pool.connect()
+//         const result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [item_id]);
+//         const results = { 'results': (result) ? result.rows : null};
+//         client.release();
+//         return await results;
+//     } catch (err) {
+//         console.error(err);
+//         res.render('error', { error: err });
+// 	}
+// }
