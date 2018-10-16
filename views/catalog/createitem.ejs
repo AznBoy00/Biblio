@@ -18,10 +18,7 @@
 
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <form>
-                    
-                    <%- include('../partials/_error'); -%>
-
+                <form>                 
                     <div class="form-group">
                         <label for="inputSelect">Select type of item to add to catalog:</label>
                         <select class="form-control" id="inputSelect" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
