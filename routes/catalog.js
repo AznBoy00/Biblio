@@ -182,9 +182,8 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
     try {
         const client = await pool.connect();
         const result = await client.query(
-            "UPDATE books SET quantity = " + newItem.quantity +
-            ", title = '" + newItem.title + "'" +
-            ", author = '" + newItem.author + "'" +
+            "UPDATE books SET title = '" + newItem.title +
+            "', author = '" + newItem.author + "'" +
             ", format = '" + newItem.format  + "'" +
             ", pages = " + newItem.pages +
             ", publisher = '" + newItem.publisher + "'" +
