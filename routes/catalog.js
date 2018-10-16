@@ -89,9 +89,9 @@ router.post('/createitems/createbook', function (req, res) {
     req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
     req.checkBody('quantity', 'Quantity is required').notEmpty();
 
-    var error = req.validationErrors();
-    if (error) {
-        res.render('catalog/createBook', { errors: error, title: 'Error'});
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
         console.log(newbook);
         catalog.insertNewBook(newbook);

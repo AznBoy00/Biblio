@@ -1,15 +1,25 @@
-<% title = 'Error' %>
-<!-- Page that gets generated with errors -->
+<!-- Custom error messages -->
+<!-- 
+    Login, Register methods 
+    From the Users Routes uses this
+-->
 <% if (typeof msg !== 'undefined') { %>
     <div class="alert alert-danger" role="alert">
         <%= msg %>
     </div>
 <% } %>
 
+<!-- Default error messages -->
+<!-- 
+    Create items (book, magazine, music, movie)
+    Update Items(book, magazine, music, movie)
+    From the Catalog Routes uses this 
+-->
+<!-- Errors returns [location, param, msg, value] -->
 <% if (typeof errors !== 'undefined') { %>
     <div class="alert alert-danger" role="alert">
-        <h2><%= errors[1].toString() %></h2>
-        <h3 class="text-danger"><%= errors[0].status %></h3>
-        <pre><%= errors[0].stack %></pre>
+        <% for (var i = 0 ; i < errors.length ; i++){%>
+            <h4 class="my-3"><%= errors[i].msg %></h4>
+        <% } %>
     </div>
 <% } %>
