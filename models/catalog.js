@@ -6,11 +6,11 @@ const pool = new Pool({
     ssl: true
 });
 
-//Insert new book into db
+//Insert new book into db (without using Item table)
 module.exports.insertNewBook = async function(newBook) {
     try {
         const client = await pool.connect();
-            const result = await admin.query("INSERT INTO Book (title, author, format, pages, publisher, language, isbn10, isbn13, quantity) VALUES ('"
+            const result = await client.query("INSERT INTO Book (title, author, format, pages, publisher, language, isbn10, isbn13, quantity) VALUES ('"
                 + newBook.title + "','"
                 + newBook.author + "','"
                 + newBook.format+ "','"
@@ -34,11 +34,11 @@ module.exports.insertNewBook = async function(newBook) {
     }
 };
 
-//Insert new magazine into db
+//Insert new magazine into db (without using Item table)
 module.exports.insertNewMagazine = async function(newMagazine) {
     try {
         const client = await pool.connect();
-            const result = await admin.query("INSERT INTO Magazine (title, artist, label, releaseDate, language, quantity, asin) VALUES ('"
+            const result = await client.query("INSERT INTO Magazine (title, artist, label, releaseDate, language, quantity, asin) VALUES ('"
                 + newMagazine.title + "','"
                 + newMagazine.artist + "','"
                 + newMagazine.label+ "','"
@@ -60,6 +60,9 @@ module.exports.insertNewMagazine = async function(newMagazine) {
         res.send(err);
     }
 };
+
+
+
 
 
 
