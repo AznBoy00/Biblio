@@ -92,7 +92,7 @@ module.exports.getItem = async function(item_id) {
     try {
         const client = await pool.connect()
         let result;
-        let discriminator = await getDiscriminator(item_id);
+        let discriminator = await this.getDiscriminator(item_id);
         switch(discriminator) {
             case "Book":
                 result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [item_id]);
@@ -119,7 +119,7 @@ module.exports.getItem = async function(item_id) {
 }
 
 //Getter for discriminator
-async function getDiscriminator(item_id) {
+module.exports.getDiscriminator = async function(item_id) {
     try {
         const client = await pool.connect();
         let result = await client.query(
