@@ -208,9 +208,10 @@ module.exports.updateItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
         let result;
-        let discriminator = this.getDiscriminator(item_id);
+        let discriminator = await this.getDiscriminator(item_id);
+        //console.log(discriminator);
         switch (discriminator) {
-            case "Movie":
+            case "Book":
                 result = await client.query(
                     "UPDATE books SET " +
                     "title = '"+ newItem.title + "', " +
@@ -225,6 +226,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
+                //console.log("BOOK SQL");
                 break;
             case "Magazine":
                 result = await client.query(
@@ -239,6 +241,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
+                //console.log("MAGAZINE SQL");
                 break;
             case "Movie":
                 result = await client.query(
@@ -257,6 +260,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
+                //console.log("MOVIE SQL");
                 break;
             case "Music":
                 result = await client.query(
@@ -271,9 +275,11 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
+                //console.log("MUSIC SQL");
                 break;
             default:
                 result = null;
+                //console.log("NO SQL");
                 break;
         }
         client.release();
