@@ -1,0 +1,5 @@
+<% if (typeof errors != "undefined") { %>
+    <% for (var i=0; i < errors.length; i++) { %>
+    <p style="color:red;"><%= errors[i].msg %></p>
+    <% } %>
+<% } %> 
