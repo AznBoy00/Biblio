@@ -89,40 +89,27 @@ router.post('/createitems/createbook', function (req, res) {
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/updatebook/:item_id', async (req, res) => {
+router.get('/updateitem/:item_id', async (req, res) => {
 	try {
         let results = await catalog.getItem(req.params.item_id);
-        res.render('catalog/updateBook', {results, title: 'Catalog'});
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemagazine/:item_id', async (req, res) => {
-	try {
-        let results = await catalog.getItem(req.params.item_id);
-        res.render('catalog/updateMagazine', {results, title: 'Catalog'});
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemovie/:item_id', async (req, res) => {
-	try {
-        let results = await catalog.getItem(req.params.item_id);
-        res.render('catalog/updateMovie', {results, title: 'Catalog'});
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemusic/:item_id', async (req, res) => {
-	try {
-        let results = await catalog.getItem(req.params.item_id);
-        res.render('catalog/updateMusic', {results, title: 'Catalog'});
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        switch(discriminator) {
+            case "Book":
+                res.render('catalog/updateBook', {results, title: 'Catalog'});
+                break;
+            case "Magazine":
+                res.render('catalog/updateMagazine', {results, title: 'Catalog'});
+                break;
+            case "Movie":
+                res.render('catalog/updateMovie', {results, title: 'Catalog'});
+                break;
+            case "Music":
+                res.render('catalog/updateMusic', {results, title: 'Catalog'});
+                break;
+            default:
+                result = null;
+                break;
+        }
 	} catch (err) {
         console.error(err);
         res.render('error', { error: err });
