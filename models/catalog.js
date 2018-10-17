@@ -13,10 +13,10 @@ module.exports.getCatalog = async function() {
     try {
         const client = await pool.connect();
         let result = [];
-        const resultBook = await client.query('SELECT * FROM books');
-        const resultMagazine = await client.query('SELECT * FROM magazines ');
-        const resultMovie = await client.query('SELECT * FROM movies ');
-        const resultMusic = await client.query('SELECT * FROM music ');
+        const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
+        const resultMagazine = await client.query('SELECT * FROM magazines ORDER BY item_id ASC');
+        const resultMovie = await client.query('SELECT * FROM movies ORDER BY item_id ASC');
+        const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
 
         result.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
         result.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
@@ -93,16 +93,16 @@ module.exports.getItem = async function(item_id) {
         let discriminator = await this.getDiscriminator(item_id);
         switch(discriminator) {
             case "Book":
-                result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [item_id]);
+                result = await client.query("SELECT * FROM books WHERE item_id = ($1)", [item_id]);
                 break;
             case "Magazine":
-                result = await client.query("SELECT * FROM magazines WHERE magazine_id = ($1)", [item_id]);
+                result = await client.query("SELECT * FROM magazines WHERE item_id = ($1)", [item_id]);
                 break;
             case "Movie":
-                result = await client.query("SELECT * FROM movies WHERE movie_id = ($1)", [item_id]);
+                result = await client.query("SELECT * FROM movies WHERE item_id = ($1)", [item_id]);
                 break;
             case "Music":
-                result = await client.query("SELECT * FROM music WHERE music_id = ($1)", [item_id]);
+                result = await client.query("SELECT * FROM music WHERE item_id = ($1)", [item_id]);
                 break;
             default:
                 result = null;
@@ -223,7 +223,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "loanable = '" + newItem.loanable + "', " +
                     "loand_period = " + newItem.loand_period + ", " + 
                     "quantity = "+ newItem.quantity +
-                    " WHERE book_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]  
                 );
                 break;
             case "Magazine":
@@ -237,7 +237,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "loanable = '" + newItem.loanable + "', " +
                     "loand_period = " + newItem.loand_period + ", " + 
                     "quantity = "+ newItem.quantity +
-                    " WHERE magazine_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]  
                 );
                 break;
             case "Movie":
@@ -255,7 +255,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "loanable = '" + newItem.loanable + "', " +
                     "loand_period = " + newItem.loand_period + ", " + 
                     "quantity = "+ newItem.quantity +
-                    " WHERE movie_id = ($1);", [item_id]
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 break;
             case "Music":
@@ -269,7 +269,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "loanable = '" + newItem.loanable + "', " +
                     "loand_period = " + newItem.loand_period + ", " + 
                     "quantity = "+ newItem.quantity +
-                    " WHERE music_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]  
                 );
                 break;
             default:
