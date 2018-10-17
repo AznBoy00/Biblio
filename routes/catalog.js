@@ -135,7 +135,7 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        let result = await catalog.updateItem(newItem, req.params.item_id, 1);
+        let result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -156,7 +156,7 @@ router.post('/updatemagazine/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        let result = await catalog.updateItem(newItem, req.params.item_id, 2);
+        let result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -180,7 +180,7 @@ router.post('/updatemovie/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        let result = await catalog.updateItem(newItem, req.params.item_id, 3);
+        let result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -201,7 +201,7 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        let result = await catalog.updateItem(newItem, req.params.item_id, 4);
+        let result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);

@@ -136,12 +136,13 @@ module.exports.getDiscriminator = async function(item_id) {
 //async function getItem
 
 // updateItem to database; Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
-module.exports.updateItem = async function(newItem, item_id, discriminator) {
+module.exports.updateItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
         let result;
+        let discriminator = this.getDiscriminator(item_id);
         switch (discriminator) {
-            case 1:
+            case "Movie":
                 result = await client.query(
                     "UPDATE books SET " +
                     "title = '"+ newItem.title + "', " +
@@ -157,7 +158,7 @@ module.exports.updateItem = async function(newItem, item_id, discriminator) {
                     " WHERE book_id = ($1);", [item_id]  
                 );
                 break;
-            case 2:
+            case "Magazine":
                 result = await client.query(
                     "UPDATE magazines SET " +
                     "title = '"+ newItem.title + "', " +
@@ -171,7 +172,7 @@ module.exports.updateItem = async function(newItem, item_id, discriminator) {
                     " WHERE magazine_id = ($1);", [item_id]  
                 );
                 break;
-            case 3:
+            case "Movie":
                 result = await client.query(
                     "UPDATE movies SET " +
                     "title = '"+ newItem.title + "', " +
@@ -189,7 +190,7 @@ module.exports.updateItem = async function(newItem, item_id, discriminator) {
                     " WHERE movie_id = ($1);", [item_id]
                 );
                 break;
-            case 4:
+            case "Music":
                 result = await client.query(
                     "UPDATE music SET " +
                     "title = '"+ newItem.title + "', " +
