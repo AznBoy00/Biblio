@@ -148,23 +148,8 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE books SET " +
-            "title = '"+ newItem.title + "', " +
-            "author = '" + newItem.author + "', " +
-            "format = '" + newItem.format + "', " +
-            "pages = " + newItem.pages + ", " +
-            "language = '" + newItem.language + "', " +
-            "isbn10 = " + newItem.isbn10 + ", " +
-            "isbn13 = " + newItem.isbn13 + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE book_id = ($1);", [req.params.item_id]  
-        );
+        let result = await catalog.updateItem(newItem, req.params.item_id, 1);
         res.redirect('/catalog');
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -184,22 +169,8 @@ router.post('/updatemagazine/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE magazines SET " +
-            "title = '"+ newItem.title + "', " +
-            "publisher = '" + newItem.publisher + "', " +
-            "language = '" + newItem.language + "', " +
-            "isbn10 = " + newItem.isbn10 + ", " +
-            "isbn13 = " + newItem.isbn13 + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE magazine_id = ($1);", [req.params.item_id]  
-        );
-        
+        let result = await catalog.updateItem(newItem, req.params.item_id, 2);
         res.redirect('/catalog');
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -222,26 +193,8 @@ router.post('/updatemovie/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE movies SET " +
-            "title = '"+ newItem.title + "', " +
-            "director = '" + newItem.director + "', " +
-            "producers = '" + newItem.producers + "', " +
-            "language = '" + newItem.language + "', " +
-            "dubbed = '" + newItem.dubbed + "', " +
-            "subtitles = '" + newItem.subtitles + "', " +
-            "actors = '" + newItem.actors + "', " +
-            "release_date = '" + newItem.release_date + "', " +
-            "run_time = " + newItem.run_time + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE movie_id = ($1);", [req.params.item_id]
-        );
-        
+        let result = await catalog.updateItem(newItem, req.params.item_id, 3);
         res.redirect('/catalog');
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -261,22 +214,8 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
         "quantity": req.body.quantity
     };
     try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE music SET " +
-            "title = '"+ newItem.title + "', " +
-            "artist = '" + newItem.artist + "', " +
-            "label = '" + newItem.label + "', " +
-            "release_date = '" + newItem.release_date + "', " +
-            "asin = '" + newItem.asin + "', " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE music_id = ($1);", [req.params.item_id]  
-        );
-
+        let result = await catalog.updateItem(newItem, req.params.item_id, 4);
         res.redirect('/catalog');
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });

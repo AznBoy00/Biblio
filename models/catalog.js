@@ -87,7 +87,7 @@ module.exports.insertNewBook = async function(newbook) {
  * getItem(item_id, discriminator)
  * Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
  **/
-module.exports.getItem = async function (item_id, discriminator) {
+module.exports.getItem = async function(item_id, discriminator) {
     try {
         const client = await pool.connect()
         let result;
@@ -115,4 +115,83 @@ module.exports.getItem = async function (item_id, discriminator) {
         console.error(err);
         res.render('error', { error: err });
 	}
+}
+
+// updateItem to database; Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
+module.exports.updateItem = async function(newItem, item_id, discriminator) {
+    try {
+        const client = await pool.connect();
+        let result;
+        switch (discriminator) {
+            case 1:
+                result = await client.query(
+                    "UPDATE books SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "author = '" + newItem.author + "', " +
+                    "format = '" + newItem.format + "', " +
+                    "pages = " + newItem.pages + ", " +
+                    "language = '" + newItem.language + "', " +
+                    "isbn10 = " + newItem.isbn10 + ", " +
+                    "isbn13 = " + newItem.isbn13 + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " + 
+                    "quantity = "+ newItem.quantity +
+                    " WHERE book_id = ($1);", [item_id]  
+                );
+                break;
+            case 2:
+                result = await client.query(
+                    "UPDATE magazines SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "publisher = '" + newItem.publisher + "', " +
+                    "language = '" + newItem.language + "', " +
+                    "isbn10 = " + newItem.isbn10 + ", " +
+                    "isbn13 = " + newItem.isbn13 + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " + 
+                    "quantity = "+ newItem.quantity +
+                    " WHERE magazine_id = ($1);", [item_id]  
+                );
+                break;
+            case 3:
+                result = await client.query(
+                    "UPDATE movies SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "director = '" + newItem.director + "', " +
+                    "producers = '" + newItem.producers + "', " +
+                    "language = '" + newItem.language + "', " +
+                    "dubbed = '" + newItem.dubbed + "', " +
+                    "subtitles = '" + newItem.subtitles + "', " +
+                    "actors = '" + newItem.actors + "', " +
+                    "release_date = '" + newItem.release_date + "', " +
+                    "run_time = " + newItem.run_time + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " + 
+                    "quantity = "+ newItem.quantity +
+                    " WHERE movie_id = ($1);", [item_id]
+                );
+                break;
+            case 4:
+                const result = await client.query(
+                    "UPDATE music SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "artist = '" + newItem.artist + "', " +
+                    "label = '" + newItem.label + "', " +
+                    "release_date = '" + newItem.release_date + "', " +
+                    "asin = '" + newItem.asin + "', " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " + 
+                    "quantity = "+ newItem.quantity +
+                    " WHERE music_id = ($1);", [item_id]  
+                );
+                break;
+            default:
+                res.redirect('/catalog');
+                break;
+        }
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
 }
