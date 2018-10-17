@@ -22,12 +22,13 @@ router.get('/', function(req, res, next) {
 // manage users page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
-        const client = await pool.connect()
+        const client = await pool.connect();
         const result = await client.query('SELECT * FROM users ORDER BY user_id ASC');
         const results = { 'results': (result) ? result.rows : null};
         res.render('users/manageusers', {results, title: 'Admin CP'} );
         client.release();
 	} catch (err) {
+        client.release();
         console.error(err);
         res.send("error" + err);
 	}
@@ -36,12 +37,13 @@ router.get('/admincp/manageusers', async (req, res) => {
 // promote/demote users to admin page
 router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
 	try {
-        const client = await pool.connect()
+        const client = await pool.connect();
         const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
         const fname = req.params.fname;
         res.redirect('/users/admincp/manageusers');
         client.release();
 	} catch (err) {
+        client.release();
         console.error(err);
         res.send("error" + err);
 	}
@@ -49,12 +51,13 @@ router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
 
 router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
 	try {
-        const client = await pool.connect()
+        const client = await pool.connect();
         const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
         const fname = req.params.fname;
         res.redirect('/users/admincp/manageusers');
         client.release();
 	} catch (err) {
+        client.release();
         console.error(err);
         res.send("error " + err);
 	}

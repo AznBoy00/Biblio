@@ -19,7 +19,7 @@ module.exports.insertNewUser = async function(newUser) {
                     console.log(result);
                 }
             });
-
+        client.release();
     } catch (err) {
         console.error(err);
         res.send(err);
@@ -31,8 +31,10 @@ async function findUserByEmail(email){
     try {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+        client.release();
         return await result;
     } catch (err) {
+        client.release();
         console.error(err);
         res.send("Error " + err);
     }
@@ -64,8 +66,10 @@ module.exports.findUserByEmail = async function findUserByEmail(email){
     try {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+        client.release();
         return await result;
     } catch (err) {
+        client.release();
         console.error(err);
         res.send("Error " + err);
     }
