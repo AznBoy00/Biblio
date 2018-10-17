@@ -317,14 +317,9 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
 router.get('/deletebook/:item_id', async(req, res) => {
 
     try {
-        // const client = await pool.connect();
-        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
-        //     console.log("Deleted Items");
-        //     res.redirect('/catalog');
-        // client.release();
         const client = await pool.connect();
-        const resultDeleteBook = await client.query('DELETE FROM books WHERE book_id = ($1)', [req.params.item_id]);
-            console.log("Deleted Books");
+        const resultDeleteBook = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Book");
         res.redirect('/catalog');
         client.release();
     } catch (err) {
@@ -337,13 +332,8 @@ router.get('/deletebook/:item_id', async(req, res) => {
 router.get('/deletemagazine/:item_id', async(req, res) => {
 
     try {
-        // const client = await pool.connect();
-        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
-        //     console.log("Deleted Items");
-        //     res.redirect('/catalog');
-        // client.release();
         const client = await pool.connect();
-        const resultMagazine = await client.query('DELETE FROM magazines WHERE magazine_id = ($1)', [req.params.item_id]);
+        const resultMagazine = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Magazine");
         res.redirect('/catalog');
         client.release();
@@ -357,13 +347,8 @@ router.get('/deletemagazine/:item_id', async(req, res) => {
 router.get('/deletemovie/:item_id', async(req, res) => {
 
     try {
-        // const client = await pool.connect();
-        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
-        //     console.log("Deleted Items");
-        //     res.redirect('/catalog');
-        // client.release();
         const client = await pool.connect();
-        const resultDeleteMovie = await client.query('DELETE FROM movies WHERE movie_id = ($1)', [req.params.item_id]);
+        const resultDeleteMovie = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Movie");
         res.redirect('/catalog');
         client.release();
@@ -377,13 +362,8 @@ router.get('/deletemovie/:item_id', async(req, res) => {
 router.get('/deletemusic/:item_id', async(req, res) => {
 
     try {
-        // const client = await pool.connect();
-        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
-        //     console.log("Deleted Items");
-        //     res.redirect('/catalog');
-        // client.release();
         const client = await pool.connect();
-        const resultDeleteMusic = await client.query('DELETE FROM music WHERE music_id = ($1)', [req.params.item_id]);
+        const resultDeleteMusic = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Music");
         res.redirect('/catalog');
         client.release();
