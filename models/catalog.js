@@ -119,11 +119,11 @@ module.exports.getItem = async function(item_id, discriminator) {
 }
 
 //Getter for discriminator
-async function getDiscriminator(req) {
+async function getDiscriminator(item_id) {
     try {
         const client = await pool.connect();
         let result = await client.query(
-            "SELECT discriminator FROM Items WHERE item_id=$1;", [req.params.item_id]
+            "SELECT discriminator FROM Items WHERE item_id=$1;", [item_id]
         );
         client.release();
         return await result;
@@ -137,6 +137,7 @@ async function getDiscriminator(req) {
 // updateItem to database; Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
 module.exports.updateItem = async function(newItem, item_id, discriminator) {
     try {
+        const client = await pool.connect();
         let result;
         switch (discriminator) {
             case 1:
