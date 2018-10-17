@@ -309,5 +309,92 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
     }
 });
 
+// ====================================== //
+// == GET Requests for Deleting Items === //
+// ====================================== //
+
+// Books
+router.get('/deletebook/:item_id', async(req, res) => {
+
+    try {
+        // const client = await pool.connect();
+        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
+        //     console.log("Deleted Items");
+        //     res.redirect('/catalog');
+        // client.release();
+        const client = await pool.connect();
+        const resultDeleteBook = await client.query('DELETE FROM books WHERE book_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Books");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Magazine
+router.get('/deletemagazine/:item_id', async(req, res) => {
+
+    try {
+        // const client = await pool.connect();
+        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
+        //     console.log("Deleted Items");
+        //     res.redirect('/catalog');
+        // client.release();
+        const client = await pool.connect();
+        const resultMagazine = await client.query('DELETE FROM magazines WHERE magazine_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Magazine");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Movies
+router.get('/deletemovie/:item_id', async(req, res) => {
+
+    try {
+        // const client = await pool.connect();
+        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
+        //     console.log("Deleted Items");
+        //     res.redirect('/catalog');
+        // client.release();
+        const client = await pool.connect();
+        const resultDeleteMovie = await client.query('DELETE FROM movies WHERE movie_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Movie");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Music
+router.get('/deletemusic/:item_id', async(req, res) => {
+
+    try {
+        // const client = await pool.connect();
+        // const resultDeleteItem = await client.query('DELETE FROM items WHERE item_id = ($1)', [req.params.item_id]);
+        //     console.log("Deleted Items");
+        //     res.redirect('/catalog');
+        // client.release();
+        const client = await pool.connect();
+        const resultDeleteMusic = await client.query('DELETE FROM music WHERE music_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Music");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+
+
+
 //keep the next line at the end of this script
 module.exports = router;
