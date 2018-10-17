@@ -85,10 +85,8 @@ module.exports.insertNewBook = async function(newbook) {
 
 /**
  * getItem(item_id, discriminator)
- * Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
  **/
 module.exports.getItem = async function(item_id) {
-    //console.error(getDiscriminator(item_id));
     try {
         const client = await pool.connect()
         let result;
@@ -133,9 +131,79 @@ module.exports.getDiscriminator = async function(item_id) {
     }
 }
 
-//async function getItem
+//getNewItem structure
+module.exports.getNewItem = async function(discriminator) {
+    var newItem;
+    try {
+        switch(discriminator) {
+            case "Book":
+                newItem = {
+                    "title": req.body.title,
+                    "author": req.body.author,
+                    "format": req.body.format,
+                    "pages": req.body.pages,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Magazine":
+                newItem = {
+                    "title": req.body.title,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Movie":
+                newItem = {
+                    "title": req.body.title,
+                    "Publisher": req.body.director,
+                    "producers": req.body.producers,
+                    "language": req.body.language,
+                    "dubbed": req.body.dubbed,
+                    "subtitles": req.body.subtitles,
+                    "actors": req.body.actors,
+                    "release_date": req.body.release_date,
+                    "run_time": req.body.run_time,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Music":
+                newItem = {
+                    "title": req.body.title,
+                    "artist": req.body.artist,
+                    "label": req.body.label,
+                    "release_date": req.body.release_date,
+                    "asin": req.body.asin,
+                    "run_time": req.body.run_time,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            default:
+                result = null;
+                break;
+        }
+        console.log(newItem);
+        return newItem;
+    } catch (err) {
+        console.error(err);
+    }
+}
 
-// updateItem to database; Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
+// updateItem to database;
 module.exports.updateItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();

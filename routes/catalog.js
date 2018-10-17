@@ -120,21 +120,11 @@ router.get('/updateitem/:item_id', async (req, res) => {
 // ====================================== //
 // == POST Requests for Updating Items === //
 // ====================================== //
-router.post('/updatebook/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "author": req.body.author,
-        "format": req.body.format,
-        "pages": req.body.pages,
-        "publisher": req.body.publisher,
-        "language": req.body.language,
-        "isbn10": req.body.isbn10,
-        "isbn13": req.body.isbn13,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
+router.post('/updateitem/:item_id/modify', async (req, res) => {
     try {
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        console.log(discriminator);
+        const newItem = catalog.getNewItem();
         let result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
@@ -143,71 +133,94 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
     }
 });
 
+// router.post('/updatebook/:item_id/modify', async (req, res) => {
+//     const newItem = {
+//         "title": req.body.title,
+//         "author": req.body.author,
+//         "format": req.body.format,
+//         "pages": req.body.pages,
+//         "publisher": req.body.publisher,
+//         "language": req.body.language,
+//         "isbn10": req.body.isbn10,
+//         "isbn13": req.body.isbn13,
+//         "loanable": req.body.loanable,
+//         "loand_period": req.body.loand_period,
+//         "quantity": req.body.quantity
+//     };
+//     try {
+//         let result = await catalog.updateItem(newItem, req.params.item_id);
+//         res.redirect('/catalog');
+//     } catch (err) {
+//         console.error(err);
+//         res.render('error', { error: err });
+//     }
+// });
 
-router.post('/updatemagazine/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "publisher": req.body.publisher,
-        "language": req.body.language,
-        "isbn10": req.body.isbn10,
-        "isbn13": req.body.isbn13,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        let result = await catalog.updateItem(newItem, req.params.item_id);
-        res.redirect('/catalog');
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
 
-router.post('/updatemovie/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "Publisher": req.body.director,
-        "producers": req.body.producers,
-        "language": req.body.language,
-        "dubbed": req.body.dubbed,
-        "subtitles": req.body.subtitles,
-        "actors": req.body.actors,
-        "release_date": req.body.release_date,
-        "run_time": req.body.run_time,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        let result = await catalog.updateItem(newItem, req.params.item_id);
-        res.redirect('/catalog');
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
+// router.post('/updatemagazine/:item_id/modify', async (req, res) => {
+//     const newItem = {
+//         "title": req.body.title,
+//         "publisher": req.body.publisher,
+//         "language": req.body.language,
+//         "isbn10": req.body.isbn10,
+//         "isbn13": req.body.isbn13,
+//         "loanable": req.body.loanable,
+//         "loand_period": req.body.loand_period,
+//         "quantity": req.body.quantity
+//     };
+//     try {
+//         let result = await catalog.updateItem(newItem, req.params.item_id);
+//         res.redirect('/catalog');
+//     } catch (err) {
+//         console.error(err);
+//         res.render('error', { error: err });
+//     }
+// });
 
-router.post('/updatemusic/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "artist": req.body.artist,
-        "label": req.body.label,
-        "release_date": req.body.release_date,
-        "asin": req.body.asin,
-        "run_time": req.body.run_time,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        let result = await catalog.updateItem(newItem, req.params.item_id);
-        res.redirect('/catalog');
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
+// router.post('/updatemovie/:item_id/modify', async (req, res) => {
+//     const newItem = {
+//         "title": req.body.title,
+//         "Publisher": req.body.director,
+//         "producers": req.body.producers,
+//         "language": req.body.language,
+//         "dubbed": req.body.dubbed,
+//         "subtitles": req.body.subtitles,
+//         "actors": req.body.actors,
+//         "release_date": req.body.release_date,
+//         "run_time": req.body.run_time,
+//         "loanable": req.body.loanable,
+//         "loand_period": req.body.loand_period,
+//         "quantity": req.body.quantity
+//     };
+//     try {
+//         let result = await catalog.updateItem(newItem, req.params.item_id);
+//         res.redirect('/catalog');
+//     } catch (err) {
+//         console.error(err);
+//         res.render('error', { error: err });
+//     }
+// });
+
+// router.post('/updatemusic/:item_id/modify', async (req, res) => {
+//     const newItem = {
+//         "title": req.body.title,
+//         "artist": req.body.artist,
+//         "label": req.body.label,
+//         "release_date": req.body.release_date,
+//         "asin": req.body.asin,
+//         "run_time": req.body.run_time,
+//         "loanable": req.body.loanable,
+//         "loand_period": req.body.loand_period,
+//         "quantity": req.body.quantity
+//     };
+//     try {
+//         let result = await catalog.updateItem(newItem, req.params.item_id);
+//         res.redirect('/catalog');
+//     } catch (err) {
+//         console.error(err);
+//         res.render('error', { error: err });
+//     }
+// });
 
 //keep the next line at the end of this script
 module.exports = router;
