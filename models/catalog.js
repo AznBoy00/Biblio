@@ -88,6 +88,7 @@ module.exports.insertNewBook = async function(newbook) {
  * Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
  **/
 module.exports.getItem = async function(item_id, discriminator) {
+    //console.error(getDiscriminator(item_id));
     try {
         const client = await pool.connect()
         let result;
@@ -117,10 +118,25 @@ module.exports.getItem = async function(item_id, discriminator) {
 	}
 }
 
+//Getter for discriminator
+async function getDiscriminator(req) {
+    try {
+        const client = await pool.connect();
+        let result = await client.query(
+            "SELECT discriminator FROM Items WHERE item_id=$1;", [req.params.item_id]
+        );
+        client.release();
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+//async function getItem
+
 // updateItem to database; Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
 module.exports.updateItem = async function(newItem, item_id, discriminator) {
     try {
-        const client = await pool.connect();
         let result;
         switch (discriminator) {
             case 1:
@@ -172,7 +188,7 @@ module.exports.updateItem = async function(newItem, item_id, discriminator) {
                 );
                 break;
             case 4:
-                const result = await client.query(
+                result = await client.query(
                     "UPDATE music SET " +
                     "title = '"+ newItem.title + "', " +
                     "artist = '" + newItem.artist + "', " +
@@ -186,12 +202,11 @@ module.exports.updateItem = async function(newItem, item_id, discriminator) {
                 );
                 break;
             default:
-                res.redirect('/catalog');
+                result = null;
                 break;
         }
         client.release();
     } catch (err) {
         console.error(err);
-        res.render('error', { error: err });
     }
 }
