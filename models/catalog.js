@@ -87,22 +87,24 @@ module.exports.insertNewBook = async function(newbook) {
  * getItem(item_id, discriminator)
  * Discriminator: 1 = books, 2 = magazines, 3 = movies, 4 = music
  **/
-module.exports.getItem = async function(item_id, discriminator) {
+module.exports.getItem = async function(item_id) {
     //console.error(getDiscriminator(item_id));
     try {
         const client = await pool.connect()
         let result;
+        let discriminatorJSON = await getDiscriminator(item_id);
+        var discriminator = discriminatorJSON.discriminator[0].discriminator;
         switch(discriminator) {
-            case 1:
+            case "Book":
                 result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [item_id]);
                 break;
-            case 2:
+            case "Magazine":
                 result = await client.query("SELECT * FROM magazines WHERE magazine_id = ($1)", [item_id]);
                 break;
-            case 3:
+            case "Movie":
                 result = await client.query("SELECT * FROM movies WHERE movie_id = ($1)", [item_id]);
                 break;
-            case 4:
+            case "Music":
                 result = await client.query("SELECT * FROM music WHERE music_id = ($1)", [item_id]);
                 break;
             default:
@@ -114,7 +116,6 @@ module.exports.getItem = async function(item_id, discriminator) {
         return await results;
     } catch (err) {
         console.error(err);
-        res.render('error', { error: err });
 	}
 }
 
@@ -126,7 +127,7 @@ async function getDiscriminator(item_id) {
             "SELECT discriminator FROM Items WHERE item_id=$1;", [item_id]
         );
         client.release();
-        return await result;
+        return await { 'discriminator': (await result) ? await result.rows : null};
     } catch (err) {
         console.error(err);
     }

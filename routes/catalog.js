@@ -91,7 +91,7 @@ router.post('/createitems/createbook', function (req, res) {
 // ====================================== //
 router.get('/updatebook/:item_id', async (req, res) => {
 	try {
-        let results = await catalog.getItem(req.params.item_id, 1);
+        let results = await catalog.getItem(req.params.item_id);
         res.render('catalog/updateBook', {results, title: 'Catalog'});
 	} catch (err) {
         console.error(err);
@@ -101,7 +101,7 @@ router.get('/updatebook/:item_id', async (req, res) => {
 
 router.get('/updatemagazine/:item_id', async (req, res) => {
 	try {
-        let results = await catalog.getItem(req.params.item_id, 2);
+        let results = await catalog.getItem(req.params.item_id);
         res.render('catalog/updateMagazine', {results, title: 'Catalog'});
 	} catch (err) {
         console.error(err);
@@ -111,7 +111,7 @@ router.get('/updatemagazine/:item_id', async (req, res) => {
 
 router.get('/updatemovie/:item_id', async (req, res) => {
 	try {
-        let results = await catalog.getItem(req.params.item_id, 3);
+        let results = await catalog.getItem(req.params.item_id);
         res.render('catalog/updateMovie', {results, title: 'Catalog'});
 	} catch (err) {
         console.error(err);
@@ -121,7 +121,7 @@ router.get('/updatemovie/:item_id', async (req, res) => {
 
 router.get('/updatemusic/:item_id', async (req, res) => {
 	try {
-        let results = await catalog.getItem(req.params.item_id, 4);
+        let results = await catalog.getItem(req.params.item_id);
         res.render('catalog/updateMusic', {results, title: 'Catalog'});
 	} catch (err) {
         console.error(err);
