@@ -77,7 +77,6 @@ router.get('/register', function(req, res, next) {
 
 // Registering a new user POST for request
 router.post('/register', function (req, res) {
-
     const newUser ={
         "fname": req.body.first_name,
         "lname": req.body.last_name,
@@ -96,7 +95,7 @@ router.post('/register', function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('users/register', { errors: errors, title: "Register"});
+        return res.render('users/register', { errors: errors, title: "Register"});
     }
     else {
         let hash = bcrypt.hashSync(newUser.password);
@@ -118,7 +117,7 @@ router.post('/login', async function (req, res) {
 
     var errors = req.validationErrors();
     if (errors) {
-        res.render('login', { errors: errors});
+        return res.render('users/login', { errors: errors, title: "Login"});
     }
     else {
         var userExists  = await user.userExists(email);
@@ -135,10 +134,10 @@ router.post('/login', async function (req, res) {
                 req.session.is_admin = userInfo.is_admin;
                 res.redirect('/');
             } else {
-                res.render('users/login', {msg: "Password Incorrect", title: "Login"});
+                return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
             }
         } else {
-            res.render('users/login', {msg: "No such account", title: "Login"});
+            return res.render('users/login', {errors: "No such account", title: "Login"});
         }
     }
 });
