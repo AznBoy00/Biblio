@@ -114,7 +114,7 @@ module.exports.getDiscriminator = async function(item_id) {
 module.exports.getNewItem = async function(item_id, req) {
     let newItem;
     const discriminator = await this.getDiscriminator(item_id);
-    console.log("getNewItem DISCRIMINATOR: " + discriminator);
+    // console.log("getNewItem DISCRIMINATOR: " + discriminator);
     try {
         switch(discriminator) {
             case "Book":
@@ -190,7 +190,7 @@ module.exports.updateItem = async function(newItem, item_id) {
         const client = await pool.connect();
         let result;
         let discriminator = await this.getDiscriminator(item_id);
-        console.log(discriminator);
+        // console.log(discriminator);
         switch (discriminator) {
             case "Book":
                 result = await client.query(
@@ -207,7 +207,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                console.log("BOOK SQL");
+                // console.log("BOOK SQL");
                 break;
             case "Magazine":
                 result = await client.query(
@@ -222,7 +222,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                console.log("MAGAZINE SQL");
+                // console.log("MAGAZINE SQL");
                 break;
             case "Movie":
                 result = await client.query(
@@ -241,7 +241,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
-                console.log("MOVIE SQL");
+                // console.log("MOVIE SQL");
                 break;
             case "Music":
                 result = await client.query(
@@ -256,11 +256,11 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                console.log("MUSIC SQL");
+                // console.log("MUSIC SQL");
                 break;
             default:
                 result = null;
-                console.log("NO SQL");
+                // console.log("NO SQL");
                 break;
         }
         client.release();
