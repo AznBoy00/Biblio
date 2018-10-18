@@ -30,7 +30,7 @@
                                 <td><%= list.resultMagazines.resultMagazines[i].title %></td>
                                 <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
                                 <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
-                                <td><a href="catalog/updatemagazine/<%= list.resultMagazines.resultMagazines[i].item_id %>" style= "float: right">Update</a></td>
+                                <td><a href="catalog/updateitem/<%= list.resultMagazines.resultMagazines[i].item_id %>" style= "float: right">Update</a></td>
                                 <td><a href="catalog/deletemagazine/<%= list.resultMagazines.resultMagazines[i].item_id %>" style= "float: right">Delete</a></td>
                             </tr>
                         </thead>
@@ -42,7 +42,7 @@
                                     <td><%= list.resultMovies.resultMovies[i].title %></td>
                                     <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
                                     <td><%= list.resultMovies.resultMovies[i].quantity %></td>
-                                    <td><a href="catalog/updatemovie/<%= list.resultMovies.resultMovies[i].item_id %>" style= "float: right">Update</a></td>
+                                    <td><a href="catalog/updateitem/<%= list.resultMovies.resultMovies[i].item_id %>" style= "float: right">Update</a></td>
                                 <td><a href="catalog/deletemovie/<%= list.resultMovies.resultMovies[i].item_id %>" style= "float: right">Delete</a></td>
                                     </tr>   
                             <% } %>
@@ -53,7 +53,7 @@
                                     <td><%= list.resultMusics.resultMusics[i].title %></td>
                                     <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
                                     <td><%= list.resultMusics.resultMusics[i].quantity %></td>
-                                    <td><a href="catalog/updatemusic/<%= list.resultMusics.resultMusics[i].item_id %>" style= "float: right">Update</a></td>
+                                    <td><a href="catalog/updateitem/<%= list.resultMusics.resultMusics[i].item_id %>" style= "float: right">Update</a></td>
                                 <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>" style= "float: right">Delete</a></td>
                                 </tr>
                             <% } %>
@@ -63,7 +63,7 @@
                                     <td><%= list.resultBooks.resultBooks[i].title %></td>
                                     <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td><%= list.resultBooks.resultBooks[i].quantity %></td>
-                                    <td><a href="catalog/updatebook/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Update</a></td>
+                                    <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Update</a></td>
                                 <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Delete</a></td>
                                 </tr>
                             <% } %>
