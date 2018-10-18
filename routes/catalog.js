@@ -20,13 +20,13 @@ router.get('/', async (req, res) => {
         const resultMagazine = await client.query('SELECT * FROM magazines ');
         const resultMovie = await client.query('SELECT * FROM movies ');
         const resultMusic = await client.query('SELECT * FROM music ');
-        
-        
+
+
         list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
         list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
         list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
         list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
-        
+
         res.render('catalog/catalog', {list, title: 'Catalog'});
         client.release();
     } catch (err) {
@@ -43,19 +43,19 @@ router.get('/', async (req, res) => {
 router.get('/createitems', function(req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item'});
 });
-// Create a new book 
+// Create a new book
 router.get('/createitems/createBook', function(req, res, next) {
     res.render('catalog/createBook', { title: 'Create Item'});
 });
-// Create a new magazine 
+// Create a new magazine
 router.get('/createitems/createMagazine', function(req, res, next) {
     res.render('catalog/createMagazine', { title: 'Create Item'});
 });
-// Create a music 
+// Create a music
 router.get('/createitems/createMusic', function(req, res, next) {
     res.render('catalog/createMusic', { title: 'Create Item'});
 });
-// Create a new movie 
+// Create a new movie
 router.get('/createitems/createMovie', function(req, res, next) {
     res.render('catalog/createMovie', { title: 'Create Item'});
 });
@@ -65,7 +65,7 @@ router.get('/createitems/createMovie', function(req, res, next) {
 // == POST Requests for Creating Items === //
 // ====================================== //
 // Create a new book: Post request
-router.post('/createitems/createbook', function (req, res) {
+router.post('/createitems/createbook', async function (req, res) {
 
     const newbook = {
         "title": req.body.title,
@@ -97,6 +97,17 @@ router.post('/createitems/createbook', function (req, res) {
         catalog.insertNewBook(newbook);
         res.render('catalog/catalog', {title: 'Catalog'});
     }
+
+    try {
+        const client = await pool.connect();
+        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Book');INSERT INTO Books (item_id, discriminator, quantity, loand_period, loanable, title, author, format, pages, publisher, language, isbn10, isbn13)"+"SELECT select_id,'Book',"+newbook.quantity+",7,TRUE,'"+newbook.title+"','" +newbook.author+ "','" +newbook.format+ "'," +newbook.pages+ ",'" +newbook.publisher+ "','" +newbook.language+ "', " +newbook.isbn10+ ", " +newbook.isbn13+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        );
+
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+
 });
 
 
@@ -185,9 +196,9 @@ router.post('/updatebook/:item_id/modify', async (req, res) => {
             "isbn10 = " + newItem.isbn10 + ", " +
             "isbn13 = " + newItem.isbn13 + ", " +
             "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
+            "loand_period = " + newItem.loand_period + ", " +
             "quantity = "+ newItem.quantity +
-            " WHERE book_id = ($1);", [req.params.item_id]  
+            " WHERE book_id = ($1);", [req.params.item_id]
         );
         res.redirect('/catalog');
         client.release();
@@ -219,11 +230,11 @@ router.post('/updatemagazine/:item_id/modify', async (req, res) => {
             "isbn10 = " + newItem.isbn10 + ", " +
             "isbn13 = " + newItem.isbn13 + ", " +
             "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
+            "loand_period = " + newItem.loand_period + ", " +
             "quantity = "+ newItem.quantity +
-            " WHERE magazine_id = ($1);", [req.params.item_id]  
+            " WHERE magazine_id = ($1);", [req.params.item_id]
         );
-        
+
         res.redirect('/catalog');
         client.release();
     } catch (err) {
@@ -261,11 +272,11 @@ router.post('/updatemovie/:item_id/modify', async (req, res) => {
             "release_date = '" + newItem.release_date + "', " +
             "run_time = " + newItem.run_time + ", " +
             "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
+            "loand_period = " + newItem.loand_period + ", " +
             "quantity = "+ newItem.quantity +
             " WHERE movie_id = ($1);", [req.params.item_id]
         );
-        
+
         res.redirect('/catalog');
         client.release();
     } catch (err) {
@@ -296,9 +307,9 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
             "release_date = '" + newItem.release_date + "', " +
             "asin = '" + newItem.asin + "', " +
             "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
+            "loand_period = " + newItem.loand_period + ", " +
             "quantity = "+ newItem.quantity +
-            " WHERE music_id = ($1);", [req.params.item_id]  
+            " WHERE music_id = ($1);", [req.params.item_id]
         );
 
         res.redirect('/catalog');
