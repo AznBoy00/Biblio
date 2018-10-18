@@ -25,12 +25,12 @@
 
 <div class="form-group">
     <label>Loanable <small class="text-muted">(TRUE or FALSE)</small></label>
-    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
+    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>" readonly>
 </div>
     
 <div class="form-group">
     <label>Loan Period <small class="text-muted">(number of days)</small></label>
-    <input type="number" class="form-control" name="loand_period" value="<%= results.results[0].loand_period %>">
+    <input type="number" class="form-control" name="loand_period" value="<%= results.results[0].loand_period %>" readonly>
 </div>
 
 <div class="form-group">

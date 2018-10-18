@@ -36,7 +36,7 @@ module.exports.insertNewBook = async function(newbook) {
     try {
         const client = await pool.connect();
 
-        const itemid = await client.query(
+        let itemid = await client.query(
             "SELECT MAX(item_id) FROM Items;",
             function(err, result) {
                 if (err)

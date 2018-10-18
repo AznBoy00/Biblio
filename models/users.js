@@ -20,7 +20,7 @@ module.exports.insertNewUser = async function(newUser) {
                     console.log(result);
                 }
             });
-
+        client.release();
     } catch (err) {
         console.error(err);
         res.send(err);
@@ -32,6 +32,7 @@ async function findUserByEmail(email){
     try {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+        client.release();
         return await result;
     } catch (err) {
         console.error(err);
@@ -51,9 +52,10 @@ module.exports.userExists = async function (email) {
 
 //check password using the bcrypt-nodejs protocol
 module.exports.checkPassword = async function (email, password) {
-    var user = await findUserByEmail(email);
+    let user = await findUserByEmail(email);
+
     const results = { 'results': (await user) ? await user.rows : null};
-    var hash = await results.results[0].password;
+    let hash = await results.results[0].password;
     if(bcrypt.compareSync('' + password, await hash)) {
         return true;
     } else {
@@ -67,6 +69,7 @@ module.exports.findUserByEmail = async function findUserByEmail(email){
     try {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+        client.release();
         return await result;
     } catch (err) {
         console.error(err);
