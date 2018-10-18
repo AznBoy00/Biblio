@@ -28,7 +28,6 @@ router.get('/admincp/manageusers', async (req, res) => {
         res.render('users/manageusers', {results, title: 'Admin CP'} );
         client.release();
 	} catch (err) {
-        client.release();
         console.error(err);
         res.send("error" + err);
 	}
@@ -43,7 +42,6 @@ router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
         res.redirect('/users/admincp/manageusers');
         client.release();
 	} catch (err) {
-        client.release();
         console.error(err);
         res.send("error" + err);
 	}
@@ -57,13 +55,12 @@ router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
         res.redirect('/users/admincp/manageusers');
         client.release();
 	} catch (err) {
-        client.release();
         console.error(err);
         res.send("error " + err);
 	}
 });
 
-// User/Admin login page
+// Users/Admin login page
 router.get('/login', function(req, res, next) {
     res.render('users/login', { title: 'Login' });
 });
