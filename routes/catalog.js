@@ -89,9 +89,9 @@ router.post('/createitems/createbook', function (req, res) {
     req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
     req.checkBody('quantity', 'Quantity is required').notEmpty();
 
-    var errors = req.validationErrors();
-    if (errors) {
-        res.render('catalog/createBook', { errors: errors});
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
         console.log(newbook);
         catalog.insertNewBook(newbook);
@@ -308,6 +308,73 @@ router.post('/updatemusic/:item_id/modify', async (req, res) => {
         res.render('error', { error: err });
     }
 });
+
+// ====================================== //
+// == GET Requests for Deleting Items === //
+// ====================================== //
+
+// Books
+router.get('/deletebook/:item_id', async(req, res) => {
+
+    try {
+        const client = await pool.connect();
+        const resultDeleteBook = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Book");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Magazine
+router.get('/deletemagazine/:item_id', async(req, res) => {
+
+    try {
+        const client = await pool.connect();
+        const resultMagazine = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Magazine");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Movies
+router.get('/deletemovie/:item_id', async(req, res) => {
+
+    try {
+        const client = await pool.connect();
+        const resultDeleteMovie = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Movie");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+//Music
+router.get('/deletemusic/:item_id', async(req, res) => {
+
+    try {
+        const client = await pool.connect();
+        const resultDeleteMusic = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+            console.log("Deleted Music");
+        res.redirect('/catalog');
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+});
+
+
+
 
 //keep the next line at the end of this script
 module.exports = router;

@@ -1,42 +1,44 @@
-<nav class="navbar sticky-top navbar-expand-md navbar-light bg-light mb-0">
+
+<nav class="navbar sticky-top navbar-expand-md navbar-light bg-light mb-3">
     <a class="navbar-brand" href="/">Biblio</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbar">
-        <ul class="navbar-nav mr-auto">
-           
+    <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+        
             <li <%- title === "Home" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link my-md-2 my-1" href="/">Home</a>
             </li>
             
             <li <%- title === "Catalog" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link" href="/catalog">Catalog</a>
+                <a class="nav-link my-md-2 my-1" href="/catalog">Catalog</a>
             </li>
             
             <li <%- title === "Create Item" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link" href="/catalog/createitems">Create Item</a>
+                <a class="nav-link my-md-2 my-1" href="/catalog/createitems">Create Item</a>
             </li>
             
             <li <%- title === "User CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link" href="/users/usercp">User</a>
+                <a class="nav-link my-md-2 my-1" href="/users/usercp">User</a>
             </li>
             
             <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link" href="/users/admincp/manageusers">Admin</a>
+                <a class="nav-link my-md-2 my-1" href="/users/admincp/manageusers">Admin</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li <%- title === "Register" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
+                <a class="btn btn-outline-primary my-md-2 my-1 mr-2" href="/users/register">Register</a>
             </li>
             
             <li <%- title === "Login" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link text" href="/users/login">Login</a>
-            </li>
-            
-            <li <%- title === "Register" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                <a class="nav-link text" href="/users/register">Register</a>
+                <a class="btn btn-outline-success my-md-2 my-1 mr-2" href="/users/login">Login</a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link text-danger" href="/users/logout">Logout</a>
+                <a class="btn btn-outline-danger my-md-2 my-1" href="/users/logout">Logout</a>
             </li>
 
         </ul>

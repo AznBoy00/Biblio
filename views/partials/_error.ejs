@@ -1,5 +1,30 @@
-<% if (typeof errors != "undefined") { %>
-    <% for (var i=0; i < errors.length; i++) { %>
-    <p style="color:red;"><%= errors[i].msg %></p>
-    <% } %>
-<% } %> 
+<!-- Custom error messages -->
+<!-- 
+    Login, Register methods 
+    From the Users Routes uses this
+-->
+<% if (typeof msg !== 'undefined') { %>
+    <div class="alert alert-danger" role="alert">
+        <%= msg %>
+    </div>
+<% } %>
+
+<!-- Default error messages -->
+<!-- 
+    Create items (book, magazine, music, movie)
+    Update Items(book, magazine, music, movie)
+    From the Catalog Routes uses this 
+-->
+<!-- Errors returns [location, param, msg, value] -->
+<% if (typeof errors !== 'undefined') { %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="my-1">Error</h3>
+        <% for (var i = 0 ; i < errors.length ; i++){%>
+            <p class="my-3"><%= errors[i].msg %></p>
+        <% } %>
+    </div>
+<% } %>
+
