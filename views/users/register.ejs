@@ -11,8 +11,8 @@
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
                 <h2>Register</h2>
             </div>
-        </div>        
-        
+        </div>
+
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2"> 
                 <form method="post" action="/users/register" onSubmit="return checkblank(this);">
@@ -22,6 +22,7 @@
                     <%- include('_registerForm') -%>   
 
 					<button class="btn btn-success" type="submit">Save</button>
+
                 </form>
                 <!-- ./ end form -->
 			</div>
@@ -31,6 +32,6 @@
 
 	</div>
 	<!-- ./ end container -->
-	<%- include('../partials/_footer') -%>   
+	<%- include('../partials/_footer'); -%>   
 </body>
 </html>
