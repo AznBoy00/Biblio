@@ -57,27 +57,6 @@ module.exports.insertNewBook = async function(newbook) {
                     console.log(newitem);
             }
         );
-
-        // const result = await client.query(
-        //     "INSERT INTO Books (book_id, quantity, title, author, format, pages, publisher, language, isbn10, isbn13) VALUES ("
-        //                 + itemid + ","
-        //                 + newbook.quantity + ",'"
-        //                 + newbook.title + "','"
-        //                 + newbook.author+ "','"
-        //                 + newbook.format + "',"
-        //                 + newbook.pages + ",'"
-        //                 + newbook.publisher + "','"
-        //                 + newbook.language + "',"
-        //                 + newbook.isbn10 + ","
-        //                 + newbook.isbn13 + ")" ,            
-        //     function(err, result){
-        //         if (err) {
-        //             console.log(err);
-        //         }
-        //         else {
-        //             console.log(result);
-        //         }
-        //     });
     } catch (err) {
         console.error(err);
     }
