@@ -17,7 +17,7 @@
         </div>
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <form method="POST" action="/catalog/updateitem/<%= results.results[0].magazine_id %>/modify" onSubmit="return checkblank(this);">
+                <form method="POST" action="/catalog/updateitem/<%= results.results[0].item_id %>/modify" onSubmit="return checkblank(this);">
 
                     <%- include('_updateMagazineForm') -%>
 

@@ -122,74 +122,12 @@ router.get('/updateitem/:item_id', async (req, res) => {
 // == POST Requests for Updating Items === //
 // ====================================== //
 router.post('/updateitem/:item_id/modify', async (req, res) => {
-    let result;
-    let newItem;
-
     try {
-        let discriminator = await catalog.getDiscriminator(req.params.item_id);
-        console.log(discriminator);
-        switch (discriminator) {
-            case "Book":
-                newItem = {
-                    "title": req.body.title,
-                    "author": req.body.author,
-                    "format": req.body.format,
-                    "pages": req.body.pages,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13,
-                    "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
-                    "quantity": req.body.quantity
-                };
-                break;
-            case "Magazine":
-                newItem = {
-                    "title": req.body.title,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13,
-                    "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
-                    "quantity": req.body.quantity
-                };
-                break;
-            case "Movie":
-                newItem = {
-                    "title": req.body.title,
-                    "Publisher": req.body.director,
-                    "producers": req.body.producers,
-                    "language": req.body.language,
-                    "dubbed": req.body.dubbed,
-                    "subtitles": req.body.subtitles,
-                    "actors": req.body.actors,
-                    "release_date": req.body.release_date,
-                    "run_time": req.body.run_time,
-                    "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
-                    "quantity": req.body.quantity
-                };
-                break;
-            case "Music":
-                newItem = {
-                    "title": req.body.title,
-                    "artist": req.body.artist,
-                    "label": req.body.label,
-                    "release_date": req.body.release_date,
-                    "asin": req.body.asin,
-                    "run_time": req.body.run_time,
-                    "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
-                    "quantity": req.body.quantity
-                };
-                break;
-            default:
-                newItem = null;
-                break;
-        }
-        console.log(newItem);
+        let result;
+        let newItem;
+        // console.log("ITEM_ID: " + req.params.item_id);
+        newItem = await catalog.getNewItem(req.params.item_id, req);
+        // console.log(newItem);
         result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {

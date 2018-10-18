@@ -132,76 +132,78 @@ module.exports.getDiscriminator = async function(item_id) {
 }
 
 //getNewItem structure
-// module.exports.getNewItem = async function(discriminator) {
-//     var newItem;
-//     try {
-//         switch(discriminator) {
-//             case "Book":
-//                 newItem = {
-//                     "title": req.body.title,
-//                     "author": req.body.author,
-//                     "format": req.body.format,
-//                     "pages": req.body.pages,
-//                     "publisher": req.body.publisher,
-//                     "language": req.body.language,
-//                     "isbn10": req.body.isbn10,
-//                     "isbn13": req.body.isbn13,
-//                     "loanable": req.body.loanable,
-//                     "loand_period": req.body.loand_period,
-//                     "quantity": req.body.quantity
-//                 };
-//                 break;
-//             case "Magazine":
-//                 newItem = {
-//                     "title": req.body.title,
-//                     "publisher": req.body.publisher,
-//                     "language": req.body.language,
-//                     "isbn10": req.body.isbn10,
-//                     "isbn13": req.body.isbn13,
-//                     "loanable": req.body.loanable,
-//                     "loand_period": req.body.loand_period,
-//                     "quantity": req.body.quantity
-//                 };
-//                 break;
-//             case "Movie":
-//                 newItem = {
-//                     "title": req.body.title,
-//                     "Publisher": req.body.director,
-//                     "producers": req.body.producers,
-//                     "language": req.body.language,
-//                     "dubbed": req.body.dubbed,
-//                     "subtitles": req.body.subtitles,
-//                     "actors": req.body.actors,
-//                     "release_date": req.body.release_date,
-//                     "run_time": req.body.run_time,
-//                     "loanable": req.body.loanable,
-//                     "loand_period": req.body.loand_period,
-//                     "quantity": req.body.quantity
-//                 };
-//                 break;
-//             case "Music":
-//                 newItem = {
-//                     "title": req.body.title,
-//                     "artist": req.body.artist,
-//                     "label": req.body.label,
-//                     "release_date": req.body.release_date,
-//                     "asin": req.body.asin,
-//                     "run_time": req.body.run_time,
-//                     "loanable": req.body.loanable,
-//                     "loand_period": req.body.loand_period,
-//                     "quantity": req.body.quantity
-//                 };
-//                 break;
-//             default:
-//                 result = null;
-//                 break;
-//         }
-//         console.log(newItem);
-//         return newItem;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
+module.exports.getNewItem = async function(item_id, req) {
+    let newItem;
+    const discriminator = await this.getDiscriminator(item_id);
+    console.log("getNewItem DISCRIMINATOR: " + discriminator);
+    try {
+        switch(discriminator) {
+            case "Book":
+                newItem = await {
+                    "title": req.body.title,
+                    "author": req.body.author,
+                    "format": req.body.format,
+                    "pages": req.body.pages,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Magazine":
+                newItem = await {
+                    "title": req.body.title,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Movie":
+                newItem = await {
+                    "title": req.body.title,
+                    "Publisher": req.body.director,
+                    "producers": req.body.producers,
+                    "language": req.body.language,
+                    "dubbed": req.body.dubbed,
+                    "subtitles": req.body.subtitles,
+                    "actors": req.body.actors,
+                    "release_date": req.body.release_date,
+                    "run_time": req.body.run_time,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Music":
+                newItem = await {
+                    "title": req.body.title,
+                    "artist": req.body.artist,
+                    "label": req.body.label,
+                    "release_date": req.body.release_date,
+                    "asin": req.body.asin,
+                    "run_time": req.body.run_time,
+                    "loanable": req.body.loanable,
+                    "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            default:
+                newItem = null;
+                console.log("NO OBJECT FOUND");
+                break;
+        }
+        return await newItem;
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 // updateItem to database;
 module.exports.updateItem = async function(newItem, item_id) {
@@ -209,7 +211,7 @@ module.exports.updateItem = async function(newItem, item_id) {
         const client = await pool.connect();
         let result;
         let discriminator = await this.getDiscriminator(item_id);
-        //console.log(discriminator);
+        console.log(discriminator);
         switch (discriminator) {
             case "Book":
                 result = await client.query(
@@ -226,7 +228,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                //console.log("BOOK SQL");
+                console.log("BOOK SQL");
                 break;
             case "Magazine":
                 result = await client.query(
@@ -241,7 +243,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                //console.log("MAGAZINE SQL");
+                console.log("MAGAZINE SQL");
                 break;
             case "Movie":
                 result = await client.query(
@@ -260,7 +262,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
-                //console.log("MOVIE SQL");
+                console.log("MOVIE SQL");
                 break;
             case "Music":
                 result = await client.query(
@@ -275,11 +277,11 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
-                //console.log("MUSIC SQL");
+                console.log("MUSIC SQL");
                 break;
             default:
                 result = null;
-                //console.log("NO SQL");
+                console.log("NO SQL");
                 break;
         }
         client.release();
