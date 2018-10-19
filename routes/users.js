@@ -25,7 +25,7 @@ router.get('/admincp/manageusers', async (req, res) => {
         const client = await pool.connect();
         const result = await client.query('SELECT * FROM users ORDER BY user_id ASC');
         const results = { 'results': (result) ? result.rows : null};
-        res.render('users/manageusers', {results, title: 'Admin CP'} );
+        res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged} );
         client.release();
 	} catch (err) {
         console.error(err);
@@ -67,7 +67,7 @@ router.get('/login', function(req, res, next) {
 
 // User control panel page
 router.get('/usercp', function(req, res, next) {
-    res.render('users/usercp', { title: 'User CP'});
+    res.render('users/usercp', { title: 'User CP', is_logged: req.session.logged});
 });
 
 // Registering a new user GET for request
@@ -144,9 +144,7 @@ router.post('/login', async function (req, res) {
 });
 
 router.get("/logout", function(req, res){
-    console.log(req.session);
     req.session.destroy();
-    console.log(req.session);
     res.redirect('/');
 });
 
