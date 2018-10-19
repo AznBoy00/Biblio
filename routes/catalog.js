@@ -110,6 +110,47 @@ router.post('/createitems/createbook', async function (req, res) {
 
 });
 
+// Create a new magazine: Post request
+router.post('/createitems/createmagazine', async function (req, res) {
+
+    const newItem = {
+        "title": req.body.title,
+        "publisher": req.body.publisher,
+        "language": req.body.language,
+        "isbn10": req.body.isbn10,
+        "isbn13": req.body.isbn13,
+        "quantity": req.body.quantity
+    };
+
+    req.checkBody('title', 'Title is required').notEmpty();
+    req.checkBody('publisher', 'Publisher is required').notEmpty();
+    req.checkBody('language', 'Language is required').notEmpty();
+    req.checkBody('isbn10', 'ISBN10 is required').notEmpty();
+    req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
+    req.checkBody('quantity', 'Quantity is required').notEmpty();
+
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createMagazine', {errors: err, title: 'Create Item'});
+    } else {
+        console.log(newItem);
+        catalog.insertNewBook(newItem);
+        res.render('catalog/catalog', {title: 'Catalog'});
+    }
+
+    try {
+        const client = await pool.connect();
+        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');"+
+        "INSERT INTO Magazines"+
+            "(item_id, discriminator, quantity, loand_period, loanable, title, publisher, language, isbn10, isbn13)"+
+            "SELECT select_id,'Magazine',"+newItem.quantity+",0,FALSE,'"+newItem.title+"','"+newItem.publisher+"', '"+newItem.language+"',"+newItem.isbn10+", "+newItem.isbn13+
+            "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;");
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+
+});
 
 // ====================================== //
 // == GET Requests for Updating Items === //
