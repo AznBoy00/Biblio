@@ -20,22 +20,8 @@ const pool = require('../db');
 // ====================================== //
 router.get('/', async (req, res) => {
     try {
-        const client = await pool.connect();
-
-        let list = [];
-        const resultBook = await client.query('SELECT * FROM books');
-        const resultMagazine = await client.query('SELECT * FROM magazines ');
-        const resultMovie = await client.query('SELECT * FROM movies ');
-        const resultMusic = await client.query('SELECT * FROM music ');
-        
-        
-        list.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
-        list.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
-        list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
-        list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
-        
-        res.render('catalog/catalog', {list, title: 'Catalog', is_logged: req.session.logged});
-        client.release();
+        let list = await catalog.getCatalog();
+        res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -47,23 +33,23 @@ router.get('/', async (req, res) => {
 // == GET Requests for Creating Items === //
 // ====================================== //
 // Create a new item page
-router.get('/createitems', function(req, res, next) {
+router.get('/createitems', function (req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new book 
-router.get('/createitems/createBook', function(req, res, next) {
+router.get('/createitems/createBook', function (req, res, next) {
     res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new magazine 
-router.get('/createitems/createMagazine', function(req, res, next) {
+router.get('/createitems/createMagazine', function (req, res, next) {
     res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a music 
-router.get('/createitems/createMusic', function(req, res, next) {
+router.get('/createitems/createMusic', function (req, res, next) {
     res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new movie 
-router.get('/createitems/createMovie', function(req, res, next) {
+router.get('/createitems/createMovie', function (req, res, next) {
     res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged});
 });
 
@@ -95,14 +81,13 @@ router.post('/createitems/createbook', function (req, res) {
     req.checkBody('isbn10', 'ISBN10 is required').notEmpty();
     req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
     req.checkBody('quantity', 'Quantity is required').notEmpty();
-
     const err = req.validationErrors();
     if (err) {
         res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
         console.log(newbook);
         catalog.insertNewBook(newbook);
-        res.render('catalog/catalog', {title: 'Catalog'});
+        res.render('catalog/catalog', { title: 'Catalog' });
     }
 });
 
@@ -110,206 +95,47 @@ router.post('/createitems/createbook', function (req, res) {
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/updatebook/:item_id', async (req, res) => {
-	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM books WHERE book_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
-        res.render('catalog/updateBook', {results, title: 'Catalog'});
-        client.release();
-	} catch (err) {
+router.get('/updateitem/:item_id', async (req, res) => {
+    try {
+        let results = await catalog.getItem(req.params.item_id);
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        console.log(discriminator);
+        switch (discriminator) {
+            case "Book":
+                res.render('catalog/updateBook', { results, title: 'Catalog' });
+                break;
+            case "Magazine":
+                res.render('catalog/updateMagazine', { results, title: 'Catalog' });
+                break;
+            case "Movie":
+                res.render('catalog/updateMovie', { results, title: 'Catalog' });
+                break;
+            case "Music":
+                res.render('catalog/updateMusic', { results, title: 'Catalog' });
+                break;
+            default:
+                result = null;
+                break;
+        }
+    } catch (err) {
         console.error(err);
         res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemagazine/:item_id', async (req, res) => {
-	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM magazines WHERE magazine_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
-        res.render('catalog/updateMagazine', {results, title: 'Catalog'});
-        client.release();
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemovie/:item_id', async (req, res) => {
-	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM movies WHERE movie_id = ($1) ", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
-        res.render('catalog/updateMovie', {results, title: 'Catalog'});
-        client.release();
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
-});
-
-router.get('/updatemusic/:item_id', async (req, res) => {
-	try {
-        const client = await pool.connect()
-        const result = await client.query("SELECT * FROM music WHERE music_id = ($1)", [req.params.item_id]);
-        const results = { 'results': (result) ? result.rows : null};
-        res.render('catalog/updateMusic', {results, title: 'Catalog'});
-        client.release();
-	} catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-	}
+    }
 });
 
 
 // ====================================== //
 // == POST Requests for Updating Items === //
 // ====================================== //
-router.post('/updatebook/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "author": req.body.author,
-        "format": req.body.format,
-        "pages": req.body.pages,
-        "publisher": req.body.publisher,
-        "language": req.body.language,
-        "isbn10": req.body.isbn10,
-        "isbn13": req.body.isbn13,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
+router.post('/updateitem/:item_id/modify', async (req, res) => {
     try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE books SET " +
-            "title = '"+ newItem.title + "', " +
-            "author = '" + newItem.author + "', " +
-            "format = '" + newItem.format + "', " +
-            "pages = " + newItem.pages + ", " +
-            "language = '" + newItem.language + "', " +
-            "isbn10 = " + newItem.isbn10 + ", " +
-            "isbn13 = " + newItem.isbn13 + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE book_id = ($1);", [req.params.item_id]  
-        );
+        let result;
+        let newItem;
+        // console.log("ITEM_ID: " + req.params.item_id);
+        newItem = await catalog.getNewItem(req.params.item_id, req);
+        // console.log(newItem);
+        result = await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
-
-
-router.post('/updatemagazine/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "publisher": req.body.publisher,
-        "language": req.body.language,
-        "isbn10": req.body.isbn10,
-        "isbn13": req.body.isbn13,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE magazines SET " +
-            "title = '"+ newItem.title + "', " +
-            "publisher = '" + newItem.publisher + "', " +
-            "language = '" + newItem.language + "', " +
-            "isbn10 = " + newItem.isbn10 + ", " +
-            "isbn13 = " + newItem.isbn13 + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE magazine_id = ($1);", [req.params.item_id]  
-        );
-        
-        res.redirect('/catalog');
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
-
-router.post('/updatemovie/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "Publisher": req.body.director,
-        "producers": req.body.producers,
-        "language": req.body.language,
-        "dubbed": req.body.dubbed,
-        "subtitles": req.body.subtitles,
-        "actors": req.body.actors,
-        "release_date": req.body.release_date,
-        "run_time": req.body.run_time,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE movies SET " +
-            "title = '"+ newItem.title + "', " +
-            "director = '" + newItem.director + "', " +
-            "producers = '" + newItem.producers + "', " +
-            "language = '" + newItem.language + "', " +
-            "dubbed = '" + newItem.dubbed + "', " +
-            "subtitles = '" + newItem.subtitles + "', " +
-            "actors = '" + newItem.actors + "', " +
-            "release_date = '" + newItem.release_date + "', " +
-            "run_time = " + newItem.run_time + ", " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE movie_id = ($1);", [req.params.item_id]
-        );
-        
-        res.redirect('/catalog');
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-});
-
-router.post('/updatemusic/:item_id/modify', async (req, res) => {
-    const newItem = {
-        "title": req.body.title,
-        "artist": req.body.artist,
-        "label": req.body.label,
-        "release_date": req.body.release_date,
-        "asin": req.body.asin,
-        "run_time": req.body.run_time,
-        "loanable": req.body.loanable,
-        "loand_period": req.body.loand_period,
-        "quantity": req.body.quantity
-    };
-    try {
-        const client = await pool.connect();
-        const result = await client.query(
-            "UPDATE music SET " +
-            "title = '"+ newItem.title + "', " +
-            "artist = '" + newItem.artist + "', " +
-            "label = '" + newItem.label + "', " +
-            "release_date = '" + newItem.release_date + "', " +
-            "asin = '" + newItem.asin + "', " +
-            "loanable = '" + newItem.loanable + "', " +
-            "loand_period = " + newItem.loand_period + ", " + 
-            "quantity = "+ newItem.quantity +
-            " WHERE music_id = ($1);", [req.params.item_id]  
-        );
-
-        res.redirect('/catalog');
-        client.release();
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });

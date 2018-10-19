@@ -11,8 +11,6 @@ router.use(session({
     resave : true,
     saveUninitialized : true
 }));
-// DB connection
-const pool = require('../db');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -22,42 +20,36 @@ router.get('/', function(req, res, next) {
 // manage users page
 router.get('/admincp/manageusers', async (req, res) => {
 	try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM users ORDER BY user_id ASC');
-        const results = { 'results': (result) ? result.rows : null};
+        let results = await user.displayAllUsers();
         res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged} );
-        client.release();
 	} catch (err) {
         console.error(err);
         res.send("error" + err);
 	}
 });
 
-// promote/demote users to admin page
+// promote users to admin page
 router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
 	try {
-        const client = await pool.connect();
-        const result = await client.query("UPDATE users SET is_admin = 't' WHERE user_id = ($1)", [req.params.userid]);
-        const fname = req.params.fname;
+        user.toggleAdminStatus(req.params.userid, false);
+        console.log("PROMOTING: " + req.params.userid);
         res.redirect('/users/admincp/manageusers');
-        client.release();
 	} catch (err) {
         console.error(err);
         res.send("error" + err);
-	}
+    }
 });
 
+// demote users to admin page
 router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
 	try {
-        const client = await pool.connect();
-        const result = await client.query("UPDATE users SET is_admin = 'f' WHERE user_id = ($1)", [req.params.userid]);
-        const fname = req.params.fname;
+        user.toggleAdminStatus(req.params.userid, true);
+        console.log("DEMOTING: "+ req.params.userid);
         res.redirect('/users/admincp/manageusers');
-        client.release();
-	} catch (err) {
+    } catch (err) {
         console.error(err);
         res.send("error " + err);
-	}
+    }
 });
 
 // Users/Admin login page
