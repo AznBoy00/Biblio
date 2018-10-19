@@ -1,6 +1,13 @@
 // Config Variables
+var session = require('express-session');
 var express = require('express');
 var router = express.Router();
+var router = express.Router();
+router.use(session({
+    secret : '2C44-4D44-WppQ38S',
+    resave : true,
+    saveUninitialized : true
+}));
 var expressValidator = require('express-validator');
 router.use(expressValidator());
 var catalog = require('../models/catalog');
