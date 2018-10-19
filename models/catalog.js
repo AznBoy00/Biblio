@@ -22,6 +22,7 @@ router.post('/createItem/:item_id', async (req, res) => {
         res.render('error', { error: err });
     }
     switch(discriminator){
+        //case 1
         case "Book":
             module.exports.insertNewBook = async function(newBook) {
                 try {
@@ -49,6 +50,7 @@ router.post('/createItem/:item_id', async (req, res) => {
                     res.send(err);
                 }
             };
+        //case 2
         case "Magazine":
             module.exports.insertNewMagazine = async function(newMagazine){
                 try {
@@ -76,10 +78,16 @@ router.post('/createItem/:item_id', async (req, res) => {
                     res.send(err);
                 }
             };
+        //case 3
         case "Music":
+            module.exports.insertNewMusic = async function(newMusic){
 
-    };
+            };
+        //case 4
+         //case
 });
+});
+}
 
 
 
