@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
         list.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
         list.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
         
-        res.render('catalog/catalog', {list, title: 'Catalog'});
+        res.render('catalog/catalog', {list, title: 'Catalog', is_logged: req.session.logged});
         client.release();
     } catch (err) {
         console.error(err);
@@ -48,23 +48,23 @@ router.get('/', async (req, res) => {
 // ====================================== //
 // Create a new item page
 router.get('/createitems', function(req, res, next) {
-    res.render('catalog/createitem', { title: 'Create Item'});
+    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new book 
 router.get('/createitems/createBook', function(req, res, next) {
-    res.render('catalog/createBook', { title: 'Create Item'});
+    res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new magazine 
 router.get('/createitems/createMagazine', function(req, res, next) {
-    res.render('catalog/createMagazine', { title: 'Create Item'});
+    res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a music 
 router.get('/createitems/createMusic', function(req, res, next) {
-    res.render('catalog/createMusic', { title: 'Create Item'});
+    res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged});
 });
 // Create a new movie 
 router.get('/createitems/createMovie', function(req, res, next) {
-    res.render('catalog/createMovie', { title: 'Create Item'});
+    res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged});
 });
 
 
