@@ -6,6 +6,66 @@ const pool = new Pool({
     ssl: true
 });
 
+
+//Create new book: Post request
+
+var item = require('../models/item');
+
+// Create
+
+
+//insert new book
+
+module.exports.insertNewItem = async function(newItem) {
+    try {
+        const client = await pool.connect();
+
+        let itemid = await client.query(
+            "SELECT MAX(item_id) FROM Items;",
+            function(err, result) {
+                if (err)
+                    console.log(err);
+                else
+                    console.log(itemid);
+            }
+        );
+
+        itemid = itemid + 1;
+
+        const newItem = await client.query(
+            "INSERT INTO Items (item_id, discriminator) VALUES (" + itemid[0] + ", 'Items')",
+            function(err, result) {
+                if (err)
+                    console.log(err);
+                else
+                    console.log('1 record inserted');
+            }
+        );
+
+        const result = await client.query("INSERT INTO Book (discriminator) VALUES ("
+                         + itemid + ","
+                       + newbook.quantity + ",'"
+                       + newbook.title + "','"
+                        + newbook.author+ "','"
+                + newbook.format + "',"
+                         + newbook.pages + ",'"
+                         + newbook.publisher + "','"
+                         + newbook.language + "',"
+                         + newbook.isbn10 + ","
+                         + newbook.isbn13 + ")" ,
+             function(err, result){
+                 if (err) {
+                     console.log(err);
+                 }
+                 else {
+                     console.log(result);
+                 }
+             });
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 //Insert new book into db (without using Item table)
 module.exports.insertNewBook = async function(newBook) {
     try {
@@ -60,6 +120,7 @@ module.exports.insertNewMagazine = async function(newMagazine) {
         res.send(err);
     }
 };
+
 
 
 
