@@ -143,6 +143,7 @@ router.post('/updateitem/:item_id/modify', async (req, res) => {
 router.get('/deletebook/:item_id', async(req, res) => {
 
     try {
+        //let agree = confirm ("Are you sure to delete this record");
         const client = await pool.connect();
         const resultDeleteBook = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Book");
@@ -153,6 +154,7 @@ router.get('/deletebook/:item_id', async(req, res) => {
         res.send("Error " + err);
     }
 });
+
 
 //Magazine
 router.get('/deletemagazine/:item_id', async(req, res) => {

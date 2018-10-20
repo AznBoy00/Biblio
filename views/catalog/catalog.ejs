@@ -64,7 +64,7 @@
                                     <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td><%= list.resultBooks.resultBooks[i].quantity %></td>
                                     <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Update</a></td>
-                                <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Delete</a></td>
+                                <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>" onclick="return confirm('Are sure want to remove');" style= "float: right">Delete</a></td>
                                 </tr>
                             <% } %>
                         </tbody>
