@@ -143,11 +143,11 @@ router.post('/updateitem/:item_id/modify', async (req, res) => {
 router.get('/deletebook/:item_id', async(req, res) => {
 
     try {
-        //let agree = confirm ("Are you sure to delete this record");
+        //front-end will confirm if the item is to be deleted or not
         const client = await pool.connect();
         const resultDeleteBook = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Book");
-        res.redirect('/catalog');
+        res.redirect('/catalog'); //refresh the page with the new changes 
         client.release();
     } catch (err) {
         console.error(err);
@@ -160,10 +160,11 @@ router.get('/deletebook/:item_id', async(req, res) => {
 router.get('/deletemagazine/:item_id', async(req, res) => {
 
     try {
+        //front-end will confirm if the item is to be deleted or not
         const client = await pool.connect();
         const resultMagazine = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Magazine");
-        res.redirect('/catalog');
+        res.redirect('/catalog');//refresh the page with the new changes 
         client.release();
     } catch (err) {
         console.error(err);
@@ -175,9 +176,10 @@ router.get('/deletemagazine/:item_id', async(req, res) => {
 router.get('/deletemovie/:item_id', async(req, res) => {
 
     try {
+        //front-end will confirm if the item is to be deleted or not
         const client = await pool.connect();
         const resultDeleteMovie = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
-            console.log("Deleted Movie");
+            console.log("Deleted Movie");//refresh the page with the new changes 
         res.redirect('/catalog');
         client.release();
     } catch (err) {
@@ -190,10 +192,11 @@ router.get('/deletemovie/:item_id', async(req, res) => {
 router.get('/deletemusic/:item_id', async(req, res) => {
 
     try {
+        //front-end will confirm if the item is to be deleted or not
         const client = await pool.connect();
         const resultDeleteMusic = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
             console.log("Deleted Music");
-        res.redirect('/catalog');
+        res.redirect('/catalog');//refresh the page with the new changes 
         client.release();
     } catch (err) {
         console.error(err);
