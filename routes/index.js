@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
   var is_logged = false;
   if (typeof req.session !== 'undefined' && typeof req.session.logged !== 'undefined') {
     is_logged = req.session.logged;
-    res.render('index', { title: 'Home', is_logged: is_logged });
+    res.render('index', { title: 'Home', is_logged: is_logged, is_admin: req.session.is_admin });
   } else {
       res.render('index', { title: 'Home' });
   }
