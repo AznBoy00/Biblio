@@ -19,13 +19,18 @@ router.get('/', function(req, res, next) {
 
 // manage users page
 router.get('/admincp/manageusers', async (req, res) => {
-	try {
-        let results = await user.displayAllUsers();
-        res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged} );
-	} catch (err) {
-        console.error(err);
-        res.send("error" + err);
-	}
+    if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
+        try {
+            let results = await user.displayAllUsers();
+            res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin} );
+        } catch (err) {
+            console.error(err);
+            res.send("error" + err);
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+    }
+
 });
 
 // promote users to admin page
@@ -59,7 +64,7 @@ router.get('/login', function(req, res, next) {
 
 // User control panel page
 router.get('/usercp', function(req, res, next) {
-    res.render('users/usercp', { title: 'User CP', is_logged: req.session.logged});
+    res.render('users/usercp', { title: 'User CP', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 
 // Registering a new user GET for request
@@ -95,7 +100,7 @@ router.post('/register', function (req, res) {
         console.log(hash);
         user.insertNewUser(newUser);
     }
-    res.render('index', { title: 'Home' });
+    res.redirect('/');
 });
 
 //post for login
