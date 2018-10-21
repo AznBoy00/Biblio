@@ -20,7 +20,7 @@ Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Start
 - Course Name: Software Architecture and Design I   
 - Website: [soen343t5.herokuapp.com](https://soen343t5.herokuapp.com)  
 - Framework: [Node.js](https://nodejs.org/en/) | [Express.js](https://expressjs.com)
-- Database: [PostgreSQL] (https://www.postgresql.org/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
 - Front-end Framework: [Bootstrap](https://getbootstrap.com)
 - Templating Engine: [EJS](http://www.ejs.co)
 - Hosting: [Heroku](https://dashboard.heroku.com/apps/soen343t5)  
