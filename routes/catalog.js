@@ -21,7 +21,7 @@ const pool = require('../db');
 router.get('/', async (req, res) => {
     try {
         let list = await catalog.getCatalog();
-        res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged});
+        res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -34,23 +34,23 @@ router.get('/', async (req, res) => {
 // ====================================== //
 // Create a new item page
 router.get('/createitems', function (req, res, next) {
-    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged});
+    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a new book 
 router.get('/createitems/createBook', function (req, res, next) {
-    res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged});
+    res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a new magazine 
 router.get('/createitems/createMagazine', function (req, res, next) {
-    res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged});
+    res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a music 
 router.get('/createitems/createMusic', function (req, res, next) {
-    res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged});
+    res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a new movie 
 router.get('/createitems/createMovie', function (req, res, next) {
-    res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged});
+    res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 
 
@@ -83,11 +83,11 @@ router.post('/createitems/createbook', function (req, res) {
     req.checkBody('quantity', 'Quantity is required').notEmpty();
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createBook', {errors: err, title: 'Create Item'});
+        res.render('catalog/createBook', {errors: err, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } else {
         console.log(newbook);
         catalog.insertNewBook(newbook);
-        res.render('catalog/catalog', { title: 'Catalog' });
+        res.render('catalog/catalog', { title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     }
 });
 
@@ -102,16 +102,16 @@ router.get('/updateitem/:item_id', async (req, res) => {
         console.log(discriminator);
         switch (discriminator) {
             case "Book":
-                res.render('catalog/updateBook', { results, title: 'Catalog' });
+                res.render('catalog/updateBook', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
                 break;
             case "Magazine":
-                res.render('catalog/updateMagazine', { results, title: 'Catalog' });
+                res.render('catalog/updateMagazine', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
             case "Movie":
-                res.render('catalog/updateMovie', { results, title: 'Catalog' });
+                res.render('catalog/updateMovie', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
             case "Music":
-                res.render('catalog/updateMusic', { results, title: 'Catalog' });
+                res.render('catalog/updateMusic', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
             default:
                 result = null;
