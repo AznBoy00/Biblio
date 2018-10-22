@@ -6,6 +6,13 @@ const pool = new Pool({
     ssl: true
 });
 
+//var item = require('./models/item');
+//list to be filled with item objects from item.js in models
+//var itemsList = [];
+//below is an example of using the constructor of the object
+// item.constructor(item_id, discriminator, properties (as an object));
+
+
 //insert new items into db: GET requests
 
 router.get('/createitems', function(req, res, next) {
@@ -71,6 +78,7 @@ router.post('/createitems/createBook', async function (req, res) {
     try {
         const client = await pool.connect();
         const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Book');INSERT INTO Books (item_id, discriminator, quantity, loand_period, loanable, title, author, format, pages, publisher, language, isbn10, isbn13)"+"SELECT select_id,'Book',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.author+ "','" +newItem.format+ "'," +newItem.pages+ ",'" +newItem.publisher+ "','" +newItem.language+ "', " +newItem.isbn10+ ", " +newItem.isbn13+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        client.release()
         );
 
     } catch (err) {
@@ -119,6 +127,7 @@ router.post('/createitems/createMovie', async function (req, res) {
     try {
         const client = await pool.connect();
         const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Movie');INSERT INTO Movies (item_id, discriminator, quantity, loand_period, loanable, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time) SELECT select_id, 'Movie',3,2,TRUE,'Spiderman 20','Clint Eastwood', 'Michael Kane', 'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133 FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        client.release()
         );
 
     } catch (err) {
@@ -163,7 +172,8 @@ router.post('/createitems/createMagazine', async function (req, res) {
     try {
         const client = await pool.connect();
         const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');INSERT INTO Magazine (item_id, discriminator, quantity, loand_period, loanable, title, publisher, language, isbn10, isbn13, release_date) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.publisher+ "','" +newItem.release_date+ "'," +newItem.isbn10+ ",'" +newItem.isbn13+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
+        client.release()
+    );
 
     } catch (err) {
         console.error(err);
@@ -209,6 +219,7 @@ router.post('/createitems/createMusic', async function(req, res){
     try {
         const client = await pool.connect();
         const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Music');INSERT INTO Music (item_id, discriminator, quantity, loand_period, loanable, title, label, release_date, asin, run_time, artist) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.artist+ "','" +newItem.release_date+ "'," +newItem.asin+ ",'" +newItem.run_time+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        client.release()
         );
 
     } catch (err) {
