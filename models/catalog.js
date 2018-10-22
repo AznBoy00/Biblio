@@ -29,7 +29,7 @@ router.get('/createitems/createMagazine', function(req, res, next) {
     res.render('catalog/createMagazine', { title: 'Create Item'});
 });
 
-// Create a music
+// Create a new music
 router.get('/createitems/createMusic', function(req, res, next) {
     res.render('catalog/createMusic', { title: 'Create Item'});
 });
@@ -68,7 +68,7 @@ router.post('/createitems/createBook', async function (req, res) {
 
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createBook', {errors: err, title: 'Create Book'});
+        res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
         catalog.insertNewBook(newItem);
@@ -117,7 +117,7 @@ router.post('/createitems/createMovie', async function (req, res) {
 
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createMovie', {errors: err, title: 'Create Movie'});
+        res.render('catalog/createMovie', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
         catalog.insertNewBook(newItem);
@@ -162,7 +162,7 @@ router.post('/createitems/createMagazine', async function (req, res) {
 
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createMagazine', {errors: err, title: 'Create Magazine'});
+        res.render('catalog/createMagazine', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
         catalog.insertNewMagazine(newItem);
@@ -209,7 +209,7 @@ router.post('/createitems/createMusic', async function(req, res){
 
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createMusic', {errors: err, title: 'Create Music'});
+        res.render('catalog/createMusic', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
         catalog.insertNewMusic(newItem);
