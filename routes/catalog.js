@@ -32,6 +32,9 @@ router.get('/', async (req, res) => {
 // ====================================== //
 // == GET Requests for Creating Items === //
 // ====================================== //
+//
+// is_logged is passed to check the session in the front-end
+//
 // Create a new item page
 router.get('/createitems', function (req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged});
