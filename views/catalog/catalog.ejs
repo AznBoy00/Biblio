@@ -22,6 +22,7 @@
                                 <th>Item Name</th>
                                 <th>Type</th>
                                 <th>Quantity</th>
+				//Update and delete should only be accessible by admins
                                 <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                     <th>Update</th>
                                     <th>Delete</th>
