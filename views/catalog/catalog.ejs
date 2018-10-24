@@ -22,7 +22,8 @@
                                 <th>Item Name</th>
                                 <th>Type</th>
                                 <th>Quantity</th>
-				//Update and delete should only be accessible by admins
+
+				                  //Update and delete should only be accessible by admins
                                 <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                     <th>Update</th>
                                     <th>Delete</th>
@@ -65,6 +66,7 @@
                                     <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
                                     <td><%= list.resultMusics.resultMusics[i].quantity %></td>
 
+
                            <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                 <td><a href="catalog/updateitem/<%= list.resultMusics.resultMusics[i].item_id %>">Update</a></td>
                                 <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>">Delete</a></td>
@@ -78,6 +80,7 @@
                                     <td><%= list.resultBooks.resultBooks[i].title %></td>
                                     <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td><%= list.resultBooks.resultBooks[i].quantity %></td>
+
 
                             <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                 <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>">Update</a></td>
