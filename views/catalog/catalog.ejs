@@ -67,6 +67,7 @@
                            <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                 <td><a href="catalog/updateitem/<%= list.resultMusics.resultMusics[i].item_id %>">Update</a></td>
                                 <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>">Delete</a></td>
+
                            <% } %>
                                 </tr>
                             <% } %>
@@ -80,6 +81,7 @@
                             <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
                                 <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>">Update</a></td>
                                 <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>">Delete</a></td>
+
                             <% } %>
                                 </tr>
                             <% } %>

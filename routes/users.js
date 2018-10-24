@@ -30,7 +30,6 @@ router.get('/admincp/manageusers', async (req, res) => {
     } else {
         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
     }
-
 });
 
 // promote users to admin page
