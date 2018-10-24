@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('../partials/_navbar'); -%>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <h2>Register</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2"> 
+                <form method="post" action="/users/register" onSubmit="return checkblank(this);">
+                    
+                    <%- include('../partials/_error'); -%>
+
+                    <%- include('_registerForm') -%>   
+
+					<button class="btn btn-success" type="submit">Save</button>
+
+                </form>
+                <!-- ./ end form -->
+			</div>
+			<!-- ./ end col -->
+		</div>
+		<!-- ./ end row -->
+
+	</div>
+	<!-- ./ end container -->
+	<%- include('../partials/_footer'); -%>   
+</body>
+</html>

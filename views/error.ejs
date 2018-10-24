@@ -1,0 +1,26 @@
+<!-- Pages are using /partials/_error.ejs instead  -->
+<!-- Default 404, 500, etc... errors are using this page -->
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <% title = 'Error' %>
+    <%- include('partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('partials/_navbar'); -%>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <h1><%= error.toString() %></h1>
+                    <h1><%= error.message %></h1>
+                    <h2 class="text-danger"><%= error.status %></h2>
+                </div>
+                <pre><%= error.stack %></pre>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/_footer'); -%>        
+</body>
+</html>

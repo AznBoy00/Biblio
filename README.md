@@ -1,22 +1,32 @@
 # SOEN343 Team 5 Concordia University Fall 2018
 Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 
+### Getting Started
+
+1. Clone the [repo](https://github.com/AznBoy00/soen343team5.git)
+1. `$ cd into/project/directory`
+1. `$ npm install`
+1. `$ npm start`
+1. visit [localhost:3000](http://localhost:3000) in your browser  
+
+or
+
+1. Visit [soen343t5.herokuapp.com](https://soen343t5.herokuapp.com) to view the live production website.  
+
+Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for more information on getting started.  
+
 ### Project Information
 - Course: SOEN 343-H  
 - Course Name: Software Architecture and Design I   
 - Website: [soen343t5.herokuapp.com](https://soen343t5.herokuapp.com)  
 - Framework: [Node.js](https://nodejs.org/en/) | [Express.js](https://expressjs.com)
-- Database: [MySQL] (https://www.mysql.com/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
 - Front-end Framework: [Bootstrap](https://getbootstrap.com)
 - Templating Engine: [EJS](http://www.ejs.co)
 - Hosting: [Heroku](https://dashboard.heroku.com/apps/soen343t5)  
 - CI: [Circle CI](https://circleci.com/gh/AznBoy00/soen343team5)  
 - [![CircleCI](https://circleci.com/gh/AznBoy00/soen343team5/tree/master.svg?style=svg&circle-token=8b92e6b3f8f6994e99d8be7c73902e9a46cada38)](https://circleci.com/gh/AznBoy00/soen343team5/tree/master)
 
-### Getting Started
-Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Started) for information on how to get the project up and running.  
-
-Visit the [website](https://soen343t5.herokuapp.com) to see the project.  
 
 ### Team Information:
 

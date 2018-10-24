@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('../partials/_navbar'); -%>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+                <h2>List of Items in the Catalog</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Item Name</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+
+				                  //Update and delete should only be accessible by admins
+                                <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                <% } %>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i in list.resultMagazines.resultMagazines) { %>
+                            <tr class="text-center">
+                                <td><%= list.resultMagazines.resultMagazines[i].title %></td>
+                                <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
+                                <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
+                                
+                                <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
+                                  <td><a href="catalog/updateitem/<%= list.resultMagazines.resultMagazines[i].item_id %>">Update</a></td>
+                                  <td><a href="catalog/deletemagazine/<%= list.resultMagazines.resultMagazines[i].item_id %>">Delete</a></td>
+                                <% } %>
+                            </tr>
+
+                            <% } %>
+                            <% for(var i in list.resultMovies.resultMovies) { %>
+                                <tr class="text-center">
+                                    <td><%= list.resultMovies.resultMovies[i].title %></td>
+                                    <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
+                                    <td><%= list.resultMovies.resultMovies[i].quantity %></td>
+
+                             <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
+                                 <td><a href="catalog/updateitem/<%= list.resultMovies.resultMovies[i].item_id %>">Update</a></td>
+                                 <td><a href="catalog/deletemovie/<%= list.resultMovies.resultMovies[i].item_id %>">Delete</a></td>
+                             <% } %>
+                                </tr>
+
+                            <% } %>
+
+                            <% for(var i in list.resultMusics.resultMusics) { %>
+                                <tr class="text-center">
+                                    
+                                    <td><%= list.resultMusics.resultMusics[i].title %></td>
+                                    <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
+                                    <td><%= list.resultMusics.resultMusics[i].quantity %></td>
+
+
+                           <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
+                                <td><a href="catalog/updateitem/<%= list.resultMusics.resultMusics[i].item_id %>">Update</a></td>
+                                <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>">Delete</a></td>
+
+                           <% } %>
+                                </tr>
+                            <% } %>
+
+                            <% for(var i in list.resultBooks.resultBooks) { %>
+                                <tr class="text-center">
+                                    <td><%= list.resultBooks.resultBooks[i].title %></td>
+                                    <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
+                                    <td><%= list.resultBooks.resultBooks[i].quantity %></td>
+
+
+                            <% if (typeof is_logged !== 'undefined' && is_logged && is_admin){ %>
+                                <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>">Update</a></td>
+                                <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>">Delete</a></td>
+
+                            <% } %>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- ./ end table responsive -->
+			</div>
+			<!-- ./ end col -->
+		</div>
+		<!-- ./ end row -->
+
+	</div>
+	<!-- ./ end container -->
+	<%- include('../partials/_footer') -%>   
+</body>
+
+</html>

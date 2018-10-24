@@ -1,0 +1,44 @@
+<div class="form-group">
+    <label>Title</label>
+    <input type="text" class="form-control" name="title" value="<%= results.results[0].title %>">
+</div>
+
+<div class="form-group">
+    <label>Artist</label>
+    <input type="text" class="form-control" name="artist" value="<%= results.results[0].artist %>">
+</div>
+
+<div class="form-group">
+    <label>Label</label>
+    <input type="text" class="form-control" name="label" value="<%= results.results[0].label %>">
+</div>
+
+<div class="form-group">
+    <label>Release Date <small class="text-muted">(yyyy-mm-dd)</small></label>
+    <% releasedate = results.results[0].release_date %>
+    <% day = releasedate.getDate().toString().length < 2 ? '0' + releasedate.getDate() : releasedate.getDate() %>
+    <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
+    <% year = releasedate.getFullYear() %>
+    <% newdate = year+"-"+month+"-"+day %>
+    <input type="date" class="form-control" name="release_date" value="<%= newdate %>">
+</div>
+
+<div class="form-group">
+    <label>ASIN <small class="text-muted">(B008FOB124)</small></label>
+    <input type="text" class="form-control" name="asin" maxlength="10" value="<%= results.results[0].asin %>">
+</div>
+
+<div class="form-group">
+    <label>Loanable <small class="text-muted">(TRUE or FALSE)</small></label>
+    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
+</div>
+    
+<div class="form-group">
+    <label>Loan Period <small class="text-muted">(number of days)</small></label>
+    <input type="number" class="form-control" name="loand_period" value="<%= results.results[0].loand_period %>">
+</div>
+
+<div class="form-group">
+    <label>Quantity</label>
+    <input type="number" class="form-control" name="quantity" value="<%= results.results[0].quantity %>" >
+</div>

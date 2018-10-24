@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <%- include('../partials/_header') -%>
+    <script>function redirect(){window.location="/";}</script>
+</head>
+
+<body>
+	<%- include('../partials/_navbar'); -%>
+	<div class="container">
+
+		<div class="row">
+			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <h2>Update a Movie</h2>
+			</div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <form method="POST" action="/catalog/updateitem/<%= results.results[0].item_id %>/modify" onSubmit="return checkblank(this);">
+
+                    <%- include('../partials/_error'); -%>
+
+                    <%- include('_updateMovieForm') -%>
+
+					<button class="btn btn-success" type="submit">Submit</button>
+					<a class="btn btn-danger" href="/catalog">Cancel</a>	
+                </form>
+            </div>
+            <!-- ./ end col -->
+        </div>
+        <!-- ./ end row -->
+
+    </div>
+    <!-- ./ end container -->
+    <%- include('../partials/_footer') -%>   
+</body>
+
+</html>

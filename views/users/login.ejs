@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('../partials/_navbar'); -%>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+				<h2>Login</h2>
+            </div>
+		</div>        
+		
+        <div class="row">
+			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2"> 
+				<form method="post" action="/users/login">
+					
+					<%- include('../partials/_error'); -%>
+					
+					<div class="form-group">
+						<label>E-mail</label>
+						<input id="login-email" type="email" class="form-control" name="email" value="" placeholder="Enter your email">
+					</div>
+
+					
+					<div class="form-group">
+						<label>Password</label>
+						<input id="login-password" type="password" class="form-control" name="password" placeholder="Enter your password">
+					</div>					
+
+					<div class="form-group">
+						<button class="btn btn-success text-left" type="submit">Login</button>
+						<small class="col-6">
+							Don't have an account? 
+							<a href="/users/register">Register Here</a>
+						</small>
+					</div>
+
+				</form>    
+                <!-- ./ end form -->
+			</div>
+			<!-- ./ end col -->
+		</div>
+		<!-- ./ end row -->
+
+	</div>
+	<!-- ./ end container -->
+	<%- include('../partials/_footer') -%>   
+</body>
+</html>

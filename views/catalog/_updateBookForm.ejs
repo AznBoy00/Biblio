@@ -1,0 +1,54 @@
+<div class="form-group">
+    <label>Title</label>
+    <input type="text" class="form-control" name="title" value="<%= results.results[0].title %>">
+</div>
+
+<div class="form-group">
+    <label>Author</label>
+    <input type="text" class="form-control" name="author" value="<%= results.results[0].author %>">
+</div>
+
+<div class="form-group">
+    <label>Format <small class="text-muted">(Paperback or Hard Cover)</small></label>
+    <input type="text" class="form-control" name="format" value="<%= results.results[0].format %>">
+</div>
+
+<div class="form-group">
+    <label>Pages</label>
+    <input type="number" class="form-control" name="pages" value="<%= results.results[0].pages %>">
+</div>
+
+<div class="form-group">
+    <label>Publisher</label>
+    <input type="text" class="form-control" name="publisher" value="<%= results.results[0].publisher %>">
+</div>
+
+<div class="form-group">
+    <label>Language</label>
+    <input type="text" class="form-control" name="language" value="<%= results.results[0].language %>">
+</div>
+
+<div class="form-group">
+    <label>ISBN10 <small class="text-muted">(1234567890)</small></label>
+    <input type="number" class="form-control" name="isbn10" value="<%= results.results[0].isbn10 %>">
+</div>
+
+<div class="form-group">
+    <label>ISBN13 <small class="text-muted">(1234567890123)</small></label>
+    <input type="number" class="form-control" name="isbn13" value="<%= results.results[0].isbn13 %>">
+</div>
+
+<div class="form-group">
+    <label>Loanable <small class="text-muted">(TRUE or FALSE)</small></label>
+    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
+</div>
+    
+<div class="form-group">
+    <label>Loan Period <small class="text-muted">(number of days)</small></label>
+    <input type="number" class="form-control" name="loand_period" value="<%= results.results[0].loand_period %>">
+</div>
+
+<div class="form-group">
+    <label>Quantity</label>
+    <input type="number" class="form-control" name="quantity" value="<%= results.results[0].quantity %>" >
+</div>
