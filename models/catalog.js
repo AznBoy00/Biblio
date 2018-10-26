@@ -29,52 +29,87 @@ module.exports.getCatalog = async function() {
         console.error(err);
         res.render('error', { error: err });
     }
-}
+};
 
-//INSERT INTO DB
-
-//insert new book
-module.exports.insertNewBook = async function(newItem, item_id) {
+//Insert new item into db
+module.exports.insertNewItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
+        let result;
         let discriminator = await this.getDiscriminator(item_id);
-        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Movie');INSERT INTO Movies (item_id, discriminator, quantity, loand_period, loanable, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time) SELECT select_id, 'Movie',3,2,TRUE,'Spiderman 20','Clint Eastwood', 'Michael Kane', 'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133 FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
+        switch (discriminator) {
+            case "Book":
+                result = await client.query(
+                    "INSERT INTO books SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "author = '" + newItem.author + "', " +
+                    "format = '" + newItem.format + "', " +
+                    "pages = " + newItem.pages + ", " +
+                    "language = '" + newItem.language + "', " +
+                    "isbn10 = " + newItem.isbn10 + ", " +
+                    "isbn13 = " + newItem.isbn13 + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " +
+                    "quantity = "+ newItem.quantity +
+                    " WHERE item_id = ($1);", [item_id]
+                );
+                break;
+            case "Magazine":
+                result = await client.query(
+                    "INSERT INTO magazines SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "publisher = '" + newItem.publisher + "', " +
+                    "language = '" + newItem.language + "', " +
+                    "isbn10 = " + newItem.isbn10 + ", " +
+                    "isbn13 = " + newItem.isbn13 + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " +
+                    "quantity = "+ newItem.quantity +
+                    " WHERE item_id = ($1);", [item_id]
+                );
+                break;
+            case "Movie":
+                result = await client.query(
+                    "INSERT INTO movies SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "director = '" + newItem.director + "', " +
+                    "producers = '" + newItem.producers + "', " +
+                    "language = '" + newItem.language + "', " +
+                    "dubbed = '" + newItem.dubbed + "', " +
+                    "subtitles = '" + newItem.subtitles + "', " +
+                    "actors = '" + newItem.actors + "', " +
+                    "release_date = '" + newItem.release_date + "', " +
+                    "run_time = " + newItem.run_time + ", " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " +
+                    "quantity = "+ newItem.quantity +
+                    " WHERE item_id = ($1);", [item_id]
+                );
+                // console.log("MOVIE SQL");
+                break;
+            case "Music":
+                result = await client.query(
+                    "INSERT INTO music SET " +
+                    "title = '"+ newItem.title + "', " +
+                    "artist = '" + newItem.artist + "', " +
+                    "label = '" + newItem.label + "', " +
+                    "release_date = '" + newItem.release_date + "', " +
+                    "asin = '" + newItem.asin + "', " +
+                    "loanable = '" + newItem.loanable + "', " +
+                    "loand_period = " + newItem.loand_period + ", " +
+                    "quantity = "+ newItem.quantity +
+                    " WHERE item_id = ($1);", [item_id]
+                );
+                break;
+            default:
+                result = null;
+                break;
+        }
         client.release();
     } catch (err) {
         console.error(err);
-        res.render('error', { error: err });
     }
 };
-
-//insert new Magazine
-module.exports.insertNewMagazine = async function(newItem, item_id) {
-    try {
-        const client = await pool.connect();
-        let discriminator = await this.getDiscriminator(item_id);
-        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');INSERT INTO Magazine (item_id, discriminator, quantity, loand_period, loanable, title, publisher, language, isbn10, isbn13, release_date) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.publisher+ "','" +newItem.release_date+ "'," +newItem.isbn10+ ",'" +newItem.isbn13+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-};
-
-//insert new Music
-module.exports.insertNewMusic = async function(newItem, item_id) {
-    try {
-        const client = await pool.connect();
-        let discriminator = await this.getDiscriminator(item_id);
-        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Music');INSERT INTO Music (item_id, discriminator, quantity, loand_period, loanable, title, label, release_date, asin, run_time, artist) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.artist+ "','" +newItem.release_date+ "'," +newItem.asin+ ",'" +newItem.run_time+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-    }
-};
-
 
 /**
  * getItem(item_id, discriminator)
