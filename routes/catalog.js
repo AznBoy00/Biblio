@@ -34,25 +34,37 @@ router.get('/', async (req, res) => {
 //
 // is_logged is passed to check the session in the front-end
 //
-// Create a new item page
-router.get('/createitems', function (req, res, next) {
-    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-});
-// Create a new book
-router.get('/createitems/createBook', function (req, res, next) {
-    res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-});
-// Create a new magazine
-router.get('/createitems/createMagazine', function (req, res, next) {
-    res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-});
-// Create a music
-router.get('/createitems/createMusic', function (req, res, next) {
-    res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-});
-// Create a new movie
-router.get('/createitems/createMovie', function (req, res, next) {
-    res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+
+router.get('/createitems/:item_id', async (req, res) => {
+    try {
+        let results = await catalog.getItem(req.params.item_id);
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        console.log(discriminator);
+        switch (discriminator) {
+            //create new book
+            case "Book":
+                res.render('catalog/createBook', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+                break;
+                //create new magazine
+            case "Magazine":
+                res.render('catalog/createMagazine', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                break;
+             // create new movie
+            case "Movie":
+                res.render('catalog/createMovie', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                break;
+             //create new music
+            case "Music":
+                res.render('catalog/createMusic', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                break;
+            default:
+                result = null;
+                break;
+        }
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
 });
 
 
