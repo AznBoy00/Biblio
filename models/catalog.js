@@ -31,36 +31,21 @@ module.exports.getCatalog = async function() {
     }
 }
 
+//INSERT INTO DB
+
 //insert new book
-module.exports.insertNewBook = async function(newbook) {
+module.exports.insertNewBook = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
-
-        let itemid = await client.query(
-            "SELECT MAX(item_id) FROM Items;",
-            function(err, result) {
-                if (err)
-                    console.log(err);
-                else
-                    console.log(itemid);
-            }
+        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Movie');INSERT INTO Movies (item_id, discriminator, quantity, loand_period, loanable, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time) SELECT select_id, 'Movie',3,2,TRUE,'Spiderman 20','Clint Eastwood', 'Michael Kane', 'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133 FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
         );
-
-        itemid = itemid + 1;
-
-        const newitem = await client.query(
-            "INSERT INTO Items (item_id, discriminator) VALUES (" + itemid[0] + ", 'Book')",
-            function(err, result) {
-                if (err)
-                    console.log(err);
-                else
-                    console.log(newitem);
-            }
-        );
+        client.release();
     } catch (err) {
         console.error(err);
+        res.render('error', { error: err });
     }
-}
+};
+
 
 /**
  * getItem(item_id, discriminator)
