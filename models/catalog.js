@@ -38,51 +38,56 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
         let result;
         switch (discriminator) {
             case "Book":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Book');");
                 result = await client.query(
-                    "INSERT INTO books SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "author = '" + newItem.author + "', " +
-                    "format = '" + newItem.format + "', " +
-                    "pages = " + newItem.pages + ", " +
-                    "language = '" + newItem.language + "', " +
-                    "isbn10 = " + newItem.isbn10 + ", " +
-                    "isbn13 = " + newItem.isbn13 + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " +
-                    "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]
+                    "INSERT INTO books (item_id, quantity, pages" +
+                    "title, author, format, publisher, language, isbn10, isbn13)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.pages + "', " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.author + "', " +
+                    "'" + newItem.format + "', " +
+                    "'" + newItem.publisher + "', " +
+                    "'" + newItem.isbn10 + "', " +
+                    "'" + newItem.isbn13 + "', " +
+                    "'" + newItem.language + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
             case "Magazine":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');");
                 result = await client.query(
-                    "INSERT INTO magazines SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "publisher = '" + newItem.publisher + "', " +
-                    "language = '" + newItem.language + "', " +
-                    "isbn10 = " + newItem.isbn10 + ", " +
-                    "isbn13 = " + newItem.isbn13 + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " +
-                    "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]
+                    "INSERT INTO magazines (item_id, quantity , " +
+                    "title, publisher, language, isbn10, isbn13)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.publisher + "', " +
+                    "'" + newItem.language + "', " +
+                    "'" + newItem.isbn10 + "', " +
+                    "'" + newItem.isbn13 + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
             case "Movie":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
                 result = await client.query(
-                    "INSERT INTO movies SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "director = '" + newItem.director + "', " +
-                    "producers = '" + newItem.producers + "', " +
-                    "language = '" + newItem.language + "', " +
-                    "dubbed = '" + newItem.dubbed + "', " +
-                    "subtitles = '" + newItem.subtitles + "', " +
-                    "actors = '" + newItem.actors + "', " +
-                    "release_date = '" + newItem.release_date + "', " +
-                    "run_time = " + newItem.run_time + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " +
-                    "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]
+                    "INSERT INTO movies (item_id, quantity , run_time , " +
+                    "title, director, producers, actors, language, dubbed, subtitles, release_date)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.producers + "', " +
+                    "'" + newItem.director + "', " +
+                    "'" + newItem.language + "', " +
+                    "'" + newItem.dubbed + "', " +
+                    "'" + newItem.subtitles + "', " +
+                    "'" + newItem.actors + "', " +
+                    "'" + newItem.release_date + "', " +
+                    "'" + newItem.run_time + "', " +
+                    "'" + newItem.quantity + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
             case "Music":
@@ -98,7 +103,7 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "'" + newItem.label + "', " +
                     "'" + newItem.release_date + "', " +
                     "'" + newItem.asin + "' " +
-                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"                    
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
             default:
@@ -141,7 +146,7 @@ module.exports.getItem = async function(item_id) {
         return await results;
     } catch (err) {
         console.error(err);
-	}
+    }
 }
 
 //Getter for discriminator
@@ -160,8 +165,8 @@ module.exports.getDiscriminator = async function(item_id) {
 }
 
 // getNewItem for update
-// get a new item passed in from the HTML form 
-// based on the item_id 
+// get a new item passed in from the HTML form
+// based on the item_id
 module.exports.getNewItem = async function(item_id, req) {
     let newItem;
     const discriminator = await this.getDiscriminator(item_id);
@@ -237,7 +242,7 @@ module.exports.getNewItem = async function(item_id, req) {
 }
 
 // getNewItem for insert
-// get a new item passed in from the HTML form 
+// get a new item passed in from the HTML form
 // based on the discriminator type
 module.exports.getNewItemForInsert = async function(discriminator, req) {
     let newItem;
@@ -294,9 +299,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("BOOK SQL");
                 break;
@@ -309,9 +314,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MAGAZINE SQL");
                 break;
@@ -328,7 +333,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "run_time = " + newItem.run_time + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -344,9 +349,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "asin = '" + newItem.asin + "', " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MUSIC SQL");
                 break;
