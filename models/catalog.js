@@ -47,9 +47,9 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "'" + newItem.title + "', " +
                     "'" + newItem.author + "', " +
                     "'" + newItem.format + "', " +
+                    "'" + newItem.pages + "', " +
                     "'" + newItem.publisher + "', " +
                     "'" + newItem.language + "', " +
-                    "'" + newItem.pages + "', " +
                     "'" + newItem.isbn10 + "', " +
                     "'" + newItem.isbn13 + "' " +
                     "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
@@ -77,16 +77,15 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "title, director, producers, actors, language, dubbed, subtitles, release_date)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
+                    "'" + newItem.run_time + "', " +
                     "'" + newItem.title + "', " +
-                    "'" + newItem.producers + "', " +
                     "'" + newItem.director + "', " +
+                    "'" + newItem.producers + "', " +
+                    "'" + newItem.actors + "', " +
                     "'" + newItem.language + "', " +
                     "'" + newItem.dubbed + "', " +
                     "'" + newItem.subtitles + "', " +
-                    "'" + newItem.actors + "', " +
                     "'" + newItem.release_date + "', " +
-                    "'" + newItem.run_time + "', " +
-                    "'" + newItem.quantity + "' " +
                     "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
