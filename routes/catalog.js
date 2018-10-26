@@ -35,6 +35,11 @@ router.get('/', async (req, res) => {
 // is_logged is passed to check the session in the front-end
 //
 
+// Create a new item page
+router.get('/createitems', function (req, res, next) {
+    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+});
+
 router.get('/createitems/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItem(req.params.item_id);
