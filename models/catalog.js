@@ -73,8 +73,8 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
             case "Movie":
                 client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
                 result = await client.query(
-                    "INSERT INTO movies (item_id, quantity , run_time , " +
-                    "title, director, producers, actors, language, dubbed, subtitles, release_date)" +
+                    "INSERT INTO movies (item_id, quantity , " +
+                    "title, director, producers, actors, language, dubbed, subtitles, release_date, run_time)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
                     "'" + newItem.title + "', " +
