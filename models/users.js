@@ -129,8 +129,8 @@ module.exports.getNewUserInfo = async function(email, req) {
     let newUserInfo;
     try {
                 newUserInfo = await {
-                  "fname": req.body.f_name,
-                  "lname": req.body.l_name,
+                  "f_name": req.body.f_name,
+                  "l_name": req.body.l_name,
                   "phone": req.body.phone,
                   "password": req.body.password
         };
