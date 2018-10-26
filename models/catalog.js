@@ -48,7 +48,7 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " +
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -62,7 +62,7 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " +
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -80,7 +80,7 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "release_date = '" + newItem.release_date + "', " +
                     "run_time = " + newItem.run_time + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " +
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -179,7 +179,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "isbn10": req.body.isbn10,
                     "isbn13": req.body.isbn13,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -191,7 +191,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "isbn10": req.body.isbn10,
                     "isbn13": req.body.isbn13,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -207,7 +207,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "release_date": req.body.release_date,
                     "run_time": req.body.run_time,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -221,7 +221,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "asin": req.body.asin,
                     "run_time": req.body.run_time,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -294,7 +294,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " + 
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
@@ -309,7 +309,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " + 
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
@@ -328,7 +328,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "run_time = " + newItem.run_time + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " + 
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -344,7 +344,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "asin = '" + newItem.asin + "', " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " + 
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]  
                 );
