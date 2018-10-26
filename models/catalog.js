@@ -37,6 +37,7 @@ module.exports.getCatalog = async function() {
 module.exports.insertNewBook = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
+        let discriminator = await this.getDiscriminator(item_id);
         const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Movie');INSERT INTO Movies (item_id, discriminator, quantity, loand_period, loanable, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time) SELECT select_id, 'Movie',3,2,TRUE,'Spiderman 20','Clint Eastwood', 'Michael Kane', 'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133 FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
         );
         client.release();
@@ -46,6 +47,19 @@ module.exports.insertNewBook = async function(newItem, item_id) {
     }
 };
 
+//insert new Magazine
+module.exports.insertNewMagazine = async function(newItem, item_id) {
+    try {
+        const client = await pool.connect();
+        let discriminator = await this.getDiscriminator(item_id);
+        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');INSERT INTO Magazine (item_id, discriminator, quantity, loand_period, loanable, title, publisher, language, isbn10, isbn13, release_date) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.publisher+ "','" +newItem.release_date+ "'," +newItem.isbn10+ ",'" +newItem.isbn13+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        );
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+};
 
 /**
  * getItem(item_id, discriminator)
