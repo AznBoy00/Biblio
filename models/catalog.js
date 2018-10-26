@@ -89,9 +89,10 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                 client.query("INSERT INTO Items (discriminator) VALUES ('Music');");
                 result = await client.query(
                     "INSERT INTO music (item_id, quantity, " +
-                    "title, artist, label, release_date, asin)" +
+                    "type, title, artist, label, release_date, asin)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
+                    "'" + newItem.type + "', " +
                     "'" + newItem.title + "', " +
                     "'" + newItem.artist + "', " +
                     "'" + newItem.label + "', " +
@@ -158,7 +159,7 @@ module.exports.getDiscriminator = async function(item_id) {
     }
 }
 
-// getNewItem:
+// getNewItem for update
 // get a new item passed in from the HTML form 
 // based on the item_id 
 module.exports.getNewItem = async function(item_id, req) {
@@ -214,6 +215,7 @@ module.exports.getNewItem = async function(item_id, req) {
                 newItem = await {
                     "title": req.body.title,
                     "artist": req.body.artist,
+                    "type": req.body.type,
                     "label": req.body.label,
                     "release_date": req.body.release_date,
                     "asin": req.body.asin,
@@ -234,7 +236,7 @@ module.exports.getNewItem = async function(item_id, req) {
     }
 }
 
-// getNewItem:
+// getNewItem for insert
 // get a new item passed in from the HTML form 
 // based on the discriminator type
 module.exports.getNewItemForInsert = async function(discriminator, req) {
@@ -255,6 +257,7 @@ module.exports.getNewItemForInsert = async function(discriminator, req) {
                     "title": req.body.title,
                     "type": req.body.type,
                     "artist": req.body.artist,
+                    "type": req.body.type,
                     "label": req.body.label,
                     "release_date": req.body.release_date,
                     "asin": req.body.asin,
@@ -336,6 +339,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "UPDATE music SET " +
                     "title = '"+ newItem.title + "', " +
                     "artist = '" + newItem.artist + "', " +
+                    "type = '" + newItem.type + "', " +
                     "label = '" + newItem.label + "', " +
                     "release_date = '" + newItem.release_date + "', " +
                     "asin = '" + newItem.asin + "', " +
