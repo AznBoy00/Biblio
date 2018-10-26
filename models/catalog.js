@@ -203,9 +203,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loand_period = " + newItem.loand_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("BOOK SQL");
                 break;
@@ -218,9 +218,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loand_period = " + newItem.loand_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MAGAZINE SQL");
                 break;
@@ -237,7 +237,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "run_time = " + newItem.run_time + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loand_period = " + newItem.loand_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -252,9 +252,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "asin = '" + newItem.asin + "', " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loand_period = " + newItem.loand_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MUSIC SQL");
                 break;

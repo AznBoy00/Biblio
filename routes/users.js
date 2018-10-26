@@ -144,5 +144,31 @@ router.get("/logout", function(req, res){
     res.redirect('/');
 });
 
+// get request for updating user profile information
+router.get('/usercp/:email', async (req, res) => {
+    try {
+        let results = await user.getUserInfo(req.params.email);
+        res.render('users/usercp', { results, title: 'User', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        } catch (err) {
+          console.error(err);
+          res.render('error', { error: err });
+      }
+  });
+
+// post request for updating user profile information
+  router.post('/usercp/:email/modify', async (req, res) => {
+      try {
+          let result;
+          let newUserInfo;
+          // console.log("email: " + req.params.email);
+          newUserInfo = await user.getNewUserInfo(req.params.email, req);
+          // console.log(newUserInfo);
+          result = await user.updateUserInfo(newUserInfo, req.params.email);
+          res.redirect('/');
+      } catch (err) {
+          console.error(err);
+          res.render('error', { error: err });
+      }
+  });
 
 module.exports = router;
