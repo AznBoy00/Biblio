@@ -18,14 +18,14 @@
 
     	<div class="row">
 			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-				<form method="POST" action="/catalog/createitems/<%= results.results[0].item_id %>/create" onSubmit="return checkblank(this);">
+				<form method="POST" action="/catalog/createmovie" onSubmit="return checkblank(this);">
 					
 					<%- include('../partials/_error'); -%>
 
 					<%- include('_createMovieForm') -%>
 
 					<button class="btn btn-success" type="submit">Submit</button>
-					<a class="btn btn-danger" href="/catalog">Cancel</a>
+					<a class="btn btn-danger" href="/catalog/createitems">Cancel</a>
 				</form>
 			</div>
 			<!-- ./ end col -->
