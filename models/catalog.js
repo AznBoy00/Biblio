@@ -40,8 +40,8 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
             case "Book":
                 client.query("INSERT INTO Items (discriminator) VALUES ('Book');");
                 result = await client.query(
-                    "INSERT INTO books (item_id, quantity , " +
-                    "title, author, format, publisher, language, isbn10, isbn13, pages)" +
+                    "INSERT INTO books (item_id, quantity , pages ," +
+                    "title, author, format, publisher, language, isbn10, isbn13)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
                     "'" + newItem.title + "', " +
@@ -73,8 +73,8 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
             case "Movie":
                 client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
                 result = await client.query(
-                    "INSERT INTO movies (item_id, quantity , " +
-                    "title, director, producers, actors, language, dubbed, subtitles, release_date, run_time)" +
+                    "INSERT INTO movies (item_id, quantity , run_time , " +
+                    "title, director, producers, actors, language, dubbed, subtitles, release_date)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
                     "'" + newItem.title + "', " +
