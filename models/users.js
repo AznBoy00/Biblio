@@ -127,12 +127,14 @@ module.exports.getUserInfo = async function(email) {
 //getter for a new user profile information
 module.exports.getNewUserInfo = async function(email, req) {
     let newUserInfo;
+    let hash = bcrypt.hashSync(req.body.password);
+
     try {
                 newUserInfo = await {
                   "f_name": req.body.f_name,
                   "l_name": req.body.l_name,
                   "phone": req.body.phone,
-                  "password": req.body.password
+                  "password": await hash
         };
         return await newUserInfo;
     } catch (err) {
@@ -151,8 +153,8 @@ module.exports.updateUserInfo = async function(newUserInfo,email) {
                     "f_name = '"+ newUserInfo.f_name + "', " +
                     "l_name = '" + newUserInfo.l_name + "', " +
                     "phone = '" + newUserInfo.phone + "', " +
-                    "password = " + newUserInfo.password + ", " +
-                    " WHERE email = ($1);", [email]
+                    "password = '" + newUserInfo.password + "' " +
+                    "WHERE email = ($1);", [email]
                 );
         client.release();
     } catch (err) {
