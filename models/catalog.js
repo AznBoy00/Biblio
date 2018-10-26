@@ -275,10 +275,10 @@ module.exports.getNewItemForInsert = async function(discriminator, req) {
                     "title": req.body.title,
                     "director": req.body.director,
                     "producers": req.body.producers,
+                    "actors": req.body.actors,
                     "language": req.body.language,
                     "dubbed": req.body.dubbed,
                     "subtitles": req.body.subtitles,
-                    "actors": req.body.actors,
                     "release_date": req.body.release_date,
                     "run_time": req.body.run_time,
                     "quantity": req.body.quantity
