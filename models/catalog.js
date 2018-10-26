@@ -44,10 +44,10 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "title, author, format, publisher, language, isbn10, isbn13)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
+                    "'" + newItem.pages + "', " +
                     "'" + newItem.title + "', " +
                     "'" + newItem.author + "', " +
                     "'" + newItem.format + "', " +
-                    "'" + newItem.pages + "', " +
                     "'" + newItem.publisher + "', " +
                     "'" + newItem.language + "', " +
                     "'" + newItem.isbn10 + "', " +
