@@ -2,7 +2,6 @@
 var session = require('express-session');
 var express = require('express');
 var router = express.Router();
-var router = express.Router();
 router.use(session({
     secret : '2C44-4D44-WppQ38S',
     resave : true,
@@ -39,19 +38,19 @@ router.get('/', async (req, res) => {
 router.get('/createitems', function (req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new book 
+// Create a new book
 router.get('/createitems/createBook', function (req, res, next) {
     res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new magazine 
+// Create a new magazine
 router.get('/createitems/createMagazine', function (req, res, next) {
     res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a music 
+// Create a music
 router.get('/createitems/createMusic', function (req, res, next) {
     res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new movie 
+// Create a new movie
 router.get('/createitems/createMovie', function (req, res, next) {
     res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
@@ -60,10 +59,10 @@ router.get('/createitems/createMovie', function (req, res, next) {
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
-// Create a new book: Post request
-router.post('/createitems/createbook', function (req, res) {
 
-    const newbook = {
+//POST request for Book
+router.post('/createitems/createBook', async function (req, res) {
+    const newItem = {
         "title": req.body.title,
         "author": req.body.author,
         "format": req.body.format,
@@ -84,13 +83,123 @@ router.post('/createitems/createbook', function (req, res) {
     req.checkBody('isbn10', 'ISBN10 is required').notEmpty();
     req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
     req.checkBody('quantity', 'Quantity is required').notEmpty();
+
     const err = req.validationErrors();
     if (err) {
-        res.render('catalog/createBook', {errors: err, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
-        console.log(newbook);
-        catalog.insertNewBook(newbook);
-        res.render('catalog/catalog', { title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        console.log(newItem);
+        catalog.insertNewBook(newItem);
+        res.render('catalog/catalog', {title: 'Catalog'});
+    }
+});
+
+//POST request for Movie
+
+router.post('/createitems/createMovie', async function (req, res)
+{
+
+    const newItem = {
+        "title": req.body.title,
+        "director": req.body.director,
+        "producers": req.body.producers,
+        "language": req.body.language,
+        "dubbed": req.body.dubbed,
+        "subtitles": req.body.subtitles,
+        "actors": req.body.actors,
+        "release_date": req.body.release_date,
+        "run_time": req.body.run_time,
+        "quantity": req.body.quantity
+    };
+
+    req.checkBody('title', 'Title is required').notEmpty();
+    req.checkBody('producers', 'Producers is required').notEmpty();
+    req.checkBody('language', 'Language is required').notEmpty();
+    req.checkBody('dubbed', 'Dubbed is required').notEmpty();
+    req.checkBody('subtitles', 'Subtitles is required').notEmpty();
+    req.checkBody('director', 'Director is required').notEmpty();
+    req.checkBody('actors', 'Actors is required').notEmpty();
+    req.checkBody('release_date', 'Release date is required').notEmpty();
+    req.checkBody('run_time', 'Run time of the movie is required').notEmpty();
+    req.checkBody('quantity', 'Quantity is required').notEmpty();
+
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createMovie', {errors: err, title: 'Create Item'});
+    } else {
+        console.log(newItem);
+        catalog.insertNewBook(newItem);
+        res.render('catalog/catalog', {title: 'Catalog'});
+    }
+});
+
+//POST request for Magazine
+
+router.post('/createitems/createMagazine', async function (req, res) {
+
+    const newItem = {
+        "title": req.body.title,
+        "publisher": req.body.publisher,
+        "language": req.body.language,
+        "isbn10": req.body.isbn10,
+        "isbn13": req.body.isbn13,
+        "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
+        "quantity": req.body.quantity
+    };
+
+    req.checkBody('title', 'Title is required').notEmpty();
+    req.checkBody('publisher', 'Publisher is required').notEmpty();
+    req.checkBody('language', 'Language is required').notEmpty();
+    req.checkBody('isbn10', 'ISBN1O is required').notEmpty();
+    req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
+    req.checkBody('loanable', 'Loanable is required').notEmpty();
+    req.checkBody('loand_period', 'Loan period is required').notEmpty();
+    req.checkBody('quantity', 'Quantity is required').notEmpty();
+
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createMagazine', {errors: err, title: 'Create Item'});
+    } else {
+        console.log(newItem);
+        catalog.insertNewMagazine(newItem);
+        res.render('catalog/catalog', {title: 'Catalog'});
+    }
+});
+
+//POST request for Music
+
+router.post('/createitems/createMusic', async function(req, res) {
+
+    const newItem = {
+        "title": req.body.title,
+        "artist": req.body.artist,
+        "label": req.body.label,
+        "release_date": req.body.release_date,
+        "asin": req.body.asin,
+        "run_time": req.body.run_time,
+        "loanable": req.body.loanable,
+        "loand_period": req.body.loand_period,
+        "quantity": req.body.quantity
+    };
+
+    req.checkBody('title', 'Title is required').notEmpty();
+    req.checkBody('artist', 'Artist is required').notEmpty();
+    req.checkBody('run_time', 'Run time is required').notEmpty();
+    req.checkBody('label', 'Label is required').notEmpty();
+    req.checkBody('asin', 'ASIN is required').notEmpty();
+    req.checkBody('loanable', 'Loanable is required').notEmpty();
+    req.checkBody('loand_period', 'Loan period is required').notEmpty();
+    req.checkBody('quantity', 'Quantity is required').notEmpty();
+    req.checkBody('release_date', 'Release date is required').notEmpty();
+
+    const err = req.validationErrors();
+    if (err) {
+        res.render('catalog/createMusic', {errors: err, title: 'Create Item'});
+    } else {
+        console.log(newItem);
+        catalog.insertNewMusic(newItem);
+        res.render('catalog/catalog', {title: 'Catalog'});
     }
 });
 
