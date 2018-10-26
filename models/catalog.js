@@ -249,20 +249,47 @@ module.exports.getNewItemForInsert = async function(discriminator, req) {
     try {
         switch(discriminator) {
             case "Book":
-                newItem = await {};
+                newItem = await {
+                    "title": req.body.title,
+                    "author": req.body.author,
+                    "format": req.body.format,
+                    "pages": req.body.pages,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "quantity": req.body.quantity
+                };
                 break;
             case "Magazine":
-                newItem = await {};
+                newItem = await {
+                    "title": req.body.title,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "quantity": req.body.quantity
+                };
                 break;
             case "Movie":
-                newItem = await {};
+                newItem = await {
+                    "title": req.body.title,
+                    "Publisher": req.body.director,
+                    "producers": req.body.producers,
+                    "language": req.body.language,
+                    "dubbed": req.body.dubbed,
+                    "subtitles": req.body.subtitles,
+                    "actors": req.body.actors,
+                    "release_date": req.body.release_date,
+                    "run_time": req.body.run_time,
+                    "quantity": req.body.quantity
+                };
                 break;
             case "Music":
                 newItem = await {
                     "title": req.body.title,
                     "type": req.body.type,
                     "artist": req.body.artist,
-                    "type": req.body.type,
                     "label": req.body.label,
                     "release_date": req.body.release_date,
                     "asin": req.body.asin,
