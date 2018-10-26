@@ -35,10 +35,17 @@ router.get('/', async (req, res) => {
 // is_logged is passed to check the session in the front-end
 //
 
+
 // Create a new item page
-router.get('/createitems', function (req, res, next) {
+router.get('/createitems', function (req, res) {
+try {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+} catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+}
 });
+
 
 router.get('/createitems/:item_id', async (req, res) => {
     try {
@@ -46,21 +53,17 @@ router.get('/createitems/:item_id', async (req, res) => {
         let discriminator = await catalog.getDiscriminator(req.params.item_id);
         console.log(discriminator);
         switch (discriminator) {
-            //create new book
             case "Book":
-                res.render('catalog/createBook', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+                res.render('catalog/createBook', { results, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
                 break;
-                //create new magazine
             case "Magazine":
-                res.render('catalog/createMagazine', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                res.render('catalog/createMagazine', { results, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
-             // create new movie
             case "Movie":
-                res.render('catalog/createMovie', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                res.render('catalog/createMovie', { results, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
-             //create new music
             case "Music":
-                res.render('catalog/createMusic', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin });
+                res.render('catalog/createMusic', { results, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin });
                 break;
             default:
                 result = null;
