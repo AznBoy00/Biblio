@@ -89,7 +89,7 @@ router.post('/createitems/createBook', async function (req, res) {
         res.render('catalog/createBook', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
-        catalog.insertNewBook(newItem);
+        catalog.insertNewItem(newItem);
         res.render('catalog/catalog', {title: 'Catalog'});
     }
 });
@@ -128,7 +128,7 @@ router.post('/createitems/createMovie', async function (req, res)
         res.render('catalog/createMovie', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
-        catalog.insertNewBook(newItem);
+        catalog.insertNewItem(newItem);
         res.render('catalog/catalog', {title: 'Catalog'});
     }
 });
@@ -162,7 +162,7 @@ router.post('/createitems/createMagazine', async function (req, res) {
         res.render('catalog/createMagazine', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
-        catalog.insertNewMagazine(newItem);
+        catalog.insertNewItem(newItem);
         res.render('catalog/catalog', {title: 'Catalog'});
     }
 });
@@ -198,7 +198,7 @@ router.post('/createitems/createMusic', async function(req, res) {
         res.render('catalog/createMusic', {errors: err, title: 'Create Item'});
     } else {
         console.log(newItem);
-        catalog.insertNewMusic(newItem);
+        catalog.insertNewItem(newItem);
         res.render('catalog/catalog', {title: 'Catalog'});
     }
 });
