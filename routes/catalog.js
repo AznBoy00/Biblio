@@ -60,19 +60,18 @@ router.get('/createitems/createMovie', function (req, res, next) {
 // == POST Requests for Creating Items === //
 // ====================================== //
 
-router.post('/createitems/:item_id/create', async (req, res) => {
+router.post('/createitems/create/:discriminator', async (req, res) => {
     try {
         let result;
         let newItem;
-        newItem = await catalog.getNewItem(req.params.item_id, req);
-        result = await catalog.insertNewItem(newItem, req.params.item_id);
+        newItem = await catalog.getNewItemForInsert(req.params.discriminator, req);
+        result = await catalog.insertNewItem(newItem, req.params.discriminator);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
     }
 });
-
 
 
 // ====================================== //
@@ -83,6 +82,7 @@ router.get('/updateitem/:item_id', async (req, res) => {
         let results = await catalog.getItem(req.params.item_id);
         let discriminator = await catalog.getDiscriminator(req.params.item_id);
         console.log(discriminator);
+        console.log(results.results[0].item_id);
         switch (discriminator) {
             case "Book":
                 res.render('catalog/updateBook', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});

@@ -114,6 +114,7 @@ CREATE TABLE Music(
     quantity INTEGER DEFAULT 0,
     loand_period INT DEFAULT 2,
     loanable BOOLEAN DEFAULT TRUE,
+    -- music_type VARCHAR(30) DEFAULT 'CD',
     title VARCHAR(50),
     artist VARCHAR(50),
     label VARCHAR(50),

@@ -32,11 +32,10 @@ module.exports.getCatalog = async function() {
 };
 
 //Insert new item into db
-module.exports.insertNewItem = async function(newItem, item_id) {
+module.exports.insertNewItem = async function(newItem, discriminator) {
     try {
         const client = await pool.connect();
         let result;
-        let discriminator = await this.getDiscriminator(item_id);
         switch (discriminator) {
             case "Book":
                 result = await client.query(
@@ -85,20 +84,20 @@ module.exports.insertNewItem = async function(newItem, item_id) {
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
-                // console.log("MOVIE SQL");
                 break;
             case "Music":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Music');");
                 result = await client.query(
-                    "INSERT INTO music SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "artist = '" + newItem.artist + "', " +
-                    "label = '" + newItem.label + "', " +
-                    "release_date = '" + newItem.release_date + "', " +
-                    "asin = '" + newItem.asin + "', " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " +
-                    "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]
+                    "INSERT INTO music (item_id, quantity, " +
+                    "title, artist, label, release_date, asin)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.artist + "', " +
+                    "'" + newItem.label + "', " +
+                    "'" + newItem.release_date + "', " +
+                    "'" + newItem.asin + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"                    
                 );
                 break;
             default:
@@ -159,7 +158,9 @@ module.exports.getDiscriminator = async function(item_id) {
     }
 }
 
-//getNewItem structure
+// getNewItem:
+// get a new item passed in from the HTML form 
+// based on the item_id 
 module.exports.getNewItem = async function(item_id, req) {
     let newItem;
     const discriminator = await this.getDiscriminator(item_id);
@@ -219,6 +220,44 @@ module.exports.getNewItem = async function(item_id, req) {
                     "run_time": req.body.run_time,
                     "loanable": req.body.loanable,
                     "loand_period": req.body.loand_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            default:
+                newItem = null;
+                console.log("NO OBJECT FOUND");
+                break;
+        }
+        return await newItem;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// getNewItem:
+// get a new item passed in from the HTML form 
+// based on the discriminator type
+module.exports.getNewItemForInsert = async function(discriminator, req) {
+    let newItem;
+    try {
+        switch(discriminator) {
+            case "Book":
+                newItem = await {};
+                break;
+            case "Magazine":
+                newItem = await {};
+                break;
+            case "Movie":
+                newItem = await {};
+                break;
+            case "Music":
+                newItem = await {
+                    "title": req.body.title,
+                    "type": req.body.type,
+                    "artist": req.body.artist,
+                    "label": req.body.label,
+                    "release_date": req.body.release_date,
+                    "asin": req.body.asin,
                     "quantity": req.body.quantity
                 };
                 break;
