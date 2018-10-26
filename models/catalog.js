@@ -61,6 +61,21 @@ module.exports.insertNewMagazine = async function(newItem, item_id) {
     }
 };
 
+//insert new Music
+module.exports.insertNewMusic = async function(newItem, item_id) {
+    try {
+        const client = await pool.connect();
+        let discriminator = await this.getDiscriminator(item_id);
+        const result = await client.query("INSERT INTO Items (discriminator) VALUES ('Music');INSERT INTO Music (item_id, discriminator, quantity, loand_period, loanable, title, label, release_date, asin, run_time, artist) "+"SELECT select_id,'Magazine',"+newItem.quantity+",7,TRUE,'"+newItem.title+"','" +newItem.artist+ "','" +newItem.release_date+ "'," +newItem.asin+ ",'" +newItem.run_time+ "',' " +newItem.loanable+ "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        );
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+};
+
+
 /**
  * getItem(item_id, discriminator)
  **/
