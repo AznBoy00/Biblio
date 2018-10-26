@@ -40,8 +40,8 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
             case "Book":
                 client.query("INSERT INTO Items (discriminator) VALUES ('Book');");
                 result = await client.query(
-                    "INSERT INTO books (item_id, quantity, pages" +
-                    "title, author, format, publisher, language, isbn10, isbn13)" +
+                    "INSERT INTO books (item_id, quantity, " +
+                    "title, author, format, publisher, language, isbn10, isbn13, pages)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
                     "'" + newItem.pages + "', " +
