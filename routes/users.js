@@ -154,19 +154,51 @@ router.get('/usercp', async (req, res) => {
 
 // post request for updating user profile information
   router.post('/usercp', async (req, res) => {
+      //Check form fields for empty fields.
+        //NEED TO CHECK FOR PARTIALS? Gives error when I try to pull this check. Commented out for now.
+      req.checkBody('f_name', 'First name field is empty').notEmpty();
+      req.checkBody('l_name', 'Last name field is empty').notEmpty();
+      req.checkBody('phone', 'Phone number field is empty').notEmpty();
+      req.checkBody('oldpassword', 'Old password field is empty').notEmpty();
+      req.checkBody('password','New password field is empty').notEmpty();
+      req.checkBody('confirmpassword', 'Confirm mew password field is empty').notEmpty();
+      const err = req.validationErrors();
+    //   if(err){
+    //       res.render('users/usercp', {errors:err, title: 'User CP', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    //   //}else{
       try {
           var email = req.session.email;
           let results;
           let newUserInfo;
+          //Fetch user info.
+          results = await user.getUserInfo(email);
+          let oldPassHash = results.results[0].password;
+
+          var oldPassMatched = false;
+          //Verify current session password with user input old password.
+          if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)){
+              oldPassMatched = true;
+              console.log("Old password validation SUCCESSFUL.");
+          }else{
+              console.log("Old password validation UNSUCCESSFUL. Incorrect old password.");
+           }
+          //Verify new password and confirm new password to be identical.
+          if((req.body.password == req.body.confirmpassword) && oldPassMatched){
           // console.log("email: " + req.params.email);
           newUserInfo = await user.getNewUserInfo(email, req);
+          
           console.log(newUserInfo);
           results = await user.updateUserInfo(newUserInfo, email);
           res.redirect('/');
+          console.log("User account info UPDATE SUCCESSFUL.");
+          }else{
+              console.log("User account info UPDATE UNSUCCESSFUL.");
+          }
       } catch (err) {
           console.error(err);
           res.render('error', { error: err });
       }
+    //}
   });
 
 module.exports = router;
