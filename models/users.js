@@ -111,6 +111,7 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
     }
 };
 //getter for user profile information
+
 module.exports.getUserInfo = async function(email) {
     try {
         const client = await pool.connect()
@@ -124,26 +125,61 @@ module.exports.getUserInfo = async function(email) {
 	}
 }
 
+async function compareNewPassword(req){
+    var newPassMatched=false;
+    if(req.body.password == req.body.confirmpassword){
+        newPassMatched=true;
+    }
+    return await newPassMatched;
+}
+//TO-DO = Compare old password with current password. Does it match?
+//Recall that password are hashed.
+    
 //getter for a new user profile information
 module.exports.getNewUserInfo = async function(email, req) {
     let newUserInfo;
     let hash = bcrypt.hashSync(req.body.password);
+    let result = await this.getUserInfo(email);
+    let oldPass = req.body.oldpassword;
+    var oldPassVerified = false;
+    var newPassVerified = false;
 
-    try {
-                newUserInfo = await {
-                  "f_name": req.body.f_name,
-                  "l_name": req.body.l_name,
-                  "phone": req.body.phone,
-                  "password": await hash
-        };
-        return await newUserInfo;
-    } catch (err) {
-        console.error(err);
+    if(bcrypt.compareSync(oldPass,result.results[0].password)){
+        console.log("Password matched.");
+        oldPassVerified = true;
+    }else{
+        console.log("Password does not match.");
+    }
+
+    try{
+        newPassVerified = await compareNewPassword(req);
+        console.log("New Password verified."+newPassVerified);
+    }catch(err){
+        console.log("Unable to fetch newPassVerified result.");
+    }
+
+    if(oldPassVerified && newPassVerified){
+        try {
+                    newUserInfo = await {
+                    "f_name": req.body.f_name,
+                    "l_name": req.body.l_name,
+                    "phone": req.body.phone,
+                    "password": await hash
+            };
+            return await newUserInfo;
+        } catch (err) {
+            console.error(err);
+        }
+    }else{
+        console.log("Did not update profile");
     }
 }
 
+//TO-DO IF OLDPASSVERIFIED AND NEWPASSVERIFIED, DO THE CHANGE. Otherwise stop.
+
 // update user information to database
 module.exports.updateUserInfo = async function(newUserInfo,email) {
+
     try {
         const client = await pool.connect();
         let result;
