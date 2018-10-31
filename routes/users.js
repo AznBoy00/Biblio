@@ -154,6 +154,10 @@ router.get('/usercp', async (req, res) => {
 
 // post request for updating user profile information
   router.post('/usercp', async (req, res) => {
+      //Fetch user info.
+      var email = req.session.email;
+      let results = await user.getUserInfo(email);
+
       //Check form fields for empty fields.
         //NEED TO CHECK FOR PARTIALS? Gives error when I try to pull this check. Commented out for now.
       req.checkBody('f_name', 'First name field is empty').notEmpty();
@@ -163,11 +167,10 @@ router.get('/usercp', async (req, res) => {
       req.checkBody('password','New password field is empty').notEmpty();
       req.checkBody('confirmpassword', 'Confirm mew password field is empty').notEmpty();
       const err = req.validationErrors();
-    //   if(err){
-    //       res.render('users/usercp', {errors:err, title: 'User CP', is_logged: req.session.logged, is_admin: req.session.is_admin});
-    //   //}else{
+      if(err){
+          res.render('users/usercp', {results, errors:err, title: 'User CP', is_logged: req.session.logged});
+      }else{
       try {
-          var email = req.session.email;
           let results;
           let newUserInfo;
           //Fetch user info.
@@ -198,7 +201,7 @@ router.get('/usercp', async (req, res) => {
           console.error(err);
           res.render('error', { error: err });
       }
-    //}
+    }
   });
 
 module.exports = router;
