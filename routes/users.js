@@ -159,7 +159,6 @@ router.get('/usercp', async (req, res) => {
       let results = await user.getUserInfo(email);
 
       //Check form fields for empty fields.
-        //NEED TO CHECK FOR PARTIALS? Gives error when I try to pull this check. Commented out for now.
       req.checkBody('f_name', 'First name field is empty').notEmpty();
       req.checkBody('l_name', 'Last name field is empty').notEmpty();
       req.checkBody('phone', 'Phone number field is empty').notEmpty();
@@ -170,37 +169,30 @@ router.get('/usercp', async (req, res) => {
       if(err){
           res.render('users/usercp', {results, errors:err, title: 'User CP', is_logged: req.session.logged});
       }else{
-      try {
-          let results;
-          let newUserInfo;
-          //Fetch user info.
-          results = await user.getUserInfo(email);
-          let oldPassHash = results.results[0].password;
+            try {
+                let newUserInfo;
+                let oldPassHash = results.results[0].password;
+                var oldPassMatched = false;
 
-          var oldPassMatched = false;
-          //Verify current session password with user input old password.
-          if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)){
-              oldPassMatched = true;
-              console.log("Old password validation SUCCESSFUL.");
-          }else{
-              console.log("Old password validation UNSUCCESSFUL. Incorrect old password.");
-           }
-          //Verify new password and confirm new password to be identical.
-          if((req.body.password == req.body.confirmpassword) && oldPassMatched){
-          // console.log("email: " + req.params.email);
-          newUserInfo = await user.getNewUserInfo(email, req);
-          
-          console.log(newUserInfo);
-          results = await user.updateUserInfo(newUserInfo, email);
-          res.redirect('/');
-          console.log("User account info UPDATE SUCCESSFUL.");
-          }else{
-              console.log("User account info UPDATE UNSUCCESSFUL.");
-          }
-      } catch (err) {
-          console.error(err);
-          res.render('error', { error: err });
-      }
+                //Validate current session password and user input old password to be identical.
+                if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)){
+                    oldPassMatched = true;
+                }
+
+                //Validate new password and confirm new password to be identical.
+                if((req.body.password == req.body.confirmpassword) && oldPassMatched){
+                    newUserInfo = await user.getNewUserInfo(email, req);
+                    results = await user.updateUserInfo(newUserInfo, email);
+                    res.redirect('/');
+                    console.log("User account info UPDATE SUCCESSFUL.");
+                }else{
+                    console.log("User account info UPDATE UNSUCCESSFUL.");
+                    res.redirect('/users/usercp');
+                    }
+            } catch (err) {
+                console.error(err);
+                res.render('error', { error: err });
+            }
     }
   });
 
