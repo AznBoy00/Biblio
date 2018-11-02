@@ -180,7 +180,7 @@ router.get('/usercp', async (req, res) => {
                 }
 
                 //Validate new password and confirm new password to be identical.
-                if((req.body.password == req.body.confirmpassword) && oldPassMatched){
+                if((req.body.password == req.body.confirmpassword) && (req.body.password!=req.body.oldpassword) && oldPassMatched){
                     newUserInfo = await user.getNewUserInfo(email, req);
                     results = await user.updateUserInfo(newUserInfo, email);
                     res.redirect('/');
