@@ -22,14 +22,16 @@
                                 <th>Item Name</th>
                                 <th>Type</th>
                                 <th>Quantity</th>
-                                <th>Update</th>
-                                <th>Delete</th> <!--Confirmation modal onclick whenever a record is in the process of being deleted ** see below in each of the delete sections-->
+                                <th>View Item</th>
+                                <th>Update Item</th>
+                                <th>Delete Item</th> <!--Confirmation modal onclick whenever a record is in the process of being deleted ** see below in each of the delete sections-->
                             </tr>
                         <% for(var i in list.resultMagazines.resultMagazines) { %>
                             <tr>
                                 <td><%= list.resultMagazines.resultMagazines[i].title %></td>
                                 <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
                                 <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
+                                <td><a href="catalog/viewItem/<%= list.resultMagazines.resultMagazines[i].item_id %>" style= "float: right">View</a></td>
                                 <td><a href="catalog/updateitem/<%= list.resultMagazines.resultMagazines[i].item_id %>" style= "float: right">Update</a></td>
                                 <td><a href="catalog/deletemagazine/<%= list.resultMagazines.resultMagazines[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
                             </tr>
@@ -42,9 +44,10 @@
                                     <td><%= list.resultMovies.resultMovies[i].title %></td>
                                     <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
                                     <td><%= list.resultMovies.resultMovies[i].quantity %></td>
+                                    <td><a href="catalog/viewItem/<%= list.resultMovies.resultMovies[i].item_id %>" style= "float: right">View</a></td>
                                     <td><a href="catalog/updateitem/<%= list.resultMovies.resultMovies[i].item_id %>" style= "float: right">Update</a></td>
-                                <td><a href="catalog/deletemovie/<%= list.resultMovies.resultMovies[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
-                                    </tr>   
+                                    <td><a href="catalog/deletemovie/<%= list.resultMovies.resultMovies[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
+                                </tr>   
                             <% } %>
 
                             <% for(var i in list.resultMusics.resultMusics) { %>
@@ -53,8 +56,9 @@
                                     <td><%= list.resultMusics.resultMusics[i].title %></td>
                                     <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
                                     <td><%= list.resultMusics.resultMusics[i].quantity %></td>
+                                    <td><a href="catalog/viewItem/<%= list.resultMusics.resultMusics[i].item_id %>" style= "float: right">View</a></td>
                                     <td><a href="catalog/updateitem/<%= list.resultMusics.resultMusics[i].item_id %>" style= "float: right">Update</a></td>
-                                <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
+                                    <td><a href="catalog/deletemusic/<%= list.resultMusics.resultMusics[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
                                 </tr>
                             <% } %>
 
@@ -63,8 +67,9 @@
                                     <td><%= list.resultBooks.resultBooks[i].title %></td>
                                     <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td><%= list.resultBooks.resultBooks[i].quantity %></td>
+                                    <td><a href="catalog/viewItem/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">View</a></td>
                                     <td><a href="catalog/updateitem/<%= list.resultBooks.resultBooks[i].item_id %>" style= "float: right">Update</a></td>
-                                <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
+                                    <td><a href="catalog/deletebook/<%= list.resultBooks.resultBooks[i].item_id %>" onclick="return confirm('Are sure want to delete this record');" style= "float: right">Delete</a></td>
                                 </tr>
                             <% } %>
                         </tbody>

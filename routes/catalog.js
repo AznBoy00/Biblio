@@ -27,6 +27,19 @@ router.get('/', async (req, res) => {
     }
 });
 
+// ====================================== //
+// ======== View Single Item Page ======= //
+// ====================================== //
+router.get('/viewItem/:item_id', async (req, res) => {
+    try {
+        let results = await catalog.getItem(req.params.item_id);
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
 
 // ====================================== //
 // == GET Requests for Creating Items === //
