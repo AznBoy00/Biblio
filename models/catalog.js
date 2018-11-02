@@ -31,7 +31,9 @@ module.exports.getCatalog = async function() {
     }
 };
 
-//Insert new item into db
+// Insert new item into db
+// insert into the items table dirst, then use the PSQL function to retrieve
+// the items_item_id_seq (item_id) that was just inserted to create a new item.
 module.exports.insertNewItem = async function(newItem, discriminator) {
     try {
         const client = await pool.connect();
@@ -44,15 +46,15 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "title, author, format, publisher, language, isbn10, isbn13)" +
                     " SELECT select_id, "+
                     newItem.quantity + ", " +
-                    "'" + newItem.pages + "', " +
+                    "" + newItem.pages + ", " +
                     "'" + newItem.title + "', " +
                     "'" + newItem.author + "', " +
                     "'" + newItem.format + "', " +
                     "'" + newItem.publisher + "', " +
                     "'" + newItem.language + "', " +
-                    "'" + newItem.isbn10 + "', " +
-                    "'" + newItem.isbn13 + "' " +
-                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+                    newItem.isbn10 + ", " +
+                    newItem.isbn13 +
+                    " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
             case "Magazine":
@@ -73,11 +75,11 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
             case "Movie":
                 client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
                 result = await client.query(
-                    "INSERT INTO movies (item_id, quantity , run_time , " +
-                    "title, director, producers, actors, language, dubbed, subtitles, release_date)" +
-                    " SELECT select_id, "+
+                    "INSERT INTO movies (item_id, quantity, run_time, title, " +
+                    "director, producers, actors, language, dubbed, subtitles, release_date) " +
+                    "SELECT select_id, "+
                     newItem.quantity + ", " +
-                    "'" + newItem.run_time + "', " +
+                    newItem.run_time + ", " +
                     "'" + newItem.title + "', " +
                     "'" + newItem.director + "', " +
                     "'" + newItem.producers + "', " +
@@ -85,7 +87,7 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
                     "'" + newItem.language + "', " +
                     "'" + newItem.dubbed + "', " +
                     "'" + newItem.subtitles + "', " +
-                    "'" + newItem.release_date + "', " +
+                    "'" + newItem.release_date + "' " +
                     "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
                 );
                 break;
