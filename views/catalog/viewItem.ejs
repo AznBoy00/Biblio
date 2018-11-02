@@ -34,7 +34,7 @@
                         <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
                     <% } %>
 
-                    
+                    <!-- Loop over item attributes and siplay them-->
                     <% for (let i in results.results[0]){ %>
                         <div class="row mb-2">
                             <div class="col-3">
@@ -47,12 +47,18 @@
                             </div>
                         </div>
                     <% } %>
+
+                    <!-- Buttons for delete, update, loan, go back-->
                     <div class="row my-3">
                         <div class="col-12">
                             <form class="form-inline" method="POST" onSubmit="return checkblank(this);">
                                 
                                 <!-- remove the disabled attribute on the input tag when you're ready to use this -->
-                                <button class="form-group btn btn-success mr-1" type="submit" disabled>Loan This Item</button>
+                                <!-- loan item -->
+                                <button class="form-group btn btn-success mr-1" 
+                                        type="submit" disabled>
+                                    Loan This Item
+                                </button>
                                 
                                 <!--  update an item -->
                                 <a class="btn btn-warning form-group mr-1"

@@ -16,61 +16,76 @@
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover text-center">
                         <thead>
                             <tr>
-                                <th>Item Name</th>
+                                <th>Item #</th>
                                 <th>Type</th>
+                                <th>Title</th>
+                                <th>By</th>
                                 <th>Quantity</th>
                             </tr>
-                        <% for(var i in list.resultMagazines.resultMagazines) { %>
-                            <tr>
-                                <td>
-                                    <a href="catalog/viewItem/<%= list.resultMagazines.resultMagazines[i].item_id %>"> 
-                                        <%= list.resultMagazines.resultMagazines[i].title %>
-                                    </a>
-                                </td>
-                                <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
-                                <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
-                            </tr>
                         </thead>
+                            
                         <tbody>
-                          
-                            <% } %>
-                            <% for(var i in list.resultMovies.resultMovies) { %>
-                                <tr>
-                                    <td>
-                                        <a href="catalog/viewItem/<%= list.resultMovies.resultMovies[i].item_id %>">
-                                            <%= list.resultMovies.resultMovies[i].title %>
-                                        </a>
-                                    </td>
-                                    <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
-                                    <td><%= list.resultMovies.resultMovies[i].quantity %></td>
-                                </tr>   
-                            <% } %>
-
-                            <% for(var i in list.resultMusics.resultMusics) { %>
-                                <tr>
-                                    
-                                    <td>
-                                        <a href="catalog/viewItem/<%= list.resultMusics.resultMusics[i].item_id %>">
-                                            <%= list.resultMusics.resultMusics[i].title %>
-                                        </a>
-                                    </td>
-                                    <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
-                                    <td><%= list.resultMusics.resultMusics[i].quantity %></td>
-                                </tr>
-                            <% } %>
-
+                            
+                            <!-- Iterate over Books -->
                             <% for(var i in list.resultBooks.resultBooks) { %>
                                 <tr> 
+                                    <td><%= list.resultBooks.resultBooks[i].item_id %></td>
+                                    <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td>
                                         <a href="catalog/viewItem/<%= list.resultBooks.resultBooks[i].item_id %>">
                                             <%= list.resultBooks.resultBooks[i].title %>
                                         </a>
                                     </td>
-                                    <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
+                                    <td><%= list.resultBooks.resultBooks[i].author %></td>
                                     <td><%= list.resultBooks.resultBooks[i].quantity %></td>
+                                </tr>
+                            <% } %>
+
+                            <!-- Iterate over Magazines -->
+                            <% for(var i in list.resultMagazines.resultMagazines) { %>
+                                <tr>
+                                    <td><%= list.resultMagazines.resultMagazines[i].item_id %></td>
+                                    <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
+                                    <td>
+                                        <a href="catalog/viewItem/<%= list.resultMagazines.resultMagazines[i].item_id %>"> 
+                                            <%= list.resultMagazines.resultMagazines[i].title %>
+                                        </a>
+                                    </td>
+                                    <td><%= list.resultMagazines.resultMagazines[i].publisher %></td>
+                                    <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
+                                </tr>
+                            <% } %>
+
+                            <!-- Iterate over Magazines -->
+                            <% for(var i in list.resultMovies.resultMovies) { %>
+                                <tr>
+                                        <td><%= list.resultMovies.resultMovies[i].item_id %></td>
+                                    <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
+                                    <td>
+                                        <a href="catalog/viewItem/<%= list.resultMovies.resultMovies[i].item_id %>">
+                                            <%= list.resultMovies.resultMovies[i].title %>
+                                        </a>
+                                    </td>
+                                    <td><%= list.resultMovies.resultMovies[i].director %></td>
+                                    <td><%= list.resultMovies.resultMovies[i].quantity %></td>
+                                </tr>   
+                            <% } %>
+
+                            <!-- Iterate over Music -->
+                            <% for(var i in list.resultMusics.resultMusics) { %>
+                                <tr>
+                                    <td><%= list.resultMusics.resultMusics[i].item_id %></td>
+                                    <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
+                                    <td>
+                                        <a href="catalog/viewItem/<%= list.resultMusics.resultMusics[i].item_id %>">
+                                            <%= list.resultMusics.resultMusics[i].title %>
+                                        </a>
+                                    </td>
+                                    <td><%= list.resultMusics.resultMusics[i].artist %></td>
+                                    <td><%= list.resultMusics.resultMusics[i].quantity %></td>
                                 </tr>
                             <% } %>
                         </tbody>
