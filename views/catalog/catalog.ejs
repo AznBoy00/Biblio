@@ -23,7 +23,6 @@
                                 <th>Type</th>
                                 <th>Title</th>
                                 <th>By</th>
-                                <th>Quantity</th>
                             </tr>
                         </thead>
                             
@@ -40,7 +39,6 @@
                                         </a>
                                     </td>
                                     <td><%= list.resultBooks.resultBooks[i].author %></td>
-                                    <td><%= list.resultBooks.resultBooks[i].quantity %></td>
                                 </tr>
                             <% } %>
 
@@ -55,7 +53,6 @@
                                         </a>
                                     </td>
                                     <td><%= list.resultMagazines.resultMagazines[i].publisher %></td>
-                                    <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
                                 </tr>
                             <% } %>
 
@@ -70,7 +67,6 @@
                                         </a>
                                     </td>
                                     <td><%= list.resultMovies.resultMovies[i].director %></td>
-                                    <td><%= list.resultMovies.resultMovies[i].quantity %></td>
                                 </tr>   
                             <% } %>
 
@@ -85,7 +81,6 @@
                                         </a>
                                     </td>
                                     <td><%= list.resultMusics.resultMusics[i].artist %></td>
-                                    <td><%= list.resultMusics.resultMusics[i].quantity %></td>
                                 </tr>
                             <% } %>
                         </tbody>
