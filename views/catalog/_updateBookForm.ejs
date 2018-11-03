@@ -30,12 +30,12 @@
 
 <div class="form-group">
     <label>ISBN10 <small class="text-muted">(1234567890)</small></label>
-    <input type="number" class="form-control" name="isbn10" value="<%= results.results[0].isbn10 %>">
+    <input type="number" maxlength="10" class="form-control" name="isbn10" value="<%= results.results[0].isbn10 %>">
 </div>
 
 <div class="form-group">
     <label>ISBN13 <small class="text-muted">(1234567890123)</small></label>
-    <input type="number" class="form-control" name="isbn13" value="<%= results.results[0].isbn13 %>">
+    <input type="number" maxlength="13" class="form-control" name="isbn13" value="<%= results.results[0].isbn13 %>">
 </div>
 
 <div class="form-group">
