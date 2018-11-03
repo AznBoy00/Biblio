@@ -323,6 +323,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "author = '" + newItem.author + "', " +
                     "format = '" + newItem.format + "', " +
                     "pages = " + newItem.pages + ", " +
+                    "publisher = '" + newItem.publisher + "', " +
                     "language = '" + newItem.language + "', " +
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
