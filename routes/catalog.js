@@ -44,7 +44,6 @@ router.get('/viewItem/:item_id', async (req, res) => {
 // ====================================== //
 // == GET Requests for Creating Items === //
 // ====================================== //
-
 // is_logged is passed to check the session in the front-end
 // Page to select which item ti unsert. Upon selecting
 // the specific item create/discriminator is rendered
@@ -60,7 +59,6 @@ router.get('/createitems/:discriminator', function (req, res, next) {
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
-
 router.post('/createitems/create/:discriminator', async (req, res) => {
     try {
         let newItem = await catalog.getNewItemForInsert(req.params.discriminator, req);
@@ -109,8 +107,7 @@ router.post('/updateitem/:item_id/modify', async (req, res) => {
 // ====================================== //
 // == GET Requests for Deleting Items === //
 // ====================================== //
-
-// Books
+// DELETE an ITEM from the database
 router.get('/deleteitem/:item_id', async(req, res) => {
 
     try {
@@ -124,54 +121,6 @@ router.get('/deleteitem/:item_id', async(req, res) => {
         res.send("Error " + err);
     }
 });
-
-
-//Magazine
-// router.get('/deletemagazine/:item_id', async(req, res) => {
-
-//     try {
-//         //front-end will confirm if the item is to be deleted or not
-//         const client = await pool.connect();
-//         const resultMagazine = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
-//         res.redirect('/catalog');//refresh the page with the new changes 
-//         client.release();
-//     } catch (err) {
-//         console.error(err);
-//         res.send("Error " + err);
-//     }
-// });
-
-// //Movies
-// router.get('/deletemovie/:item_id', async(req, res) => {
-
-//     try {
-//         //front-end will confirm if the item is to be deleted or not
-//         const client = await pool.connect();
-//         const resultDeleteMovie = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
-//         res.redirect('/catalog');//refresh the page with the new changes 
-//         client.release();
-//     } catch (err) {
-//         console.error(err);
-//         res.send("Error " + err);
-//     }
-// });
-
-// //Music
-// router.get('/deletemusic/:item_id', async(req, res) => {
-
-//     try {
-//         //front-end will confirm if the item is to be deleted or not
-//         const client = await pool.connect();
-//         const resultDeleteMusic = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
-//         res.redirect('/catalog');//refresh the page with the new changes 
-//         client.release();
-//     } catch (err) {
-//         console.error(err);
-//         res.send("Error " + err);
-//     }
-// });
-
-
 
 
 //keep the next line at the end of this script
