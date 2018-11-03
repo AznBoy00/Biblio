@@ -51,7 +51,7 @@ CREATE TABLE Books(
     item_id INT NOT NULL UNIQUE,
     discriminator VARCHAR(10) DEFAULT 'Book',
     quantity INTEGER DEFAULT 0,
-    loand_period INT DEFAULT 7,
+    loan_period INT DEFAULT 7,
     loanable BOOLEAN DEFAULT TRUE,
     title VARCHAR(50),
     author VARCHAR(50),
@@ -72,7 +72,7 @@ CREATE TABLE Magazines(
     item_id INT NOT NULL UNIQUE,
     discriminator VARCHAR(10) DEFAULT 'Magazine',
     quantity INTEGER DEFAULT 0,
-    loand_period INT DEFAULT 0,
+    loan_period INT DEFAULT 0,
     loanable BOOLEAN DEFAULT FALSE,
     title VARCHAR(50),
     publisher VARCHAR(50),
@@ -90,7 +90,7 @@ CREATE TABLE Movies(
     item_id INT NOT NULL UNIQUE,
     discriminator VARCHAR(10) DEFAULT 'Movie',
     quantity INTEGER DEFAULT 0,
-    loand_period INT DEFAULT 2,
+    loan_period INT DEFAULT 2,
     loanable BOOLEAN DEFAULT TRUE,   
     title VARCHAR(50),
     director VARCHAR(50),
@@ -112,8 +112,9 @@ CREATE TABLE Music(
     item_id INT NOT NULL UNIQUE,
     discriminator VARCHAR(10) DEFAULT 'Music',
     quantity INTEGER DEFAULT 0,
-    loand_period INT DEFAULT 2,
+    loan_period INT DEFAULT 2,
     loanable BOOLEAN DEFAULT TRUE,
+    type VARCHAR(30) DEFAULT 'CD',
     title VARCHAR(50),
     artist VARCHAR(50),
     label VARCHAR(50),
@@ -157,13 +158,13 @@ INSERT INTO Users
 
 /* ======== Insert New Books ======== */
 /* 
-    (book_id, item_id, discriminator, quantity, loand_period,loanable, 
+    (book_id, item_id, discriminator, quantity, loan_period,loanable, 
     title, author, format, pages, publisher, language, isbn10, isbn13)
 */
 
 INSERT INTO Items (discriminator) VALUES ('Book');
 INSERT INTO Books 
-    (item_id, discriminator, quantity, loand_period, loanable,
+    (item_id, discriminator, quantity, loan_period, loanable,
      title, author, format, pages, publisher, language, isbn10, isbn13)
     SELECT select_id,'Book',2,7,TRUE,'War Dogs',
     'Michael J. Fox','Hardcopy',504,'Anton', 'English', 1234567890, 1234567890000
@@ -171,7 +172,7 @@ INSERT INTO Books
 
 INSERT INTO Items (discriminator) VALUES ('Book');
 INSERT INTO Books 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, author, format, pages, publisher, language, isbn10, isbn13)
     SELECT select_id,'Book',3,7,TRUE,'Meditations',
     'Marcus Aurelius','Hardcopy',800,'Penguin', 'Roman', 1234567891, 1234567891000      
@@ -179,7 +180,7 @@ INSERT INTO Books
 
 INSERT INTO Items (discriminator) VALUES ('Book');
 INSERT INTO Books 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, author, format, pages, publisher, language, isbn10, isbn13)
     SELECT select_id,'Book',3,7,TRUE,'The Selfish Gene',
     'Richard Dawkins','Hardcopy',800,'Penguin', 'English', 1234567892, 1234567892000      
@@ -187,7 +188,7 @@ INSERT INTO Books
 
 INSERT INTO Items (discriminator) VALUES ('Book');
 INSERT INTO Books 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, author, format, pages, publisher, language, isbn10, isbn13)
     SELECT select_id,'Book',3,7,TRUE,'The Alchemist',
     'Paolo Coelho','Hardcopy',800,'Penguin', 'English', 1234567893, 1234567893000      
@@ -195,13 +196,13 @@ INSERT INTO Books
 
 /* ====== Insert New Magazines ====== */
 /* 
-    (magazine_id, item_id, discriminator, quantity, loand_period, loanable, 
+    (magazine_id, item_id, discriminator, quantity, loan_period, loanable, 
     title, publisher, language, isbn10, isbn13) 
 */
 
 INSERT INTO Items (discriminator) VALUES ('Magazine');
 INSERT INTO Magazines
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, publisher, language, isbn10, isbn13)
     SELECT select_id,'Magazine',2,0,FALSE,
     'BMW Magazine','BMW', 'English', 1234567899, 1234567899000
@@ -209,7 +210,7 @@ INSERT INTO Magazines
 
 INSERT INTO Items (discriminator) VALUES ('Magazine');
 INSERT INTO Magazines
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, publisher, language, isbn10, isbn13)
     SELECT select_id,'Magazine',1,0,FALSE,
     'Wired October','Wired', 'English', 1234567900, 1234567900000
@@ -217,7 +218,7 @@ INSERT INTO Magazines
     
 INSERT INTO Items (discriminator) VALUES ('Magazine');
 INSERT INTO Magazines
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, publisher, language, isbn10, isbn13)
     SELECT select_id,'Magazine',1,0,FALSE,
     'Wired November','Wired', 'English', 1234567901, 1234567901000
@@ -225,7 +226,7 @@ INSERT INTO Magazines
 
 INSERT INTO Items (discriminator) VALUES ('Magazine');
 INSERT INTO Magazines
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, publisher, language, isbn10, isbn13)
     SELECT select_id,'Magazine',1,0,FALSE,
     'Wired December','Wired', 'English', 1234567902, 1234567902000
@@ -233,12 +234,12 @@ INSERT INTO Magazines
 
 /* ======== Insert New Movies ======= */
 /* 
-    (movie_id, item_id, discriminator, quantity, loand_period, loanable, 
+    (movie_id, item_id, discriminator, quantity, loan_period, loanable, 
     title, director, producers, language, dubbed, subtitles, actors, release_date, run_time) 
 */
 INSERT INTO Items (discriminator) VALUES ('Movie');
 INSERT INTO Movies 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Movie',3,2,TRUE,'Oceans 11','Clint Eastwood', 'Michael Kane', 
     'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133
@@ -246,7 +247,7 @@ INSERT INTO Movies
 
 INSERT INTO Items (discriminator) VALUES ('Movie');
 INSERT INTO Movies 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Movie',3,2,TRUE,'Oceans 12','Clint Eastwood', 'Michael Kane', 
     'English', 'English', 'German', 'George Cloney, Brad Pitt', '2004-09-05', 127
@@ -254,7 +255,7 @@ INSERT INTO Movies
     
 INSERT INTO Items (discriminator) VALUES ('Movie');
 INSERT INTO Movies 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Movie',3,2,TRUE,'Oceans 13','Clint Eastwood', 'Michael Kane', 
     'English', 'English', 'German', 'George Cloney, Brad Pitt', '2005-09-05', 127
@@ -262,7 +263,7 @@ INSERT INTO Movies
 
 INSERT INTO Items (discriminator) VALUES ('Movie');
 INSERT INTO Movies 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Movie',3,2,TRUE,'Oceans 14','Clint Eastwood', 'Michael Kane', 
     'English', 'English', 'Spanish', 'George Cloney, Brad Pitt', '2006-09-05', 127
@@ -270,12 +271,12 @@ INSERT INTO Movies
 
 /* ======== Insert New Music ======== */
 /* 
-    (music_id, item_id, discriminator, quantity, loand_period, loanable, 
+    (music_id, item_id, discriminator, quantity, loan_period, loanable, 
     title, artist, label, release_date, asin) 
 */
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, artist, label, release_date, asin)
     SELECT select_id,'Music',5,2,TRUE,'Presence','Led Zepplin', 
     'Sony Production', '1976-01-01', 'B008FOB124'
@@ -283,7 +284,7 @@ INSERT INTO Music
 
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, artist, label, release_date, asin)
     SELECT select_id,'Music',5,2,TRUE,'The Wall','Pink Floyd', 
     'Columbia', '1979-01-01', 'B008FOB125'
@@ -292,7 +293,7 @@ INSERT INTO Music
 
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, artist, label, release_date, asin)
     SELECT select_id,'Music',5,2,TRUE,'The National','The National', 
     'Brassland', '2001-01-01', 'B008FOB126'
@@ -300,7 +301,7 @@ INSERT INTO Music
 
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music 
-    (item_id, discriminator, quantity, loand_period, loanable, 
+    (item_id, discriminator, quantity, loan_period, loanable, 
     title, artist, label, release_date, asin)
     SELECT select_id,'Music',5,2,TRUE,'For Now I Am Winter','Ólafur Arnalds', 
     'Brassland', '2001-01-01', 'B008FOB126'

@@ -29,38 +29,93 @@ module.exports.getCatalog = async function() {
         console.error(err);
         res.render('error', { error: err });
     }
-}
+};
 
-//insert new book
-module.exports.insertNewBook = async function(newbook) {
+// Insert new item into db
+// insert into the items table dirst, then use the PSQL function to retrieve
+// the items_item_id_seq (item_id) that was just inserted to create a new item.
+module.exports.insertNewItem = async function(newItem, discriminator) {
     try {
         const client = await pool.connect();
-
-        let itemid = await client.query(
-            "SELECT MAX(item_id) FROM Items;",
-            function(err, result) {
-                if (err)
-                    console.log(err);
-                else
-                    console.log(itemid);
-            }
-        );
-
-        itemid = itemid + 1;
-
-        const newitem = await client.query(
-            "INSERT INTO Items (item_id, discriminator) VALUES (" + itemid[0] + ", 'Book')",
-            function(err, result) {
-                if (err)
-                    console.log(err);
-                else
-                    console.log(newitem);
-            }
-        );
+        let result;
+        switch (discriminator) {
+            case "Book":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Book');");
+                result = await client.query(
+                    "INSERT INTO books (item_id, quantity , pages ," +
+                    "title, author, format, publisher, language, isbn10, isbn13)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "" + newItem.pages + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.author + "', " +
+                    "'" + newItem.format + "', " +
+                    "'" + newItem.publisher + "', " +
+                    "'" + newItem.language + "', " +
+                    newItem.isbn10 + ", " +
+                    newItem.isbn13 +
+                    " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+                );
+                break;
+            case "Magazine":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');");
+                result = await client.query(
+                    "INSERT INTO magazines (item_id, quantity , " +
+                    "title, publisher, language, isbn10, isbn13)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.publisher + "', " +
+                    "'" + newItem.language + "', " +
+                    "'" + newItem.isbn10 + "', " +
+                    "'" + newItem.isbn13 + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+                );
+                break;
+            case "Movie":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
+                result = await client.query(
+                    "INSERT INTO movies (item_id, quantity, run_time, title, " +
+                    "director, producers, actors, language, dubbed, subtitles, release_date) " +
+                    "SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    newItem.run_time + ", " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.director + "', " +
+                    "'" + newItem.producers + "', " +
+                    "'" + newItem.actors + "', " +
+                    "'" + newItem.language + "', " +
+                    "'" + newItem.dubbed + "', " +
+                    "'" + newItem.subtitles + "', " +
+                    "'" + newItem.release_date + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+                );
+                break;
+            case "Music":
+                client.query("INSERT INTO Items (discriminator) VALUES ('Music');");
+                result = await client.query(
+                    "INSERT INTO music (item_id, quantity, " +
+                    "type, title, artist, label, release_date, asin)" +
+                    " SELECT select_id, "+
+                    newItem.quantity + ", " +
+                    "'" + newItem.type + "', " +
+                    "'" + newItem.title + "', " +
+                    "'" + newItem.artist + "', " +
+                    "'" + newItem.label + "', " +
+                    "'" + newItem.release_date + "', " +
+                    "'" + newItem.asin + "' " +
+                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+                );
+                break;
+            default:
+                result = null;
+                break;
+        }
+        client.release();
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 /**
  * getItem(item_id, discriminator)
@@ -92,7 +147,7 @@ module.exports.getItem = async function(item_id) {
         return await results;
     } catch (err) {
         console.error(err);
-	}
+    }
 }
 
 //Getter for discriminator
@@ -110,7 +165,9 @@ module.exports.getDiscriminator = async function(item_id) {
     }
 }
 
-//getNewItem structure
+// getNewItem for update
+// get a new item passed in from the HTML form
+// based on the item_id
 module.exports.getNewItem = async function(item_id, req) {
     let newItem;
     const discriminator = await this.getDiscriminator(item_id);
@@ -128,7 +185,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "isbn10": req.body.isbn10,
                     "isbn13": req.body.isbn13,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -140,7 +197,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "isbn10": req.body.isbn10,
                     "isbn13": req.body.isbn13,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -156,7 +213,7 @@ module.exports.getNewItem = async function(item_id, req) {
                     "release_date": req.body.release_date,
                     "run_time": req.body.run_time,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -164,12 +221,79 @@ module.exports.getNewItem = async function(item_id, req) {
                 newItem = await {
                     "title": req.body.title,
                     "artist": req.body.artist,
+                    "type": req.body.type,
                     "label": req.body.label,
                     "release_date": req.body.release_date,
                     "asin": req.body.asin,
                     "run_time": req.body.run_time,
                     "loanable": req.body.loanable,
-                    "loand_period": req.body.loand_period,
+                    "loan_period": req.body.loan_period,
+                    "quantity": req.body.quantity
+                };
+                break;
+            default:
+                newItem = null;
+                console.log("NO OBJECT FOUND");
+                break;
+        }
+        return await newItem;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// getNewItem for insert
+// get a new item passed in from the HTML form
+// based on the discriminator type
+module.exports.getNewItemForInsert = async function(discriminator, req) {
+    let newItem;
+    try {
+        switch(discriminator) {
+            case "Book":
+                newItem = await {
+                    "title": req.body.title,
+                    "author": req.body.author,
+                    "format": req.body.format,
+                    "pages": req.body.pages,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Magazine":
+                newItem = await {
+                    "title": req.body.title,
+                    "publisher": req.body.publisher,
+                    "language": req.body.language,
+                    "isbn10": req.body.isbn10,
+                    "isbn13": req.body.isbn13,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Movie":
+                newItem = await {
+                    "title": req.body.title,
+                    "director": req.body.director,
+                    "producers": req.body.producers,
+                    "actors": req.body.actors,
+                    "language": req.body.language,
+                    "dubbed": req.body.dubbed,
+                    "subtitles": req.body.subtitles,
+                    "release_date": req.body.release_date,
+                    "run_time": req.body.run_time,
+                    "quantity": req.body.quantity
+                };
+                break;
+            case "Music":
+                newItem = await {
+                    "title": req.body.title,
+                    "type": req.body.type,
+                    "artist": req.body.artist,
+                    "label": req.body.label,
+                    "release_date": req.body.release_date,
+                    "asin": req.body.asin,
                     "quantity": req.body.quantity
                 };
                 break;
@@ -199,13 +323,14 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "author = '" + newItem.author + "', " +
                     "format = '" + newItem.format + "', " +
                     "pages = " + newItem.pages + ", " +
+                    "publisher = '" + newItem.publisher + "', " +
                     "language = '" + newItem.language + "', " +
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("BOOK SQL");
                 break;
@@ -218,9 +343,9 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "isbn10 = " + newItem.isbn10 + ", " +
                     "isbn13 = " + newItem.isbn13 + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MAGAZINE SQL");
                 break;
@@ -237,7 +362,7 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "release_date = '" + newItem.release_date + "', " +
                     "run_time = " + newItem.run_time + ", " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
                     " WHERE item_id = ($1);", [item_id]
                 );
@@ -248,13 +373,14 @@ module.exports.updateItem = async function(newItem, item_id) {
                     "UPDATE music SET " +
                     "title = '"+ newItem.title + "', " +
                     "artist = '" + newItem.artist + "', " +
+                    "type = '" + newItem.type + "', " +
                     "label = '" + newItem.label + "', " +
                     "release_date = '" + newItem.release_date + "', " +
                     "asin = '" + newItem.asin + "', " +
                     "loanable = '" + newItem.loanable + "', " +
-                    "loand_period = " + newItem.loand_period + ", " + 
+                    "loan_period = " + newItem.loan_period + ", " +
                     "quantity = "+ newItem.quantity +
-                    " WHERE item_id = ($1);", [item_id]  
+                    " WHERE item_id = ($1);", [item_id]
                 );
                 // console.log("MUSIC SQL");
                 break;

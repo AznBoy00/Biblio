@@ -14,6 +14,11 @@
 </div>
 
 <div class="form-group">
+    <label>Actors <small class="text-muted">(seperate by a comma)</small></label>
+    <input type="text" class="form-control" name="actors" value="<%= results.results[0].actors %>">
+</div>
+
+<div class="form-group">
     <label>Language</label>
     <input type="text" class="form-control" name="language" value="<%= results.results[0].language %>">
 </div>
@@ -26,11 +31,6 @@
 <div class="form-group">
     <label>Subtitles Language</label>
     <input type="text" class="form-control" name="subtitles" value="<%= results.results[0].subtitles %>">
-</div>
-
-<div class="form-group">
-    <label>Actors <small class="text-muted">(seperate by a comma)</small></label>
-    <input type="text" class="form-control" name="actors" value="<%= results.results[0].actors %>">
 </div>
 
 <div class="form-group">
@@ -55,7 +55,7 @@
     
 <div class="form-group">
     <label>Loan Period <small class="text-muted">(number of days)</small></label>
-    <input type="number" class="form-control" name="loand_period" value="<%= results.results[0].loand_period %>">
+    <input type="number" class="form-control" name="loan_period" value="<%= results.results[0].loan_period %>">
 </div>
 
 <div class="form-group">
