@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 // ====================================== //
 router.get('/viewItem/:item_id', async (req, res) => {
     try {
-        let results = await catalog.getItem(req.params.item_id);
+        let results = await catalog.getItemById(req.params.item_id);
         let discriminator = await catalog.getDiscriminator(req.params.item_id);
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
@@ -61,8 +61,8 @@ router.get('/createitems/:discriminator', function (req, res, next) {
 // ====================================== //
 router.post('/createitems/create/:discriminator', async (req, res) => {
     try {
-        let newItem = await catalog.getNewItemForInsert(req.params.discriminator, req);
-        let result = await catalog.insertNewItem(newItem, req.params.discriminator);
+        let newItem = await catalog.getItemFromForm(req);
+        await catalog.insertNewItem(newItem, req.params.discriminator);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -76,7 +76,7 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
 // ====================================== //
 router.get('/updateitem/:item_id', async (req, res) => {
     try {
-        let results = await catalog.getItem(req.params.item_id);
+        let results = await catalog.getItemById(req.params.item_id);
         let discriminator = await catalog.getDiscriminator(req.params.item_id);
         res.render('catalog/update'+discriminator, { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
@@ -91,12 +91,8 @@ router.get('/updateitem/:item_id', async (req, res) => {
 // ====================================== //
 router.post('/updateitem/:item_id/modify', async (req, res) => {
     try {
-        let result;
-        let newItem;
-        // console.log("ITEM_ID: " + req.params.item_id);
-        newItem = await catalog.getNewItem(req.params.item_id, req);
-        // console.log(newItem);
-        result = await catalog.updateItem(newItem, req.params.item_id);
+        let newItem = await catalog.getItemFromForm(req);
+        await catalog.updateItem(newItem, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -113,7 +109,7 @@ router.get('/deleteitem/:item_id', async(req, res) => {
     try {
         //front-end will confirm if the item is to be deleted or not
         const client = await pool.connect();
-        const result = await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+        await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
         res.redirect('/catalog'); //refresh the page with the new changes 
         client.release();
     } catch (err) {

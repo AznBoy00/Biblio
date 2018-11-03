@@ -8,7 +8,9 @@ var itemsList = [];
 //below is an example of using the constructor of the object
 // item.constructor(item_id, discriminator, properties (as an object));
 
-//Get list of catalog items
+// ====================================== //
+// ===== GET LIST OF CATALOG ITEMS ====== //
+// ====================================== //
 module.exports.getCatalog = async function() {
     try {
         const client = await pool.connect();
@@ -31,7 +33,9 @@ module.exports.getCatalog = async function() {
     }
 };
 
-// Insert new item into db
+// ====================================== //
+// ===== INSERT A NEW ITEM INTO DB ====== //
+// ====================================== //
 // insert into the items table dirst, then use the PSQL function to retrieve
 // the items_item_id_seq (item_id) that was just inserted to create a new item.
 module.exports.insertNewItem = async function(newItem, discriminator) {
@@ -113,10 +117,10 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
     }
 };
 
-/**
- * getItem(item_id, discriminator)
- **/
-module.exports.getItem = async function(item_id) {
+// ====================================== //
+// ======== GET ITEM BASED ON ID ======== //
+// ====================================== //
+module.exports.getItemById = async function(item_id) {
     try {
         const client = await pool.connect()
         let result;
@@ -146,7 +150,9 @@ module.exports.getItem = async function(item_id) {
     }
 }
 
-//Getter for discriminator
+// ====================================== //
+// = GET ITEM DISCRIMINATOR BASED ON ID = //
+// ====================================== //
 module.exports.getDiscriminator = async function(item_id) {
     try {
         const client = await pool.connect();
@@ -161,72 +167,35 @@ module.exports.getDiscriminator = async function(item_id) {
     }
 }
 
-// getNewItem for update
-// get a new item passed in from the HTML form
-// based on the item_id
-module.exports.getNewItem = async function(item_id, req) {
+// ====================================== //
+// === GET NEW ITEM FROM THE HTML FORM == //
+// ====================================== //
+// get a new item passed in from the HTML FORM
+module.exports.getItemFromForm = async function(req) {
     let newItem;
-    const discriminator = await this.getDiscriminator(item_id);
-    // console.log("getNewItem DISCRIMINATOR: " + discriminator);
     try {
-        switch(discriminator) {
-            case "Book":
-                newItem = await {
-                    "title": req.body.title,
-                    "author": req.body.author,
-                    "format": req.body.format,
-                    "pages": req.body.pages,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13,
-                    "loanable": req.body.loanable,
-                    "loan_period": req.body.loan_period
-                };
-                break;
-            case "Magazine":
-                newItem = await {
-                    "title": req.body.title,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13,
-                    "loanable": req.body.loanable,
-                    "loan_period": req.body.loan_period
-                };
-                break;
-            case "Movie":
-                newItem = await {
-                    "title": req.body.title,
-                    "Publisher": req.body.director,
-                    "producers": req.body.producers,
-                    "language": req.body.language,
-                    "dubbed": req.body.dubbed,
-                    "subtitles": req.body.subtitles,
-                    "actors": req.body.actors,
-                    "release_date": req.body.release_date,
-                    "run_time": req.body.run_time,
-                    "loanable": req.body.loanable,
-                    "loan_period": req.body.loan_period
-                };
-                break;
-            case "Music":
-                newItem = await {
-                    "title": req.body.title,
-                    "artist": req.body.artist,
-                    "type": req.body.type,
-                    "label": req.body.label,
-                    "release_date": req.body.release_date,
-                    "asin": req.body.asin,
-                    "run_time": req.body.run_time,
-                    "loanable": req.body.loanable,
-                    "loan_period": req.body.loan_period
-                };
-                break;
-            default:
-                newItem = null;
-                console.log("NO OBJECT FOUND");
-                break;
+        newItem = await {
+            "title": req.body.title,
+            "author": req.body.author,
+            "format": req.body.format,
+            "pages": req.body.pages,
+            "publisher": req.body.publisher,
+            "language": req.body.language,
+            "isbn10": req.body.isbn10,
+            "isbn13": req.body.isbn13,
+            "loanable": req.body.loanable,
+            "loan_period": req.body.loan_period,
+            // movie related attributes
+            "producers": req.body.producers,
+            "subtitles": req.body.subtitles,
+            "actors": req.body.actors,
+            "release_date": req.body.release_date,
+            "run_time": req.body.run_time,
+            // music related attributes
+            "artist": req.body.artist,
+            "type": req.body.type,
+            "label": req.body.label,
+            "asin": req.body.asin,
         }
         return await newItem;
     } catch (err) {
@@ -234,69 +203,9 @@ module.exports.getNewItem = async function(item_id, req) {
     }
 }
 
-// getNewItem for insert
-// get a new item passed in from the HTML form
-// based on the discriminator type
-module.exports.getNewItemForInsert = async function(discriminator, req) {
-    let newItem;
-    try {
-        switch(discriminator) {
-            case "Book":
-                newItem = await {
-                    "title": req.body.title,
-                    "author": req.body.author,
-                    "format": req.body.format,
-                    "pages": req.body.pages,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13
-                };
-                break;
-            case "Magazine":
-                newItem = await {
-                    "title": req.body.title,
-                    "publisher": req.body.publisher,
-                    "language": req.body.language,
-                    "isbn10": req.body.isbn10,
-                    "isbn13": req.body.isbn13
-                };
-                break;
-            case "Movie":
-                newItem = await {
-                    "title": req.body.title,
-                    "director": req.body.director,
-                    "producers": req.body.producers,
-                    "actors": req.body.actors,
-                    "language": req.body.language,
-                    "dubbed": req.body.dubbed,
-                    "subtitles": req.body.subtitles,
-                    "release_date": req.body.release_date,
-                    "run_time": req.body.run_time
-                };
-                break;
-            case "Music":
-                newItem = await {
-                    "title": req.body.title,
-                    "type": req.body.type,
-                    "artist": req.body.artist,
-                    "label": req.body.label,
-                    "release_date": req.body.release_date,
-                    "asin": req.body.asin
-                };
-                break;
-            default:
-                newItem = null;
-                console.log("NO OBJECT FOUND");
-                break;
-        }
-        return await newItem;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-// updateItem to database;
+// ====================================== //
+// ====== UPDATE AN EXISTING ITEM ======= //
+// ====================================== //
 module.exports.updateItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
