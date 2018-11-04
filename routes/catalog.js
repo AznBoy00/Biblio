@@ -2,7 +2,6 @@
 var session = require('express-session');
 var express = require('express');
 var router = express.Router();
-var router = express.Router();
 router.use(session({
     secret : '2C44-4D44-WppQ38S',
     resave : true,
@@ -28,6 +27,19 @@ router.get('/', async (req, res) => {
     }
 });
 
+// ====================================== //
+// ======== View Single Item Page ======= //
+// ====================================== //
+router.get('/viewItem/:item_id', async (req, res) => {
+    try {
+        let results = await catalog.getItem(req.params.item_id);
+        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
 
 // ====================================== //
 // == GET Requests for Creating Items === //
@@ -39,19 +51,19 @@ router.get('/', async (req, res) => {
 router.get('/createitems', function (req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new book 
+// Create a new book
 router.get('/createitems/createBook', function (req, res, next) {
     res.render('catalog/createBook', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new magazine 
+// Create a new magazine
 router.get('/createitems/createMagazine', function (req, res, next) {
     res.render('catalog/createMagazine', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a music 
+// Create a music
 router.get('/createitems/createMusic', function (req, res, next) {
     res.render('catalog/createMusic', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
-// Create a new movie 
+// Create a new movie
 router.get('/createitems/createMovie', function (req, res, next) {
     res.render('catalog/createMovie', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
@@ -60,37 +72,17 @@ router.get('/createitems/createMovie', function (req, res, next) {
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
-// Create a new book: Post request
-router.post('/createitems/createbook', function (req, res) {
 
-    const newbook = {
-        "title": req.body.title,
-        "author": req.body.author,
-        "format": req.body.format,
-        "pages": req.body.pages,
-        "publisher": req.body.publisher,
-        "language": req.body.language,
-        "isbn10": req.body.isbn10,
-        "isbn13": req.body.isbn13,
-        "quantity": req.body.quantity
-    };
-
-    req.checkBody('title', 'Title is required').notEmpty();
-    req.checkBody('author', 'Author is required').notEmpty();
-    req.checkBody('format', 'Format is required').notEmpty();
-    req.checkBody('pages', 'Page number is required').notEmpty();
-    req.checkBody('publisher', 'Publisher is required').notEmpty();
-    req.checkBody('language', 'Language is required').notEmpty();
-    req.checkBody('isbn10', 'ISBN10 is required').notEmpty();
-    req.checkBody('isbn13', 'ISBN13 is required').notEmpty();
-    req.checkBody('quantity', 'Quantity is required').notEmpty();
-    const err = req.validationErrors();
-    if (err) {
-        res.render('catalog/createBook', {errors: err, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-    } else {
-        console.log(newbook);
-        catalog.insertNewBook(newbook);
-        res.render('catalog/catalog', { title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+router.post('/createitems/create/:discriminator', async (req, res) => {
+    try {
+        let result;
+        let newItem;
+        newItem = await catalog.getNewItemForInsert(req.params.discriminator, req);
+        result = await catalog.insertNewItem(newItem, req.params.discriminator);
+        res.redirect('/catalog');
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
     }
 });
 
@@ -103,6 +95,7 @@ router.get('/updateitem/:item_id', async (req, res) => {
         let results = await catalog.getItem(req.params.item_id);
         let discriminator = await catalog.getDiscriminator(req.params.item_id);
         console.log(discriminator);
+        console.log(results.results[0].item_id);
         switch (discriminator) {
             case "Book":
                 res.render('catalog/updateBook', { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});

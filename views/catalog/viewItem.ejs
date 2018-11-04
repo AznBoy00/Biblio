@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <%- include('../partials/_header') -%>
+    <script>function redirect(){window.location="/";}</script>
+</head>
+
+<body>
+	<%- include('../partials/_navbar'); -%>
+	<div class="container">
+
+		<div class="row">
+			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <!-- title -->
+                <h1 class="display-4"><%= results.results[0].title %></h1>
+                <!-- error partial -->
+                <%- include('../partials/_error'); -%>
+			</div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                    <!-- display the attribute artist || publisher || author || director -->
+                    <!-- depending on if it is typ music || magazine || book || movie -->
+                    <!-- respectively -->
+                    <% if (results.results[0].discriminator == "Book"){ %>
+                        <%- "<p class='lead'>by "+results.results[0].author+"</p>" %> 
+                    <% } if (results.results[0].discriminator == "Magazine"){ %>
+                        <%- "<p class='lead'>by "+results.results[0].publisher+"</p>" %> 
+                    <% } if (results.results[0].discriminator == "Movie"){ %>
+                        <%- "<p class='lead'>by "+results.results[0].director+"</p>" %> 
+                    <% } if (results.results[0].discriminator == "Music"){ %>
+                        <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
+                    <% } %>
+
+                    <!-- Loop over item attributes and siplay them-->
+                    <% for (let i in results.results[0]){ %>
+                        <div class="row mb-2">
+                            <div class="col-3">
+                                <!-- the attribute title -->
+                                <strong><%= i %></strong>
+                            </div>
+                            <div class="col-9">
+                                <!-- the attribute value -->
+                                <span><%= results.results[0][i] %></span>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Buttons for delete, update, loan, go back-->
+                    <div class="row my-3">
+                        <div class="col-12">
+                            <form class="form-inline" method="POST" onSubmit="return checkblank(this);">
+                                
+                                <!-- remove the disabled attribute on the input tag when you're ready to use this -->
+                                <!-- loan item -->
+                                <button class="form-group btn btn-outline-success mr-1" 
+                                        type="submit" disabled>
+                                    Loan This Item
+                                </button>
+                                
+                                <!--  update an item -->
+                                <a class="btn btn-outline-warning form-group mr-1"
+                                    href="/catalog/updateitem/<%= results.results[0].item_id %>">
+                                    Update
+                                </a>
+
+                                <!-- Delete an item -->
+                                <a class="btn btn-outline-danger form-group mr-1"
+                                    href="/catalog/delete<%= results.results[0].discriminator %>/<%= results.results[0].item_id %>" 
+                                    onclick="return confirm('Are sure want to delete this record');">
+                                    Delete
+                                </a>
+
+                                <!-- go back to the catalog --> 
+                                <a class="btn btn-outline-primary mr-1" href="/catalog">Go back</a>	
+                            </form>
+                        </div>
+                    </div>
+            </div>
+            <!-- ./ end col -->
+        </div>
+        <!-- ./ end row -->
+
+    </div>
+    <!-- ./ end container -->
+    <%- include('../partials/_footer') -%>   
+</body>
+
+</html>
