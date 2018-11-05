@@ -1,4 +1,3 @@
-
 <nav class="navbar sticky-top navbar-expand-md navbar-light bg-light mb-3">
     <a class="navbar-brand" href="/">Biblio</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
@@ -16,7 +15,7 @@
                 <a class="nav-link my-md-2 my-1" href="/catalog">Catalog</a>
             </li>
             <% if (typeof is_logged !== 'undefined' && is_logged){ %>
-                <% if (is_admin){ %>
+                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                     <li <%- title === "Create Item" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                         <a class="nav-link my-md-2 my-1" href="/catalog/createitems">Insert New Item</a>
                     </li>
@@ -24,7 +23,7 @@
                 <li <%- title === "User CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                     <a class="nav-link my-md-2 my-1" href="/users/usercp">User Profile</a>
                 </li>
-                <% if (is_admin){ %>
+                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                     <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                         <a class="nav-link my-md-2 my-1" href="/users/admincp/manageusers">Manage Users</a>
                     </li>

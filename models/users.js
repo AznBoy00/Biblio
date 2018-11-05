@@ -110,3 +110,64 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
         console.error(err);
     }
 };
+//getter for user profile information
+module.exports.getUserInfo = async function(email) {
+    try {
+        const client = await pool.connect()
+        let result;
+        result = await client.query("SELECT * FROM Users WHERE email = ($1)", [email]);
+        const results = { 'results': (result) ? result.rows : null};
+        client.release();
+        return await results;
+    } catch (err) {
+        console.error(err);
+	}
+}
+
+//getter for a new user profile information
+module.exports.getNewUserInfo = async function(email, req) {
+    let newUserInfo;
+    let hash;
+
+    // let result = await this.getUserInfo(email);
+    // console.log(result.results[0].password);
+    try {
+        if (req.body.password != '') {
+            hash = bcrypt.hashSync(req.body.password);
+            //console.log("NEW PW");
+        } else {
+            hash = bcrypt.hashSync(req.body.oldpassword);
+            //console.log("OLD PW");
+        }
+
+        newUserInfo = await {
+            "f_name": req.body.f_name,
+            "l_name": req.body.l_name,
+            "phone": req.body.phone,
+            "password": await hash
+        };
+        return await newUserInfo;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// update user information to database
+module.exports.updateUserInfo = async function(newUserInfo, email) {
+    try {
+        const client = await pool.connect();
+        let result;
+
+            result = await client.query(
+                    "UPDATE users SET " +
+                    "f_name = '"+ newUserInfo.f_name + "', " +
+                    "l_name = '" + newUserInfo.l_name + "', " +
+                    "phone = '" + newUserInfo.phone + "', " +
+                    "password = '" + newUserInfo.password + "' " +
+                    "WHERE email = ($1);", [email]
+                );
+        client.release();
+    } catch (err) {
+        console.error(err);
+    }
+}
