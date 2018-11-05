@@ -156,40 +156,40 @@ router.get('/usercp', async (req, res) => {
 router.post('/usercp', async (req, res) => {
     //Fetch user info.
     var email = req.session.email;
+    let newUserInfo;
     let results = await user.getUserInfo(email);
+    let oldPassHash = results.results[0].password;
+    var oldPassMatched = false;
 
-    //Check form fields for empty fields.
+    //Validate current session password and user input old password to be identical.
+    if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)) {
+        oldPassMatched = true;
+    }
+
+    //Check form fields for empty fields/match.
     req.checkBody('f_name', 'First name field is empty.').notEmpty();
     req.checkBody('l_name', 'Last name field is empty.').notEmpty();
     req.checkBody('phone', 'Phone number field is empty.').notEmpty();
     req.checkBody('oldpassword', 'Old password field is empty.').notEmpty();
-    req.checkBody('password','New password field is empty.').notEmpty();
-    req.checkBody('confirmpassword', 'Confirm new password field is empty.').notEmpty();
-    req.checkBody('confirmpassword', 'Confirmation password does not match.').equals(req.body.password);
+    //req.checkBody('password','New password field is empty.').notEmpty();
+    if(!oldPassMatched)
+        req.checkBody('oldpassword', 'Current password must match to make changes.').isEmpty();
+    if(req.body.password != '') {
+        req.checkBody('confirmpassword', 'Confirm new password field is empty.').notEmpty();
+        req.checkBody('confirmpassword', 'Confirmation password does not match.').equals(req.body.password);
+    }
     const err = req.validationErrors();
     if(err){
         res.render('users/usercp', {results, errors:err, title: 'User CP', is_logged: req.session.logged});
     } else {
         try {
-            let newUserInfo;
-            let oldPassHash = results.results[0].password;
-            var oldPassMatched = false;
-
-            //Validate current session password and user input old password to be identical.
-            if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)) {
-                oldPassMatched = true;
-            }
-
             //Validate new password and confirm new password to be identical, new pass is different than previous pass, and that oldpassword has been validated.
             if((req.body.password == req.body.confirmpassword) && (req.body.password!=req.body.oldpassword) && oldPassMatched){
                 newUserInfo = await user.getNewUserInfo(email, req);
                 results = await user.updateUserInfo(newUserInfo, email);
-                res.redirect('/');
                 console.log("User account info UPDATE SUCCESSFUL.");
-            }else{
-                console.log("User account info UPDATE UNSUCCESSFUL.");
-                res.redirect('/users/usercp');
             }
+            res.redirect('/users/usercp');
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });

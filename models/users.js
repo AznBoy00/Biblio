@@ -127,15 +127,24 @@ module.exports.getUserInfo = async function(email) {
 //getter for a new user profile information
 module.exports.getNewUserInfo = async function(email, req) {
     let newUserInfo;
-    let hash = bcrypt.hashSync(req.body.password);
+    let hash;
+
     // let result = await this.getUserInfo(email);
     // console.log(result.results[0].password);
     try {
-                newUserInfo = await {
-                  "f_name": req.body.f_name,
-                  "l_name": req.body.l_name,
-                  "phone": req.body.phone,
-                  "password": await hash
+        if (req.body.password != '') {
+            hash = bcrypt.hashSync(req.body.password);
+            //console.log("NEW PW");
+        } else {
+            hash = bcrypt.hashSync(req.body.oldpassword);
+            //console.log("OLD PW");
+        }
+
+        newUserInfo = await {
+            "f_name": req.body.f_name,
+            "l_name": req.body.l_name,
+            "phone": req.body.phone,
+            "password": await hash
         };
         return await newUserInfo;
     } catch (err) {
