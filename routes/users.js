@@ -189,7 +189,9 @@ router.post('/usercp', async (req, res) => {
                 results = await user.updateUserInfo(newUserInfo, email);
                 console.log("User account info UPDATE SUCCESSFUL.");
             }
-            res.redirect('/users/usercp');
+            results = await user.getUserInfo(email);
+            const success = ['Update Complete!'];
+            res.render('users/usercp', {results, success:success, title: 'User CP', is_logged: req.session.logged});
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });
