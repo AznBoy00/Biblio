@@ -1,4 +1,4 @@
-<!-- Custom error messages -->
+<!-- Custom success messages -->
 <!-- 
     Login, Register methods 
     From the Users Routes uses this
@@ -9,18 +9,18 @@
     </div>
 <% } %>
 
-<!-- Default error messages -->
+<!-- Default success messages -->
 <!-- 
     Create items (book, magazine, music, movie)
     Update Items(book, magazine, music, movie)
     From the Catalog Routes uses this 
 -->
-<!-- Errors returns [location, param, msg, value] -->
+<!-- Success returns [location, param, msg, value] -->
 <% if (typeof success !== 'undefined') { %>
     <div class="alert alert-success alert-dismissible" role="alert">
-        <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-        </button> -->
+        </button>
         <!-- <h3 class="my-1">Success</h3> -->
         <% for (var i = 0 ; i < success.length ; i++){%>
             <p class="my-3"><%= success[i] %></p>
