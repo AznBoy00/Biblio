@@ -209,7 +209,6 @@ module.exports.getItemFromForm = async function(req) {
 module.exports.updateItem = async function(newItem, item_id) {
     try {
         const client = await pool.connect();
-        let result;
         let discriminator = await this.getDiscriminator(item_id);
         // console.log(discriminator);
         switch (discriminator) {
@@ -286,4 +285,25 @@ module.exports.updateItem = async function(newItem, item_id) {
     } catch (err) {
         console.error(err);
     }
+}
+
+// ====================================== //
+// ===== Delet an Item from the DB ====== //
+// ====================================== //
+// DELETE an ITEM from the database which
+// cascades down to delete the corresponding
+// book, magazine, movie or music
+module.exports.deleteItem = async function (item_id){
+    try {
+        const client = await pool.connect();
+        // query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+        let result = await client.query(
+            "DELETE FROM Items WHERE item_id=($1);", [item_id]
+        );
+        var resultJSON = { 'result': (await result) ? await result.rows : null};
+        client.release();
+        return await resultJSON.result[0].discriminator;
+    } catch (err) {
+        console.error(err);
+    }        
 }

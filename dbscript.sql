@@ -1,4 +1,4 @@
-/* heroku pg:psql -f dbscript.sql*/
+/* heroku pg:psql -f dbscript.sql */
 /* ======== Re-Initialize ======== */
 DROP TABLE Transactions CASCADE;
 DROP TABLE Users;  

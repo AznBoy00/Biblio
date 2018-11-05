@@ -10,8 +10,7 @@ router.use(session({
 var expressValidator = require('express-validator');
 router.use(expressValidator());
 var catalog = require('../models/catalog');
-// DB Connection
-const pool = require('../db');
+
 
 
 // ====================================== //
@@ -108,10 +107,11 @@ router.get('/deleteitem/:item_id', async(req, res) => {
 
     try {
         //front-end will confirm if the item is to be deleted or not
-        const client = await pool.connect();
-        await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
+        // const client = await pool.connect();
+        await catalog.deleteItem(req.params.item_id);
+        // await client.query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
         res.redirect('/catalog'); //refresh the page with the new changes 
-        client.release();
+        // client.release();
     } catch (err) {
         console.error(err);
         res.send("Error " + err);
