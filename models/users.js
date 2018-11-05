@@ -144,7 +144,7 @@ module.exports.getNewUserInfo = async function(email, req) {
 }
 
 // update user information to database
-module.exports.updateUserInfo = async function(newUserInfo,email) {
+module.exports.updateUserInfo = async function(newUserInfo, email) {
     try {
         const client = await pool.connect();
         let result;
