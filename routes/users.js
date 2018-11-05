@@ -187,7 +187,7 @@ router.post('/usercp', async (req, res) => {
             if((req.body.password == req.body.confirmpassword) && (req.body.password!=req.body.oldpassword) && oldPassMatched){
                 newUserInfo = await user.getNewUserInfo(email, req);
                 results = await user.updateUserInfo(newUserInfo, email);
-                console.log("User account info UPDATE SUCCESSFUL.");
+                //console.log("User account info UPDATE SUCCESSFUL.");
             }
             results = await user.getUserInfo(email);
             const success = ['Update Complete!'];
