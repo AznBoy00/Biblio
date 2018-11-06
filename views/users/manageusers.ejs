@@ -36,7 +36,11 @@
                             <% for(var i = 0; i < results.results.length; i++) { %>
                                 <tr>
                                     <!-- USES BOOLEAN -->
-                                    <% if(results.results[i].is_admin == false) { %>
+                                    <% if(results.results[i].user_id == 1) { %>
+                                        <td>
+                                            
+                                        </td>
+                                    <% } else if(results.results[i].is_admin == false) { %>
                                         <td>
                                             <a class="btn btn-sm btn-success" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
                                         </td>
