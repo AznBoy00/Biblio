@@ -19,8 +19,6 @@ var catalog = require('../models/catalog');
 router.get('/', async (req, res) => {
     try {
         let list = await catalog.getFullCatalog();
-        // console.log(list.books[0].book_id);
-        // console.log(list[0][0]);
         res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
@@ -34,7 +32,7 @@ router.get('/', async (req, res) => {
 router.get('/viewItem/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id);
-        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        let discriminator = results.results[0].discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
@@ -62,8 +60,7 @@ router.get('/createitems/:discriminator', function (req, res, next) {
 // ====================================== //
 router.post('/createitems/create/:discriminator', async (req, res) => {
     try {
-        let newItem = await catalog.getItemFromForm(req);
-        await catalog.insertNewItem(newItem, req.params.discriminator);
+        await catalog.insertNewItem(req, req.params.discriminator);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);
@@ -78,7 +75,7 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
 router.get('/updateitem/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id);
-        let discriminator = await catalog.getDiscriminator(req.params.item_id);
+        let discriminator = results.results[0].discriminator;
         res.render('catalog/update'+discriminator, { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
@@ -92,8 +89,7 @@ router.get('/updateitem/:item_id', async (req, res) => {
 // ====================================== //
 router.post('/updateitem/:item_id/modify', async (req, res) => {
     try {
-        let newItem = await catalog.getItemFromForm(req);
-        await catalog.updateItem(newItem, req.params.item_id);
+        await catalog.updateItem(req, req.params.item_id);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);

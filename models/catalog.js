@@ -1,12 +1,9 @@
 // DB Connection
 const pool = require('../db');
 
-var uow = require('../models/catalogUnitOfWork');
-
-var item = require('../models/item');
+// var item = require('../models/item');
 //list to be filled with item objects from item.js in models
-var itemsList = [];
-
+// var itemsList = [];
 //below is an example of using the constructor of the object
 // itemsList = item.constructor(item_id, discriminator, properties (as an object));
 
@@ -41,8 +38,10 @@ module.exports.getFullCatalog = async function() {
 // ====================================== //
 // insert into the items table dirst, then use the PSQL function to retrieve
 // the items_item_id_seq (item_id) that was just inserted to create a new item.
-module.exports.insertNewItem = async function(newItem, discriminator) {
+module.exports.insertNewItem = async function(req, discriminator) {
     try {
+        // get the item fromt he html form
+        let newItem = await this.getItemFromForm(req);
         // change the disciminator to match the table name, add an S
         // to bookS, movieS, magazineS and leave music as is 
         let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
@@ -156,13 +155,14 @@ module.exports.getItemFromForm = async function(req) {
 // ====================================== //
 // ====== UPDATE AN EXISTING ITEM ======= //
 // ====================================== //
-module.exports.updateItem = async function(newItem, item_id) {
+module.exports.updateItem = async function(req, item_id) {
     try {
-        let tableName = await this.getDiscriminator(item_id);
-        // change the disciminator to match the table name, add an S
-        // to bookS, movieS, magazineS and leave music as is 
-        if (tableName != "Music")
-            tableName = tableName + "s";
+        // get the item fromt he html form
+        let newItem = await this.getItemFromForm(req);
+        // change the disciminator to match the table name
+        // add an S to bookS, movieS, magazineS and leave music as is 
+        let discriminator = await this.getDiscriminator(item_id);
+        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
         
         // build the query string
         let query = "UPDATE " + tableName + " SET ";
@@ -194,12 +194,13 @@ module.exports.updateItem = async function(newItem, item_id) {
 // book, magazine, movie or music
 module.exports.deleteItem = async function (item_id){
     try {
+        let query = "DELETE FROM Items WHERE item_id = " + item_id + ";"
+        
         const client = await pool.connect();
-        let result = await client.query(
-            "DELETE FROM Items WHERE item_id=($1);", [item_id]
-        );
-        var resultJSON = { 'result': (await result) ? await result.rows : null};
+        let result = await client.query(query);
         client.release();
+        
+        var resultJSON = { 'result': (await result) ? await result.rows : null};
         return await resultJSON.result[0].discriminator;
     } catch (err) {
         console.error(err);
