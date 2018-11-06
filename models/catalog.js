@@ -10,31 +10,32 @@ var itemsList = [];
 //below is an example of using the constructor of the object
 // itemsList = item.constructor(item_id, discriminator, properties (as an object));
 
-// ====================================== //
-// ===== GET LIST OF CATALOG ITEMS ====== //
-// ====================================== //
-module.exports.getCatalog = async function() {
-    try {
+// ======================================== //
+// = GET LIST OF ALL ITEMS IN THE CATALOG = //
+// ======================================== //
+module.exports.getFullCatalog = async function() {
+    try {        
+        //open the connections, query the db, release the connection
         const client = await pool.connect();
-        let result = [];
         const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
         const resultMagazine = await client.query('SELECT * FROM magazines ORDER BY item_id ASC');
         const resultMovie = await client.query('SELECT * FROM movies ORDER BY item_id ASC');
         const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
-
-        result.resultBooks = { 'resultBooks': (resultBook) ? resultBook.rows : null};
-        result.resultMagazines = { 'resultMagazines': (resultMagazine) ? resultMagazine.rows : null};
-        result.resultMovies = { 'resultMovies': (resultMovie) ? resultMovie.rows : null};
-        result.resultMusics = { 'resultMusics': (resultMusic) ? resultMusic.rows : null};
         client.release();
-        //console.log(list);
+        
+        let result = [];
+        result.books = (resultBook != null) ? resultBook.rows : null;
+        result.magazines = (resultMagazine != null) ? resultMagazine.rows : null;
+        result.movies = (resultMovie != null) ? resultMovie.rows : null;
+        result.musics = (resultMusic != null) ? resultMusic.rows : null;
+        
+        // console.log(result);
         return await result;
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
     }
-};
-
+}
 // ====================================== //
 // ===== INSERT A NEW ITEM INTO DB ====== //
 // ====================================== //
@@ -86,7 +87,7 @@ module.exports.getItemById = async function(item_id) {
         let discriminator = await this.getDiscriminator(item_id);
         let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
 
-        let query = "SELECT * FROM "+tableName+" WHERE item_id = "+item_id;
+        let query = "SELECT * FROM " + tableName + " WHERE item_id = " + item_id;
         const client = await pool.connect()
         let result = await client.query(query);
         client.release();
@@ -102,12 +103,11 @@ module.exports.getItemById = async function(item_id) {
 // ====================================== //
 module.exports.getDiscriminator = async function(item_id) {
     try {
+        let query = "SELECT discriminator FROM Items WHERE "+item_id+";";
         const client = await pool.connect();
-        let result = await client.query(
-            "SELECT discriminator FROM Items WHERE item_id=$1;", [item_id]
-        );
-        var resultJSON = { 'result': (await result) ? await result.rows : null};
+        let result = await client.query(query);
         client.release();
+        var resultJSON = { 'result': (await result) ? await result.rows : null};
         return await resultJSON.result[0].discriminator;
     } catch (err) {
         console.error(err);
