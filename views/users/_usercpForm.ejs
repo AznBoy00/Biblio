@@ -1,34 +1,45 @@
 <div class="form-group">
     <label>First Name</label>
-    <input type="text" class="form-control" name="first_name" placeholder="User First Name" disabled>
+    <input type="text" class="form-control" name="f_name" placeholder="User First Name" value="<%= results.results[0].f_name %>">
 </div>
 
 <div class="form-group">
     <label>Last Name</label>
-    <input type="text" class="form-control" name="last_name" placeholder="User Last Name" disabled>
+    <input type="text" class="form-control" name="l_name" placeholder="User Last Name" value="<%= results.results[0].l_name %>">
 </div>
 
 <div class="form-group">
-    <label>Mobile Number</label>
-    <input type="number" class="form-control" name="mob_no" placeholder="Mobile Number">
+    <label>Email</label>
+    <input type="text" class="form-control" name="email" value="<%= results.results[0].email %>" disabled>
 </div>
 
 <div class="form-group">
-    <label>User Name</label>
-    <input type="text" class="form-control" name="user_name" placeholder="User Name">
+    <label>
+        Mobile Number
+        <small class="text-muted">(5145551234)</small>
+    </label>
+    <input type="number" class="form-control" name="phone" placeholder="Mobile Number" value="<%= results.results[0].phone %>">
 </div>
 
 <div class="form-group">
-    <label>Old Password</label>
-    <input type="password" class="form-control" name="oldpassword" placeholder="Enter old password">
+    <label>Current Password</label>
+    <input type="password" class="form-control" name="oldpassword" placeholder="Enter current password">
 </div>
 
-<div class="form-group">
-    <label>New Password</label>
-        <input type="password" class="form-control" name="newpassword" placeholder="Enter new password">
-</div>
+<h4>
+    Change Password
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#pw" aria-expanded="false" aria-controls="collapseExample">
+            +
+    </button>
+</h4>
+<div id="pw" class="collapse">
+    <div class="form-group">
+        <label>New Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Enter new password">
+    </div>
 
-<div class="form-group">
-    <label>Confirm New Password</label>
-    <input type="password" class="form-control" name="confirmpassword" placeholder="Re-enter new password">
+    <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" class="form-control" name="confirmpassword" placeholder="Confirm new password">
+    </div>
 </div>
