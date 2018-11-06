@@ -1,12 +1,14 @@
 // DB Connection
 const pool = require('../db');
 
+var uow = require('../models/catalogUnitOfWork');
+
 var item = require('../models/item');
 //list to be filled with item objects from item.js in models
 var itemsList = [];
 
 //below is an example of using the constructor of the object
-// item.constructor(item_id, discriminator, properties (as an object));
+// itemsList = item.constructor(item_id, discriminator, properties (as an object));
 
 // ====================================== //
 // ===== GET LIST OF CATALOG ITEMS ====== //
@@ -40,77 +42,36 @@ module.exports.getCatalog = async function() {
 // the items_item_id_seq (item_id) that was just inserted to create a new item.
 module.exports.insertNewItem = async function(newItem, discriminator) {
     try {
-        const client = await pool.connect();
-        let result;
-        switch (discriminator) {
-            case "Book":
-                client.query("INSERT INTO Items (discriminator) VALUES ('Book');");
-                result = await client.query(
-                    "INSERT INTO books (item_id , pages ," +
-                    "title, author, format, publisher, language, isbn10, isbn13)" +
-                    " SELECT select_id, "+
-                    "" + newItem.pages + ", " +
-                    "'" + newItem.title + "', " +
-                    "'" + newItem.author + "', " +
-                    "'" + newItem.format + "', " +
-                    "'" + newItem.publisher + "', " +
-                    "'" + newItem.language + "', " +
-                    newItem.isbn10 + ", " +
-                    newItem.isbn13 +
-                    " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-                );
-                break;
-            case "Magazine":
-                client.query("INSERT INTO Items (discriminator) VALUES ('Magazine');");
-                result = await client.query(
-                    "INSERT INTO magazines (item_id, " +
-                    "title, publisher, language, isbn10, isbn13)" +
-                    " SELECT select_id, "+
-                    "'" + newItem.title + "', " +
-                    "'" + newItem.publisher + "', " +
-                    "'" + newItem.language + "', " +
-                    "'" + newItem.isbn10 + "', " +
-                    "'" + newItem.isbn13 + "' " +
-                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-                );
-                break;
-            case "Movie":
-                client.query("INSERT INTO Items (discriminator) VALUES ('Movie');");
-                result = await client.query(
-                    "INSERT INTO movies (item_id, run_time, title, " +
-                    "director, producers, actors, language, dubbed, subtitles, release_date) " +
-                    "SELECT select_id, "+
-                    newItem.run_time + ", " +
-                    "'" + newItem.title + "', " +
-                    "'" + newItem.director + "', " +
-                    "'" + newItem.producers + "', " +
-                    "'" + newItem.actors + "', " +
-                    "'" + newItem.language + "', " +
-                    "'" + newItem.dubbed + "', " +
-                    "'" + newItem.subtitles + "', " +
-                    "'" + newItem.release_date + "' " +
-                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-                );
-                break;
-            case "Music":
-                client.query("INSERT INTO Items (discriminator) VALUES ('Music');");
-                result = await client.query(
-                    "INSERT INTO music (item_id, " +
-                    "type, title, artist, label, release_date, asin)" +
-                    " SELECT select_id, "+
-                    "'" + newItem.type + "', " +
-                    "'" + newItem.title + "', " +
-                    "'" + newItem.artist + "', " +
-                    "'" + newItem.label + "', " +
-                    "'" + newItem.release_date + "', " +
-                    "'" + newItem.asin + "' " +
-                    "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-                );
-                break;
-            default:
-                result = null;
-                break;
+        // change the disciminator to match the table name, add an S
+        // to bookS, movieS, magazineS and leave music as is 
+        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
+        
+        // build the query string in the format: 
+        // "INSERT INTO tableName (select_id, attributes) SELECT attribute values"
+        // "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        let query = "INSERT INTO " + tableName + " (item_id, ";
+        for(var i in newItem){
+            if(newItem[i] != null){
+                query = query + i + ", ";
+            }
         }
+        query = query.slice(0, -2); //remove the last comma
+        query = query + ") SELECT select_id, "
+        for(var j in newItem){
+            if(newItem[j] != null){
+                query = query +"\'"+ newItem[j] + "\', ";
+            }
+        }
+        query = query.slice(0, -2); //remove the last comma
+        query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        console.log(query);
+        // insert into the Item table first, in order to get the item_id later
+        let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
+        // open the connection as late as possible
+        const client = await pool.connect();
+        // now query the database with the pre-built string
+        await client.query(itemQuery);
+        await client.query(query);
         client.release();
     } catch (err) {
         console.error(err);
@@ -118,32 +79,18 @@ module.exports.insertNewItem = async function(newItem, discriminator) {
 };
 
 // ====================================== //
-// ======== GET ITEM BASED ON ID ======== //
+// ===== GET ITEM BASED ON ITEM_ID ====== //
 // ====================================== //
 module.exports.getItemById = async function(item_id) {
     try {
-        const client = await pool.connect()
-        let result;
         let discriminator = await this.getDiscriminator(item_id);
-        switch(discriminator) {
-            case "Book":
-                result = await client.query("SELECT * FROM books WHERE item_id = ($1)", [item_id]);
-                break;
-            case "Magazine":
-                result = await client.query("SELECT * FROM magazines WHERE item_id = ($1)", [item_id]);
-                break;
-            case "Movie":
-                result = await client.query("SELECT * FROM movies WHERE item_id = ($1)", [item_id]);
-                break;
-            case "Music":
-                result = await client.query("SELECT * FROM music WHERE item_id = ($1)", [item_id]);
-                break;
-            default:
-                result = null;
-                break;
-        }
-        const results = { 'results': (result) ? result.rows : null};
+        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
+
+        let query = "SELECT * FROM "+tableName+" WHERE item_id = "+item_id;
+        const client = await pool.connect()
+        let result = await client.query(query);
         client.release();
+        const results = { 'results': (result) ? result.rows : null};
         return await results;
     } catch (err) {
         console.error(err);
@@ -175,6 +122,7 @@ module.exports.getItemFromForm = async function(req) {
     let newItem;
     try {
         newItem = await {
+            // book and magazine related attributes
             "title": req.body.title,
             "author": req.body.author,
             "format": req.body.format,
@@ -186,8 +134,10 @@ module.exports.getItemFromForm = async function(req) {
             "loanable": req.body.loanable,
             "loan_period": req.body.loan_period,
             // movie related attributes
+            "director": req.body.director,
             "producers": req.body.producers,
             "subtitles": req.body.subtitles,
+            "dubbed": req.body.dubbed,
             "actors": req.body.actors,
             "release_date": req.body.release_date,
             "run_time": req.body.run_time,
@@ -208,79 +158,28 @@ module.exports.getItemFromForm = async function(req) {
 // ====================================== //
 module.exports.updateItem = async function(newItem, item_id) {
     try {
-        const client = await pool.connect();
-        let discriminator = await this.getDiscriminator(item_id);
-        // console.log(discriminator);
-        switch (discriminator) {
-            case "Book":
-                result = await client.query(
-                    "UPDATE books SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "author = '" + newItem.author + "', " +
-                    "format = '" + newItem.format + "', " +
-                    "pages = " + newItem.pages + ", " +
-                    "publisher = '" + newItem.publisher + "', " +
-                    "language = '" + newItem.language + "', " +
-                    "isbn10 = " + newItem.isbn10 + ", " +
-                    "isbn13 = " + newItem.isbn13 + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period +
-                    " WHERE item_id = ($1);", [item_id]
-                );
-                // console.log("BOOK SQL");
-                break;
-            case "Magazine":
-                result = await client.query(
-                    "UPDATE magazines SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "publisher = '" + newItem.publisher + "', " +
-                    "language = '" + newItem.language + "', " +
-                    "isbn10 = " + newItem.isbn10 + ", " +
-                    "isbn13 = " + newItem.isbn13 + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period +
-                    " WHERE item_id = ($1);", [item_id]
-                );
-                // console.log("MAGAZINE SQL");
-                break;
-            case "Movie":
-                result = await client.query(
-                    "UPDATE movies SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "director = '" + newItem.director + "', " +
-                    "producers = '" + newItem.producers + "', " +
-                    "language = '" + newItem.language + "', " +
-                    "dubbed = '" + newItem.dubbed + "', " +
-                    "subtitles = '" + newItem.subtitles + "', " +
-                    "actors = '" + newItem.actors + "', " +
-                    "release_date = '" + newItem.release_date + "', " +
-                    "run_time = " + newItem.run_time + ", " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period +
-                    " WHERE item_id = ($1);", [item_id]
-                );
-                // console.log("MOVIE SQL");
-                break;
-            case "Music":
-                result = await client.query(
-                    "UPDATE music SET " +
-                    "title = '"+ newItem.title + "', " +
-                    "artist = '" + newItem.artist + "', " +
-                    "type = '" + newItem.type + "', " +
-                    "label = '" + newItem.label + "', " +
-                    "release_date = '" + newItem.release_date + "', " +
-                    "asin = '" + newItem.asin + "', " +
-                    "loanable = '" + newItem.loanable + "', " +
-                    "loan_period = " + newItem.loan_period +
-                    " WHERE item_id = ($1);", [item_id]
-                );
-                // console.log("MUSIC SQL");
-                break;
-            default:
-                result = null;
-                // console.log("NO SQL");
-                break;
+        let tableName = await this.getDiscriminator(item_id);
+        // change the disciminator to match the table name, add an S
+        // to bookS, movieS, magazineS and leave music as is 
+        if (tableName != "Music")
+            tableName = tableName + "s";
+        
+        // build the query string
+        let query = "UPDATE " + tableName + " SET ";
+        for(var i in newItem){
+            if(newItem[i] != null){
+                query = query + i + " = \'" + newItem[i] + "\', ";
+                // console.log(i+": "+newItem[i]);
+            }
         }
+        query = query.slice(0, -2); //remove the last comma
+        query = query + " WHERE item_id = " + item_id + ";";
+        // console.log(query);
+        
+        // open the connection as late as possible
+        const client = await pool.connect();
+        // now query the database with the pre-built string
+        await client.query(query);
         client.release();
     } catch (err) {
         console.error(err);
@@ -296,7 +195,6 @@ module.exports.updateItem = async function(newItem, item_id) {
 module.exports.deleteItem = async function (item_id){
     try {
         const client = await pool.connect();
-        // query('DELETE FROM Items WHERE item_id = ($1)', [req.params.item_id]);
         let result = await client.query(
             "DELETE FROM Items WHERE item_id=($1);", [item_id]
         );
@@ -307,3 +205,4 @@ module.exports.deleteItem = async function (item_id){
         console.error(err);
     }        
 }
+
