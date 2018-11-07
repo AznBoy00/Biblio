@@ -32,7 +32,8 @@ router.get('/', async (req, res) => {
 router.get('/viewItem/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id);
-        let discriminator = results.results[0].discriminator;
+        let discriminator = "Book";
+        // console.log(results);
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);

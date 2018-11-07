@@ -12,7 +12,7 @@ const pool = require('../db');
         const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
         client.release();
         
-        let result = [resultBook];
+        let result = [];
         result.books = (resultBook != null) ? resultBook.rows : null;
         result.magazines = (resultMagazine != null) ? resultMagazine.rows : null;
         result.movies = (resultMovie != null) ? resultMovie.rows : null;
@@ -68,28 +68,27 @@ const pool = require('../db');
     module.exports.getItemByID = async function(item_id){
         let discriminator = await this.getDiscriminator(item_id);
         let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-
         let query = "SELECT * FROM " + tableName + " WHERE item_id = " + item_id + ";";
+        
         const client = await pool.connect()
         let result = await client.query(query);
         client.release();
+
         const results = { 'results': (result) ? result.rows : null};
-
-        return true;
-
+        return await results;
     }
 
     //getDiscriminator Module
 
     module.exports.getDiscriminator = async function(item_id){
         let query = "SELECT discriminator FROM Items WHERE item_id = "+item_id+";";
+        
         const client = await pool.connect();
         let result = await client.query(query);
         client.release();
+
         var resultJSON = { 'result': (await result) ? await result.rows : null};
         return await resultJSON.result[0].discriminator;
-
-        return { 'result': (await result) ? await result.rows : null}
     }
 
     //updateItem Module

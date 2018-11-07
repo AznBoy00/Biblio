@@ -13,7 +13,7 @@ var tdg = require('../TDG/itemsGateway');
 // ======================================== //
 module.exports.getCatalog = async function() {
     try {        
-        return tdg.getCatalog();
+        return await tdg.getCatalog();
     } catch (err) {
         console.error(err);
         // res.render('error', { error: err });
@@ -28,7 +28,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
     try {
         // get the item fromt he html form
         let newItem = await this.getItemFromForm(req);
-        return tdg.insertNewItem(newItem,req, discriminator);
+        return await tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
         console.error(err);
     }
@@ -39,7 +39,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // ====================================== //
 module.exports.getItemById = async function(item_id) {
     try {
-        return tdg.getItemByID(item_id);
+        return await tdg.getItemByID(item_id);
     } catch (err) {
         console.error(err);
     }
@@ -48,13 +48,13 @@ module.exports.getItemById = async function(item_id) {
 // ====================================== //
 // = GET ITEM DISCRIMINATOR BASED ON ID = //
 // ====================================== //
-module.exports.getDiscriminator = async function(item_id) {
-    try {
-        return tdg.getDiscriminator(item_id);
-    } catch (err) {
-        console.error(err);
-    }
-}
+// module.exports.getDiscriminator = async function(item_id) {
+//     try {
+//         return await tdg.getDiscriminator(item_id);
+//     } catch (err) {
+//         console.error(err);
+//     }
+// }
 
 // ====================================== //
 // === GET NEW ITEM FROM THE HTML FORM == //
