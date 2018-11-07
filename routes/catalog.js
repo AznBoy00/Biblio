@@ -72,7 +72,7 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/updateitem/:discriminator/:item_id', async (req, res) => {
+router.get('/update/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
         let discriminator = results.results[0].discriminator;

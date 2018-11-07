@@ -2,8 +2,6 @@
 const pool = require('../db');
 
 // getCatalog Module
-//For security purposes, a template query with tableName as paramater was not used. 
-//This could lead to injections
 module.exports.getCatalog = async function(){
     const client = await pool.connect();
     const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
@@ -23,14 +21,11 @@ module.exports.getCatalog = async function(){
 
 // insertNewItem Module
 module.exports.insertNewItem = async function(newItem,req, discriminator){
-    // change the disciminator to match the table name, add an S
-    // to bookS, movieS, magazineS and leave music as is 
-    let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-    
+
     // build the query string in the format: 
     // insert into the Item table first, in order to get the item_id later
     let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
-    let query = "INSERT INTO " + tableName + " (item_id, ";
+    let query = "INSERT INTO " + discriminator + " (item_id, ";
     // iterate over attribute names
     for(var i in newItem){
         if(newItem[i] != null){
@@ -61,15 +56,10 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
     return result;
 }
 
-// getItemById Module
-//For security purposes, a template query with tableName as paramater was not used. 
-//This could lead to injections
-
 // getItemByID Module
 module.exports.getItemByID = async function(item_id, discriminator){
 
-    let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-    let query = "SELECT * FROM " + tableName + " WHERE item_id = " + item_id + ";";
+    let query = "SELECT * FROM " + discriminator + " WHERE item_id = " + item_id + ";";
     
     const client = await pool.connect()
     let result = await client.query(query);
@@ -82,10 +72,8 @@ module.exports.getItemByID = async function(item_id, discriminator){
 //updateItem Module
 module.exports.updateItem = async function(newItem, item_id, discriminator){
 
-    let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-    
     // build the query string
-    let query = "UPDATE " + tableName + " SET ";
+    let query = "UPDATE " + discriminator + " SET ";
     for(var i in newItem){
         if(newItem[i] != null){
             // set attribute name = attribute value
