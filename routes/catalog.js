@@ -29,11 +29,10 @@ router.get('/', async (req, res) => {
 // ====================================== //
 // ======== View Single Item Page ======= //
 // ====================================== //
-router.get('/viewItem/:item_id', async (req, res) => {
+router.get('/view/:discriminator/:item_id', async (req, res) => {
     try {
-        let results = await catalog.getItemById(req.params.item_id);
-        let discriminator = "Book";
-        // console.log(results);
+        let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
+        let discriminator = results.results[0].discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
@@ -73,11 +72,11 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/updateitem/:item_id', async (req, res) => {
+router.get('/updateitem/:discriminator/:item_id', async (req, res) => {
     try {
-        let results = await catalog.getItemById(req.params.item_id);
+        let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
         let discriminator = results.results[0].discriminator;
-        res.render('catalog/update'+discriminator, { results, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        res.render('catalog/update'+discriminator, { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -85,12 +84,12 @@ router.get('/updateitem/:item_id', async (req, res) => {
 });
 
 
-// ====================================== //
+// ======================================= //
 // == POST Requests for Updating Items === //
-// ====================================== //
-router.post('/updateitem/:item_id/modify', async (req, res) => {
+// ======================================= //
+router.post('/update/:discriminator/:item_id', async (req, res) => {
     try {
-        await catalog.updateItem(req, req.params.item_id);
+        await catalog.updateItem(req, req.params.item_id, req.params.discriminator);
         res.redirect('/catalog');
     } catch (err) {
         console.error(err);

@@ -37,24 +37,42 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // ====================================== //
 // ===== GET ITEM BASED ON ITEM_ID ====== //
 // ====================================== //
-module.exports.getItemById = async function(item_id) {
+module.exports.getItemById = async function(item_id, discriminator) {
     try {
-        return await tdg.getItemByID(item_id);
+        return await tdg.getItemByID(item_id, discriminator);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+// ====================================== //
+// ====== UPDATE AN EXISTING ITEM ======= //
+// ====================================== //
+module.exports.updateItem = async function(req, item_id, discriminator) {
+    try {
+        // get the item fromt he html form
+        let newItem = await this.getItemFromForm(req);
+
+        return tdg.updateItem(newItem, item_id, discriminator);
     } catch (err) {
         console.error(err);
     }
 }
 
 // ====================================== //
-// = GET ITEM DISCRIMINATOR BASED ON ID = //
+// ===== Delet an Item from the DB ====== //
 // ====================================== //
-// module.exports.getDiscriminator = async function(item_id) {
-//     try {
-//         return await tdg.getDiscriminator(item_id);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
+// DELETE an ITEM from the database which
+// cascades down to delete the corresponding
+// book, magazine, movie or music
+module.exports.deleteItem = async function (item_id){
+    try {
+        return await tdg.deleteItem(item_id);
+    } catch (err) {
+        console.error(err);
+    }        
+}
 
 // ====================================== //
 // === GET NEW ITEM FROM THE HTML FORM == //
@@ -93,59 +111,4 @@ module.exports.getItemFromForm = async function(req) {
     } catch (err) {
         console.error(err);
     }
-}
-
-// ====================================== //
-// ====== UPDATE AN EXISTING ITEM ======= //
-// ====================================== //
-module.exports.updateItem = async function(req, item_id) {
-    try {
-        // get the item fromt he html form
-        let newItem = await this.getItemFromForm(req);
-        // change the disciminator to match the table name
-        // add an S to bookS, movieS, magazineS and leave music as is 
-        let discriminator = await this.getDiscriminator(item_id);
-        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-        
-        // build the query string
-        let query = "UPDATE " + tableName + " SET ";
-        for(var i in newItem){
-            if(newItem[i] != null){
-                query = query + i + " = \'" + newItem[i] + "\', ";
-                // console.log(i+": "+newItem[i]);
-            }
-        }
-        query = query.slice(0, -2); //remove the last comma
-        query = query + " WHERE item_id = " + item_id + ";";
-        // console.log(query);
-        
-        // open the connection as late as possible
-        const client = await pool.connect();
-        // now query the database with the pre-built string
-        await client.query(query);
-        client.release();
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-// ====================================== //
-// ===== Delet an Item from the DB ====== //
-// ====================================== //
-// DELETE an ITEM from the database which
-// cascades down to delete the corresponding
-// book, magazine, movie or music
-module.exports.deleteItem = async function (item_id){
-    try {
-        let query = "DELETE FROM Items WHERE item_id = " + item_id + ";"
-        
-        const client = await pool.connect();
-        let result = await client.query(query);
-        client.release();
-        
-        var resultJSON = { 'result': (await result) ? await result.rows : null};
-        return await resultJSON.result[0].discriminator;
-    } catch (err) {
-        console.error(err);
-    }        
 }
