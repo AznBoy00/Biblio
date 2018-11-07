@@ -18,7 +18,7 @@ var catalog = require('../models/catalog');
 // ====================================== //
 router.get('/', async (req, res) => {
     try {
-        let list = await catalog.getFullCatalog();
+        let list = await catalog.getCatalog();
         res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
@@ -50,7 +50,7 @@ router.get('/createitems', function (req, res, next) {
     res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a new book
-router.get('/createitems/:discriminator', function (req, res, next) {
+router.get('/create/:discriminator', function (req, res, next) {
     res.render('catalog/create'+req.params.discriminator, { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 

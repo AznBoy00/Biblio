@@ -10,7 +10,7 @@ const pool = require('../db');
 // ======================================== //
 // = GET LIST OF ALL ITEMS IN THE CATALOG = //
 // ======================================== //
-module.exports.getFullCatalog = async function() {
+module.exports.getCatalog = async function() {
     try {        
         //open the connections, query the db, release the connection
         const client = await pool.connect();
