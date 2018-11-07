@@ -46,19 +46,20 @@ router.get('/view/:discriminator/:item_id', async (req, res) => {
 // is_logged is passed to check the session in the front-end
 // Page to select which item ti unsert. Upon selecting
 // the specific item create/discriminator is rendered
-router.get('/createitems', function (req, res, next) {
-    res.render('catalog/createitem', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+router.get('/create', function (req, res) {
+    res.render('catalog/createItems', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 // Create a new book
-router.get('/createitems/:discriminator', function (req, res, next) {
-    res.render('catalog/create'+req.params.discriminator, { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+router.get('/create/:discriminator', function (req, res) {
+    let discriminator = req.params.discriminator;
+    res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 
 
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
-router.post('/createitems/create/:discriminator', async (req, res) => {
+router.post('/create/:discriminator', async (req, res) => {
     try {
         await catalog.insertNewItem(req, req.params.discriminator);
         res.redirect('/catalog');
@@ -76,7 +77,7 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
         let discriminator = results.results[0].discriminator;
-        res.render('catalog/update'+discriminator, { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        res.render('catalog/updateItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
