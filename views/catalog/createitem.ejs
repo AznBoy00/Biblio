@@ -7,32 +7,28 @@
 </head>
 
 <body>
-    <%- include('../partials/_navbar'); -%>
-    <div class="container">
-        
-        <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <h2>Add a new Item</h2>
-            </div>
-        </div>
+	<%- include('../partials/_navbar'); -%>
+	<div class="container">
 
-        <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <form>
+		<div class="row">
+			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+				<h2>Add a new Book</h2>
+			</div>
+		</div>
+
+    	<div class="row">
+			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <form method="POST" action="/catalog/create/<%= discriminator %>" onSubmit="return checkblank(this);">
+					
+					<%- include('../partials/_error'); -%>
                     
-                    <%- include('../partials/_error'); -%>
+					<% let pagename = 'partials/_create'+discriminator+'Form'; %>
+					<% console.log(pagename) %>
+					<%- include(pagename) -%>
 
-                    <div class="form-group">
-                        <label for="inputSelect">Select type of item to add to catalog:</label>
-                        <select class="form-control" id="inputSelect" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                            <option value="">Select type</option>
-                            <option value="/catalog/createitems/Book">Book</option>
-                            <option value="/catalog/createitems/Magazine">Magazine</option>
-                            <option value="/catalog/createitems/Music">Music</option>
-                            <option value="/catalog/createitems/Movie">Movie</option>
-                        </select>
-                    </div>            
-                </form>
+					<button class="btn btn-success" type="submit">Submit</button>
+					<a class="btn btn-danger" href="/catalog/createitems">Cancel</a>					
+        		</form>
 			</div>
 			<!-- ./ end col -->
 		</div>
