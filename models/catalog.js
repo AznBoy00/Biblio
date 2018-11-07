@@ -1,5 +1,3 @@
-// DB Connection
-const pool = require('../db');
 var tdg = require('../TDG/itemsGateway');
 
 // var item = require('../models/item');

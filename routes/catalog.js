@@ -72,7 +72,7 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/updateitem/:discriminator/:item_id', async (req, res) => {
+router.get('/update/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
         let discriminator = results.results[0].discriminator;
@@ -90,7 +90,8 @@ router.get('/updateitem/:discriminator/:item_id', async (req, res) => {
 router.post('/update/:discriminator/:item_id', async (req, res) => {
     try {
         await catalog.updateItem(req, req.params.item_id, req.params.discriminator);
-        res.redirect('/catalog');
+        res.redirect('/catalog//view/'+req.params.discriminator+'/'+req.params.item_id);
+        // res.redirect('/catalog');
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
