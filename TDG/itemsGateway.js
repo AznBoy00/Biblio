@@ -4,132 +4,96 @@ const pool = require('../db');
 // getCatalog Module
     //For security purposes, a template query with tableName as paramater was not used. 
     //This could lead to injections
+    module.exports.getCatalog = async function(){
+        const client = await pool.connect();
+        const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
+        const resultMagazine = await client.query('SELECT * FROM magazines ORDER BY item_id ASC');
+        const resultMovie = await client.query('SELECT * FROM movies ORDER BY item_id ASC');
+        const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
+        client.release();
+        
+        let result = [resultBook];
+        result.books = (resultBook != null) ? resultBook.rows : null;
+        result.magazines = (resultMagazine != null) ? resultMagazine.rows : null;
+        result.movies = (resultMovie != null) ? resultMovie.rows : null;
+        result.musics = (resultMusic != null) ? resultMusic.rows : null;
 
-    exports.getAllBooks = function(){
-          return query('SELECT * FROM books ORDER BY item_id ASC');
-    },
-
-    exports.getAllMagazines = function(){
-        return query('SELECT * FROM magazines ORDER BY item_id ASC');
-    },
-
-    exports.getAllMovies = function(){
-        return query('SELECT * FROM movies ORDER BY item_id ASC');
-    },
-
-    exports.getAllMusic = function(){
-        return query('SELECT * FROM music ORDER BY item_id ASC');
-    },
+        return result;
+    }
 
 // insertNewItem Module
-    exports.insertBookItem = function(discriminator){
-        return query("INSERT INTO Items (discriminator) VALUES ('Book');");
-    },
-
-    exports.insertBook = function(newItem){
-        return query(
-            "INSERT INTO books (item_id , pages ," +
-            "title, author, format, publisher, language, isbn10, isbn13)" +
-            " SELECT select_id, "+
-            "" + newItem.pages + ", " +
-            "'" + newItem.title + "', " +
-            "'" + newItem.author + "', " +
-            "'" + newItem.format + "', " +
-            "'" + newItem.publisher + "', " +
-            "'" + newItem.language + "', " +
-            newItem.isbn10 + ", " +
-            newItem.isbn13 +
-            " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-    },
-
-    exports.insertMagazineItem = function(discriminator){
-        return query("INSERT INTO Items (discriminator) VALUES ('Magazine');");
-    },
-
-    exports.insertMagazine = function(newItem){
-        return query(
-            "INSERT INTO magazines (item_id, " +
-            "title, publisher, language, isbn10, isbn13)" +
-            " SELECT select_id, "+
-            "'" + newItem.title + "', " +
-            "'" + newItem.publisher + "', " +
-            "'" + newItem.language + "', " +
-            "'" + newItem.isbn10 + "', " +
-            "'" + newItem.isbn13 + "' " +
-            "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-    },
-
-    exports.insertMovieItem = function(discriminator){
-        return query("INSERT INTO Items (discriminator) VALUES ('Movie');");
-    },
-
-    exports.insertMovie = function(newItem){
-        return query(
-            "INSERT INTO movies (item_id, run_time, title, " +
-            "director, producers, actors, language, dubbed, subtitles, release_date) " +
-            "SELECT select_id, "+
-            newItem.run_time + ", " +
-            "'" + newItem.title + "', " +
-            "'" + newItem.director + "', " +
-            "'" + newItem.producers + "', " +
-            "'" + newItem.actors + "', " +
-            "'" + newItem.language + "', " +
-            "'" + newItem.dubbed + "', " +
-            "'" + newItem.subtitles + "', " +
-            "'" + newItem.release_date + "' " +
-            "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-    },
-
-    exports.insertMusicItem = function(discriminator){
-        return query("INSERT INTO Items (discriminator) VALUES ('Music');");
-    },
-
-    exports.insertMusic = function(newItem){
-        return query(
-            "INSERT INTO music (item_id, " +
-            "type, title, artist, label, release_date, asin)" +
-            " SELECT select_id, "+
-            "'" + newItem.type + "', " +
-            "'" + newItem.title + "', " +
-            "'" + newItem.artist + "', " +
-            "'" + newItem.label + "', " +
-            "'" + newItem.release_date + "', " +
-            "'" + newItem.asin + "' " +
-            "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        );
-    },
+    module.exports.insertNewItem = async function(newItem,req, discriminator){
+        // change the disciminator to match the table name, add an S
+        // to bookS, movieS, magazineS and leave music as is 
+        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
+        
+        // build the query string in the format: 
+        // insert into the Item table first, in order to get the item_id later
+        let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
+        let query = "INSERT INTO " + tableName + " (item_id, ";
+        // iterate over attribute names
+        for(var i in newItem){
+            if(newItem[i] != null){
+                query = query + i + ", ";
+            }
+        }
+         //remove the last comma
+        query = query.slice(0, -2);
+        query = query + ") SELECT select_id, "
+        // iterate over attribute values
+        for(var j in newItem){
+            if(newItem[j] != null){
+                query = query +"\'"+ newItem[j] + "\', ";
+            }
+        }
+        //remove the last comma
+        query = query.slice(0, -2);
+        query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
+        
+        let result = [];
+        // open the connection as late as possible
+        const client = await pool.connect();
+        // now query the database with the pre-built string
+        result.insert1 =  client.query(itemQuery);
+        result.insert2 = client.query(query);
+        client.release();        
+        
+        return result;
+    }
 
 // getItemById Module
     //For security purposes, a template query with tableName as paramater was not used. 
     //This could lead to injections
 
-    exports.getBook = function(item_id){
-        return query("SELECT * FROM books WHERE item_id = ($1)", [item_id]);
-    },
+    module.exports.getItemByID = async function(item_id){
+        let discriminator = await this.getDiscriminator(item_id);
+        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
 
-    exports.getMagazine = function(item_id){
-        return query("SELECT * FROM magazines WHERE item_id = ($1)", [item_id]);
-    },
+        let query = "SELECT * FROM " + tableName + " WHERE item_id = " + item_id + ";";
+        const client = await pool.connect()
+        let result = await client.query(query);
+        client.release();
+        const results = { 'results': (result) ? result.rows : null};
 
-    exports.getMovie = function(item_id){
-        return query("SELECT * FROM movies WHERE item_id = ($1)", [item_id]);
-    },
+        return true;
 
-    exports.getMusic = function(item_id){
-        return query("SELECT * FROM music WHERE item_id = ($1)", [item_id]);
-    },
+    }
 
-//getDiscriminator Module
+    //getDiscriminator Module
 
-    exports.discriminator = function(item_id){
-        return query("SELECT discriminator FROM Items WHERE item_id=$1;", [item_id]);
-    },
+    module.exports.getDiscriminator = async function(item_id){
+        let query = "SELECT discriminator FROM Items WHERE item_id = "+item_id+";";
+        const client = await pool.connect();
+        let result = await client.query(query);
+        client.release();
+        var resultJSON = { 'result': (await result) ? await result.rows : null};
+        return await resultJSON.result[0].discriminator;
 
-//updateItem Module
-    exports.updateBook = function(item_id){
+        return { 'result': (await result) ? await result.rows : null}
+    }
+
+    //updateItem Module
+    module.exports.updateBook = async function(item_id){
         return query(
             "UPDATE books SET " +
             "title = '"+ newItem.title + "', " +
@@ -144,9 +108,9 @@ const pool = require('../db');
             "loan_period = " + newItem.loan_period +
             " WHERE item_id = ($1);", [item_id]
         );
-    },
+    }
 
-    exports.updateMagazine = function(item_id){
+    module.exports.updateMagazine = async function(item_id){
         return query(
             "UPDATE magazines SET " +
             "title = '"+ newItem.title + "', " +
@@ -158,9 +122,9 @@ const pool = require('../db');
             "loan_period = " + newItem.loan_period +
             " WHERE item_id = ($1);", [item_id]
         );
-    },
+    }
 
-    exports.updateMovie = function(item_id){
+    module.exports.updateMovie = async function(item_id){
         return query(
             "UPDATE movies SET " +
             "title = '"+ newItem.title + "', " +
@@ -176,9 +140,9 @@ const pool = require('../db');
             "loan_period = " + newItem.loan_period +
             " WHERE item_id = ($1);", [item_id]
         );
-    },
+    }
 
-    exports.updateMusic = function(item_id){
+    module.exports.updateMusic = async function(item_id){
         query(
             "UPDATE music SET " +
             "title = '"+ newItem.title + "', " +
@@ -191,9 +155,10 @@ const pool = require('../db');
             "loan_period = " + newItem.loan_period +
             " WHERE item_id = ($1);", [item_id]
         );
-    },
+    }
 
     //delete Module
-    exports.delete = function(item_id){
+    module.exports.delete = async function(item_id){
         return query("DELETE FROM Items WHERE item_id=($1);", [item_id]);
     }
+

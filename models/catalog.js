@@ -1,5 +1,6 @@
 // DB Connection
 const pool = require('../db');
+var tdg = require('../TDG/itemsGateway');
 
 // var item = require('../models/item');
 //list to be filled with item objects from item.js in models
@@ -10,27 +11,12 @@ const pool = require('../db');
 // ======================================== //
 // = GET LIST OF ALL ITEMS IN THE CATALOG = //
 // ======================================== //
-module.exports.getFullCatalog = async function() {
+module.exports.getCatalog = async function() {
     try {        
-        //open the connections, query the db, release the connection
-        const client = await pool.connect();
-        const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
-        const resultMagazine = await client.query('SELECT * FROM magazines ORDER BY item_id ASC');
-        const resultMovie = await client.query('SELECT * FROM movies ORDER BY item_id ASC');
-        const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
-        client.release();
-        
-        let result = [];
-        result.books = (resultBook != null) ? resultBook.rows : null;
-        result.magazines = (resultMagazine != null) ? resultMagazine.rows : null;
-        result.movies = (resultMovie != null) ? resultMovie.rows : null;
-        result.musics = (resultMusic != null) ? resultMusic.rows : null;
-        
-        // console.log(result);
-        return await result;
+        return tdg.getCatalog();
     } catch (err) {
         console.error(err);
-        res.render('error', { error: err });
+        // res.render('error', { error: err });
     }
 }
 // ====================================== //
@@ -42,37 +28,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
     try {
         // get the item fromt he html form
         let newItem = await this.getItemFromForm(req);
-        // change the disciminator to match the table name, add an S
-        // to bookS, movieS, magazineS and leave music as is 
-        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-        
-        // build the query string in the format: 
-        // "INSERT INTO tableName (select_id, attributes) SELECT attribute values"
-        // "FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        let query = "INSERT INTO " + tableName + " (item_id, ";
-        for(var i in newItem){
-            if(newItem[i] != null){
-                query = query + i + ", ";
-            }
-        }
-        query = query.slice(0, -2); //remove the last comma
-        query = query + ") SELECT select_id, "
-        for(var j in newItem){
-            if(newItem[j] != null){
-                query = query +"\'"+ newItem[j] + "\', ";
-            }
-        }
-        query = query.slice(0, -2); //remove the last comma
-        query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
-        console.log(query);
-        // insert into the Item table first, in order to get the item_id later
-        let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
-        // open the connection as late as possible
-        const client = await pool.connect();
-        // now query the database with the pre-built string
-        await client.query(itemQuery);
-        await client.query(query);
-        client.release();
+        return tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
         console.error(err);
     }
@@ -83,15 +39,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // ====================================== //
 module.exports.getItemById = async function(item_id) {
     try {
-        let discriminator = await this.getDiscriminator(item_id);
-        let tableName =  (discriminator!= "Music") ? discriminator + "s" : discriminator;
-
-        let query = "SELECT * FROM " + tableName + " WHERE item_id = " + item_id + ";";
-        const client = await pool.connect()
-        let result = await client.query(query);
-        client.release();
-        const results = { 'results': (result) ? result.rows : null};
-        return await results;
+        return tdg.getItemByID(item_id);
     } catch (err) {
         console.error(err);
     }
@@ -102,12 +50,7 @@ module.exports.getItemById = async function(item_id) {
 // ====================================== //
 module.exports.getDiscriminator = async function(item_id) {
     try {
-        let query = "SELECT discriminator FROM Items WHERE item_id = "+item_id+";";
-        const client = await pool.connect();
-        let result = await client.query(query);
-        client.release();
-        var resultJSON = { 'result': (await result) ? await result.rows : null};
-        return await resultJSON.result[0].discriminator;
+        return tdg.getDiscriminator(item_id);
     } catch (err) {
         console.error(err);
     }

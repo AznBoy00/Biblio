@@ -18,7 +18,7 @@ var catalog = require('../models/catalog');
 // ====================================== //
 router.get('/', async (req, res) => {
     try {
-        let list = await catalog.getFullCatalog();
+        let list = await catalog.getCatalog();
         res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
