@@ -1,4 +1,5 @@
 var tdg = require('../TDG/itemsGateway');
+var imap = require('../IMAP/identitymap');
 
 // var item = require('../models/item');
 //list to be filled with item objects from item.js in models
@@ -26,6 +27,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
     try {
         // get the item fromt he html form
         let newItem = await this.getItemFromForm(req);
+        await imap.createItem(newItem); //Add new item to Identity Map <<<<<<<<<<<<<<<<<<<<<<<<<<<< IMAP related
         return await tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
         console.error(err);
@@ -35,9 +37,40 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // ====================================== //
 // ===== GET ITEM BASED ON ITEM_ID ====== //
 // ====================================== //
+// module.exports.getItemById = async function(item_id, discriminator) {
+//     try {
+//         let temp;
+//         let boolean = await imap.find(item_id,discriminator);
+//         console.log("BOOLEAN IS : " + boolean);
+//         if(boolean){
+//             //console.log(imap.find(item_id,discriminator) + "MODELS");
+//             temp = await imap.return(item_id, discriminator);
+//         }else{
+//             console.log("in ELSE");
+//             await imap.addItemToMap(item_id, discriminator);
+//             temp = await imap.return(item_id, discriminator);
+//         }
+//         console.log("Temp in models: " + temp);
+//         return await tdg.getItemByID(item_id, discriminator);
+//     } catch (err) {
+//         console.error(err);
+//     }
+// }
+
 module.exports.getItemById = async function(item_id, discriminator) {
     try {
-        return await tdg.getItemByID(item_id, discriminator);
+        let temp;
+        let boolean = await imap.find(item_id, discriminator);
+        if(boolean){
+            temp = await imap.return(item_id, discriminator);
+        }else{
+            console.log(imap.checklength());
+            await imap.addItemToMap(item_id, discriminator);
+            console.log(imap.checklength());
+            await imap.return(item_id, discriminator);
+            temp = await imap.addItemToMap(item_id, discriminator);
+        }
+        return await temp;
     } catch (err) {
         console.error(err);
     }
@@ -51,7 +84,7 @@ module.exports.updateItem = async function(req, item_id, discriminator) {
     try {
         // get the item fromt he html form
         let newItem = await this.getItemFromForm(req);
-
+        await imap.updateItem(newItem, item_id, discriminator); // Update item on Imap.
         return tdg.updateItem(newItem, item_id, discriminator);
     } catch (err) {
         console.error(err);
