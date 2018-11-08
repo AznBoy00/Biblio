@@ -13,7 +13,16 @@ var imap = require('../IMAP/identitymap');
 // used in viewing the entire catalog page
 module.exports.getCatalog = async function() {
     try {        
-        return await tdg.getCatalog();
+        //let foundCatalog = imap.checkFullCatalog();
+        let result = await tdg.getCatalog();
+        await imap.loadFullCatalog(result);
+        
+        // if full catalog not found in imap, get from tdg
+        //if (!foundCatalog)
+        return await result;
+
+        // else get full catalog from imap
+
     } catch (err) {
         console.error(err);
         // res.render('error', { error: err });

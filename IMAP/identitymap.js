@@ -10,6 +10,16 @@
 
 //Initialize map as empty.
 var imap=[];
+// var fullCatalog = false;
+
+//Check if full catalog has been loaded once.
+// module.exports.checkFullCatalog = async function(){
+//     try{
+//         return fullCatalog;
+//     }catch(err){
+//         console.error(err);
+//     }
+// }
 
 // This method checks to see if an item already exists in the IMAP
 // If it exists it returns TRUE
@@ -24,6 +34,24 @@ module.exports.find = async function(item_id){
             }
         }
         return found;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+// load the full catalog into the imap 
+// reset the catalog to empty first since we are going to load it all into it
+// TODO do a check in the TDG to check if the catalog exists in IMAP already
+module.exports.loadFullCatalog = async function(catalog){
+    try{
+        imap = [];
+        for (var h in catalog){// catalog[book,magazine,movie,music]
+            for (var i in catalog[h]){//catalog[book], catalog[magazine]...
+                let results = {'results': [catalog[h][i]]};
+                this.addItemToMap(results);
+            }
+        }
+        this.showAllMap();
     }catch(err){
         console.error(err);
     }
