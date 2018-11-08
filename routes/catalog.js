@@ -53,7 +53,6 @@ router.get('/create', function (req, res) {
 router.get('/create/:discriminator', function (req, res) {
     let discriminator = req.params.discriminator;
     res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
-});
 
 
 // ====================================== //
