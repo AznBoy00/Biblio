@@ -1,26 +1,10 @@
-// DB Connection
-const pool = require('../db');
+var tdg = require('../TDG/usersGateway');
 const bcrypt = require('bcrypt-nodejs');
 
 //registers a new user to the DB
 module.exports.insertNewUser = async function(newUser) {
     try {
-        const client = await pool.connect();
-            const result = await client.query("INSERT INTO Users (password, phone, email, address, f_name, l_name) VALUES ('"
-                + newUser.password + "','"
-                + newUser.phone + "','"
-                + newUser.email+ "','"
-                + newUser.address + "','"
-                + newUser.fname + "','"
-                + newUser.lname + "')" ,function(err, result){
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    console.log(result);
-                }
-            });
-        client.release();
+        return await tdg.createNewUser(newUser);
     } catch (err) {
         console.error(err);
         res.send(err);
