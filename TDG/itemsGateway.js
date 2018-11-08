@@ -49,8 +49,9 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
     // open the connection as late as possible
     const client = await pool.connect();
     // now query the database with the pre-built string
-    result.insert1 =  client.query(itemQuery);
-    result.insert2 = client.query(query);
+    result.insert1 = await client.query(itemQuery);
+    result.insert2 = await client.query(query);
+    result.item_id = await client.query('SELECT CURRVAL(\'items_item_id_seq\')');
     client.release();        
     
     return result;
@@ -102,8 +103,5 @@ module.exports.deleteItem = async function(item_id){
     const client = await pool.connect();
     let result = await client.query(query);
     client.release();
-    
-    var resultJSON = { 'result': (await result) ? await result.rows : null};
-    return resultJSON.result[0].discriminator;
 }
 

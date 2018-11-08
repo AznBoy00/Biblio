@@ -32,7 +32,6 @@ router.get('/', async (req, res) => {
 router.get('/view/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
-        console.log(results);
         let discriminator = results.results[0].discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
 
@@ -62,14 +61,16 @@ router.get('/create/:discriminator', function (req, res) {
 // ====================================== //
 router.post('/create/:discriminator', async (req, res) => {
     try {
-        await catalog.insertNewItem(req, req.params.discriminator);
-        res.redirect('/catalog');
+        let results = await catalog.insertNewItem(req, req.params.discriminator);
+        let item_id = results.item_id.rows[0].currval;
+        let discriminator = req.params.discriminator;
+        res.redirect('/catalog/view/'+discriminator+'/'+item_id);
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
     }
 });
-
+// localhost:3000/catalog/createitems
 
 // ====================================== //
 // == GET Requests for Updating Items === //
