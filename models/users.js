@@ -1,6 +1,5 @@
 var tdg = require('../TDG/usersGateway');
 const bcrypt = require('bcrypt-nodejs');
-const pool = require('../db');
 
 
 //registers a new user to the DB
@@ -16,10 +15,7 @@ module.exports.insertNewUser = async function(newUser) {
 //searches a user by email
 async function findUserByEmail(email){
     try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
-        client.release();    
-        return await result;
+        return await tdg.getUserByEmail(email);
         
     } catch (err) {
         console.error(err);
@@ -54,10 +50,7 @@ module.exports.checkPassword = async function (email, password) {
 //search for a user by email
 module.exports.findUserByEmail = async function findUserByEmail(email){
     try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
-        client.release();
-        return await result;
+        return await tdg.getUserByEmail(email);
     } catch (err) {
         console.error(err);
         res.send("Error " + err);

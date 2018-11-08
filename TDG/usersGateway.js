@@ -25,7 +25,10 @@ module.exports.createNewUser = async function(newUser){
 
 //findUserByEmail Model 
 module.exports.getUserByEmail = async function(email){
-// NEED TO LOOK AT THIS ONE
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM Users WHERE Users.email = \'' + email + '\'');
+    client.release();
+    return result;
 }
 
 //displayAllUsers Model
