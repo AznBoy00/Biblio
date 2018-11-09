@@ -28,6 +28,21 @@ router.get('/', async (req, res) => {
 });
 
 // ====================================== //
+// ======== Catalog Search Page ========== //
+// ====================================== //
+router.post('/searchitems', async (req, res) => {
+    try {
+        
+        let list = await catalog.getSearchResults(req.body.search);
+
+        res.render('catalog/catalog', { list, title: 'CatalogSearch', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error("Error Has Occured during search :" + err);
+        res.render('error', { error: err });
+    }
+});
+
+// ====================================== //
 // ======== View Single Item Page ======= //
 // ====================================== //
 router.get('/viewItem/:item_id', async (req, res) => {
@@ -85,7 +100,6 @@ router.post('/createitems/create/:discriminator', async (req, res) => {
         res.render('error', { error: err });
     }
 });
-
 
 // ====================================== //
 // == GET Requests for Updating Items === //
@@ -156,7 +170,6 @@ router.get('/deletebook/:item_id', async(req, res) => {
         res.send("Error " + err);
     }
 });
-
 
 //Magazine
 router.get('/deletemagazine/:item_id', async(req, res) => {
