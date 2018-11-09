@@ -1,24 +1,63 @@
 <html lang="en">
 <head>
     <%- include('../partials/_header'); -%>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script>
-
+        var activeFilters = 0;
         function hideOthers(type){
-            console.log(type);
-            var list = ['books' , 'magazines', 'music', 'movies'];
-
-            if(!$('#' + type).hasClass("active")){
-                $('#' + type).addClass("active");
-                $('.' + type).show();
-                for(var i = 0; i < list.length; i++){
-                    if (list[i] !== type){
-                        $('.' + list[i]).hide();
+            const list = ['books' , 'magazines', 'music', 'movies'];
+            let currentType = document.getElementById('#' + type);
+            if (currentType !==  null){
+                if(!currentType.classList.contains('active')){
+                    activeFilters++;
+                    currentType.classList.add("active");
+                    $('.' + type).show();
+                    for(var i = 0; i < list.length; i++){
+                        if (list[i] !== type && !document.getElementById('#' + list[i]).classList.contains('active')){
+                            $('.' + list[i]).hide();
+                        } else {
+                            $('.' + list[i]).show();
+                        }
+                    }
+                } else {
+                    currentType.classList.remove('active');
+                    activeFilters--;
+                    if (activeFilters === 0){
+                        for(var i = 0; i < list.length; i++){
+                            $('.' + list[i]).show();
+                        }
+                    } else {
+                        $('.' + type).hide();
                     }
                 }
-            } else {
-
             }
         }
+
+        function getFilterUrl(filterType){
+            const list = ['books' , 'magazines', 'music', 'movies'];
+            var active = "";
+            for(var i = 0; i < list.length; i++) {
+                if (document.getElementById('#' + list[i]).classList.contains('active')) {
+                    active += list[i] + ",";
+                }
+            }
+            active = active.substring(0, active.length - 1);
+            window.location.replace('/catalog/filter/' + filterType + '?active='+ active);
+        }
+
+        function applyFilters(){
+            var active = <%- JSON.stringify(active)%>;
+            var activeL = active.split(',');
+            for(var i = 0; i < activeL.length; i++) {
+                hideOthers(activeL[i]);
+            }
+            if (window.location.href.includes("1")){
+                document.getElementById('#az').classList.add('active');
+            } else if (window.location.href.includes("2")){
+                document.getElementById('#za').classList.add('active');
+            }
+        }
+
     </script>
 </head>
 
@@ -34,13 +73,16 @@
 
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <h4>Filters:</h4>
-                <a class="btn btn-outline-danger my-md-2 my-1 mr-2" href="/catalog/filter/1"> A-Z </a>
-                <a class="btn btn-outline-danger my-md-2 my-1 mr-2" href="/catalog/filter/2"> Z-A </a>
-                <button id="#books" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('books')">Book</button>
-                <button id="#magazines" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('magazines')">Magazine</button>
-                <button id="#music" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('music')">Music</button>
-                <button id="#movies" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('movies')">Movie</button>
+                <div class="row">
+                    <h4 class="ml-3">Filters</h4>
+                    <button type="button" class="btn btn-outline-success btn-sm ml-2" onclick="window.location.replace('/catalog');">Clear All Filters</button>
+                </div>Order by: <a id="#az" class="btn btn-outline-danger my-md-2 my-1 mr-2 ml-2" href="#" onclick="getFilterUrl('1');"> A-Z </a>
+                <a id="#za" class="btn btn-outline-danger my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('2')"> Z-A </a>
+                Type: <button id="#books" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2 ml-2" onclick="hideOthers('books'); return false;">Book</button>
+                <button id="#magazines" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('magazines'); return false;">Magazine</button>
+                <button id="#music" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('music'); return false;">Music</button>
+                <button id="#movies" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('movies'); return false;">Movie</button>
+
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
@@ -77,7 +119,9 @@
 
 	</div>
 	<!-- ./ end container -->
-	<%- include('../partials/_footer') -%>   
+    <script> applyFilters() </script>
+
+    <%- include('../partials/_footer') -%>
 </body>
 
 </html>
