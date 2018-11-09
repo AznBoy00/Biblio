@@ -27,8 +27,30 @@ module.exports.getCatalogAlphaOrder = async function(type){
     result.items = (resultItems != null) ? resultItems.rows : null;
 
 
+
     return result;
 }
+
+module.exports.getSearchResults = async function(search) {
+
+    const client = await pool.connect();
+    const resultBook = await client.query('SELECT * FROM books WHERE Lower(title) LIKE \'%' + search + '%\' OR LOWER(author) LIKE \'%'+ search +'%\' ORDER BY item_id ASC');
+    const resultMagazine = await client.query("SELECT * FROM magazines WHERE Lower(title) LIKE '%" + search + "%' ORDER BY item_id ASC");
+    const resultMovie = await client.query("SELECT * FROM movies WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(director) LIKE '%"+search+"%' OR LOWER(producers) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    const resultMusic = await client.query("SELECT * FROM music WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(artist) LIKE '%"+search+"%' OR LOWER(label) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    client.release();
+
+    let result = [];
+    result.books = (resultBook != null) ? resultBook.rows : null;
+    result.magazines = (resultMagazine != null) ? resultMagazine.rows : null;
+    result.movies = (resultMovie != null) ? resultMovie.rows : null;
+    result.musics = (resultMusic != null) ? resultMusic.rows : null;
+    
+    return await result;
+
+}
+
+
 // insertNewItem Module
 module.exports.insertNewItem = async function(newItem,req, discriminator){
 
