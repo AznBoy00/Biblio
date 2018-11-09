@@ -12,16 +12,16 @@
 
 		<div class="row">
 			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <h2>Update an Album</h2>
+                <h2>Update <%= results.results[0].discriminator %></h2>
 			</div>
         </div>
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-                <form method="POST" action="/catalog/updateitem/<%= results.results[0].item_id %>/modify" onSubmit="return checkblank(this);">
-                    
-                    <%- include('../partials/_error'); -%>
-                    <%- include('_updateMusicForm') -%>
+                <form method="POST" action="/catalog/update/<%= results.results[0].discriminator %>/<%= results.results[0].item_id %>" onSubmit="return checkblank(this);">
 
+                    <%- include('../partials/_error'); -%>
+                    <% let pagename = 'partials/_update'+results.results[0].discriminator+'Form'; %>
+                    <%- include(pagename); -%>
 					<button class="btn btn-success" type="submit">Submit</button>
 					<a class="btn btn-danger" href="/catalog">Cancel</a>	
                 </form>

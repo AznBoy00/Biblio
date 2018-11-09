@@ -49,7 +49,7 @@ CREATE TABLE Transactions(
 CREATE TABLE Books(
     book_id SERIAL,
     item_id INT NOT NULL UNIQUE,
-    discriminator VARCHAR(10) DEFAULT 'Book',
+    discriminator VARCHAR(10) DEFAULT 'Books',
     loan_period INT DEFAULT 7,
     loanable BOOLEAN DEFAULT TRUE,
     title VARCHAR(50),
@@ -69,7 +69,7 @@ CREATE TABLE Books(
 CREATE TABLE Magazines(
     magazine_id SERIAL,
     item_id INT NOT NULL UNIQUE,
-    discriminator VARCHAR(10) DEFAULT 'Magazine',
+    discriminator VARCHAR(10) DEFAULT 'Magazines',
     loan_period INT DEFAULT 0,
     loanable BOOLEAN DEFAULT FALSE,
     title VARCHAR(50),
@@ -86,7 +86,7 @@ CREATE TABLE Magazines(
 CREATE TABLE Movies(
     movie_id SERIAL,
     item_id INT NOT NULL UNIQUE,
-    discriminator VARCHAR(10) DEFAULT 'Movie',
+    discriminator VARCHAR(10) DEFAULT 'Movies',
     loan_period INT DEFAULT 2,
     loanable BOOLEAN DEFAULT TRUE,   
     title VARCHAR(50),

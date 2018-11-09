@@ -92,7 +92,7 @@ router.post('/register', function (req, res) {
     else {
         let hash = bcrypt.hashSync(newUser.password);
         newUser.password = hash;
-        console.log(hash);
+        // console.log(hash);
         user.insertNewUser(newUser);
     }
     res.redirect('/');
