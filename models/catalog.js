@@ -28,6 +28,26 @@ module.exports.getCatalog = async function() {
         // res.render('error', { error: err });
     }
 }
+
+//Get list of filtered catalog items by alphabets type = 1 is for ascending and type = 2 is for descending
+module.exports.getCatalogAlphaOrder = async function(type) {
+    try {
+        //let foundCatalog = imap.checkFullCatalog();
+        let result = await tdg.getCatalogAlphaOrder(type);
+        await imap.loadFullCatalog(result);
+
+        // if full catalog not found in imap, get from tdg
+        //if (!foundCatalog)
+        return await result;
+
+        // else get full catalog from imap
+
+    } catch (err) {
+        console.error(err);
+        // res.render('error', { error: err });
+    }
+}
+
 // ====================================== //
 // ===== INSERT A NEW ITEM INTO DB ====== //
 // ====================================== //
