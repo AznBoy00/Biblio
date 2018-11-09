@@ -4,45 +4,48 @@ const pool = require('../db');
 // getCatalog Module
 module.exports.getCatalog = async function(){
     const client = await pool.connect();
-    const resultItems = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
-        'UNION SELECT item_id, discriminator, title, publisher FROM magazines ' +
-        'UNION SELECT item_id, discriminator, title, director FROM movies ' +
-        'UNION SELECT item_id, discriminator, title, artist FROM music ORDER BY item_id ASC');
+    const resultBook = await client.query('SELECT * FROM books ORDER BY item_id ASC');
+    const resultMagazine = await client.query('SELECT * FROM magazines ORDER BY item_id ASC');
+    const resultMovie = await client.query('SELECT * FROM movies ORDER BY item_id ASC');
+    const resultMusic = await client.query('SELECT * FROM music ORDER BY item_id ASC');
     client.release();
-    
+
     let result = [];
-    result.items = (resultItems != null) ? resultItems.rows : null;
+    result.items = (resultBook != null) ? resultBook.rows : null;
+    (resultMagazine != null) ? result.items = result.items.concat(resultMagazine.rows) : null;
+    (resultMovie != null) ? result.items = result.items.concat(resultMovie.rows) : null;
+    (resultMusic != null) ? result.items = result.items.concat(resultMusic.rows) : null;
+
     return result;
 }
+
 //filter Module
 module.exports.getCatalogAlphaOrder = async function(type){
     const client = await pool.connect();
-    const resultItems = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
+    const resultBook = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
         'UNION SELECT item_id, discriminator, title, publisher FROM magazines ' +
         'UNION SELECT item_id, discriminator, title, director FROM movies ' +
         'UNION SELECT item_id, discriminator, title, artist FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
     client.release();
 
     let result = [];
-    result.items = (resultItems != null) ? resultItems.rows : null;
-
-
+    result.items = (resultBook != null) ? resultBook.rows : [];
 
     return result;
 }
 
 module.exports.getSearchResults = async function(search) {
-
     const client = await pool.connect();
-    const resultItems = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
-        ' WHERE Lower(title) LIKE \'%' + search + '%\' OR LOWER(author) LIKE \'%'+ search +'%\' ' +
-        "UNION SELECT item_id, discriminator, title, publisher FROM magazines WHERE Lower(title) LIKE '%" + search + "%' " +
-        "UNION SELECT item_id, discriminator, title, director FROM movies WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(director) LIKE '%"+search+"%' OR LOWER(producers) LIKE '%"+search+"%' " +
-        "UNION SELECT item_id, discriminator, title, artist FROM music WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(artist) LIKE '%"+search+"%' OR LOWER(label) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    const resultBook = await client.query('SELECT * FROM books WHERE Lower(title) LIKE \'%' + search + '%\' OR LOWER(author) LIKE \'%'+ search +'%\' ORDER BY item_id ASC');
+    const resultMagazine = await client.query("SELECT * FROM magazines WHERE Lower(title) LIKE '%" + search + "%' ORDER BY item_id ASC");
+    const resultMovie = await client.query("SELECT * FROM movies WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(director) LIKE '%"+search+"%' OR LOWER(producers) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    const resultMusic = await client.query("SELECT * FROM music WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(artist) LIKE '%"+search+"%' OR LOWER(label) LIKE '%"+search+"%' ORDER BY item_id ASC");
     client.release();
-
     let result = [];
-    result.items = (resultItems != null) ? resultItems.rows : null;
+    result.items = (resultBook != null) ? resultBook.rows : null;
+    (resultMagazine != null) ? result.items = result.items.concat(resultMagazine.rows) : null;
+    (resultMovie != null) ? result.items = result.items.concat(resultMovie.rows) : null;
+    (resultMusic != null) ? result.items = result.items.concat(resultMusic.rows) : null;
 
     return await result;
 }

@@ -34,7 +34,6 @@ module.exports.getCatalogAlphaOrder = async function(type) {
     try {
         //let foundCatalog = imap.checkFullCatalog();
         let result = await tdg.getCatalogAlphaOrder(type);
-        await imap.loadFullCatalog(result);
 
         // if full catalog not found in imap, get from tdg
         //if (!foundCatalog)
