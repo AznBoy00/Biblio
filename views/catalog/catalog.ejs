@@ -46,15 +46,17 @@
         }
 
         function applyFilters(){
-            var active = <%- JSON.stringify(active)%>;
-            var activeL = active.split(',');
-            for(var i = 0; i < activeL.length; i++) {
-                hideOthers(activeL[i]);
-            }
-            if (window.location.href.includes("1")){
-                document.getElementById('#az').classList.add('active');
-            } else if (window.location.href.includes("2")){
-                document.getElementById('#za').classList.add('active');
+            var active = <%- typeof active !== 'undefined' ? JSON.stringify(active) : 'undefined'%>;
+            if (typeof active !== 'undefined'){
+                var activeL = active.split(',');
+                for(var i = 0; i < activeL.length; i++) {
+                    hideOthers(activeL[i]);
+                }
+                if (window.location.href.includes("1")){
+                    document.getElementById('#az').classList.add('active');
+                } else if (window.location.href.includes("2")){
+                    document.getElementById('#za').classList.add('active');
+                }
             }
         }
 
@@ -93,7 +95,7 @@
                                 <th>By</th>
                             </tr>
                         </thead>
-                            
+
                         <tbody>
                             <!-- Iterate over items -->
                                 <% for(var j in list['items']) { %>
@@ -105,7 +107,15 @@
                                                 <%= list['items'][j].title %>
                                             </a>
                                         </td>
-                                        <td><%= list['items'][j].author %></td>
+                                        <% if (list['items'][j].discriminator == "Books" || filter){ %>
+                                            <td><%= list['items'][j].author %></td>
+                                        <% } else if (list['items'][j].discriminator == "Magazines"){%>
+                                            <td><%= list['items'][j].publisher %></td>
+                                        <% } else if (list['items'][j].discriminator == "Movies"){%>
+                                            <td><%= list['items'][j].director %></td>
+                                        <% } else if (list['items'][j].discriminator == "Music"){%>
+                                            <td><%= list['items'][j].artist %></td>
+                                        <% } %>
                                     </tr>
                                 <% } %>
                         </tbody>
