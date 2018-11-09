@@ -23,7 +23,6 @@
                                 <th>Type</th>
                                 <th>Title</th>
                                 <th>By</th>
-                                <th>Quantity</th>
                             </tr>
                         </thead>
                             
@@ -35,12 +34,11 @@
                                     <td><%= list.resultBooks.resultBooks[i].item_id %></td>
                                     <td><%= list.resultBooks.resultBooks[i].discriminator %></td>
                                     <td>
-                                        <a href="catalog/viewItem/<%= list.resultBooks.resultBooks[i].item_id %>">
+                                        <a href="/catalog/viewItem/<%= list.resultBooks.resultBooks[i].item_id %>">
                                             <%= list.resultBooks.resultBooks[i].title %>
                                         </a>
                                     </td>
                                     <td><%= list.resultBooks.resultBooks[i].author %></td>
-                                    <td><%= list.resultBooks.resultBooks[i].quantity %></td>
                                 </tr>
                             <% } %>
 
@@ -50,12 +48,11 @@
                                     <td><%= list.resultMagazines.resultMagazines[i].item_id %></td>
                                     <td><%= list.resultMagazines.resultMagazines[i].discriminator %></td>
                                     <td>
-                                        <a href="catalog/viewItem/<%= list.resultMagazines.resultMagazines[i].item_id %>"> 
+                                        <a href="/catalog/viewItem/<%= list.resultMagazines.resultMagazines[i].item_id %>"> 
                                             <%= list.resultMagazines.resultMagazines[i].title %>
                                         </a>
                                     </td>
                                     <td><%= list.resultMagazines.resultMagazines[i].publisher %></td>
-                                    <td><%= list.resultMagazines.resultMagazines[i].quantity %></td>
                                 </tr>
                             <% } %>
 
@@ -65,12 +62,11 @@
                                         <td><%= list.resultMovies.resultMovies[i].item_id %></td>
                                     <td><%= list.resultMovies.resultMovies[i].discriminator %></td>
                                     <td>
-                                        <a href="catalog/viewItem/<%= list.resultMovies.resultMovies[i].item_id %>">
+                                        <a href="/catalog/viewItem/<%= list.resultMovies.resultMovies[i].item_id %>">
                                             <%= list.resultMovies.resultMovies[i].title %>
                                         </a>
                                     </td>
                                     <td><%= list.resultMovies.resultMovies[i].director %></td>
-                                    <td><%= list.resultMovies.resultMovies[i].quantity %></td>
                                 </tr>   
                             <% } %>
 
@@ -80,12 +76,11 @@
                                     <td><%= list.resultMusics.resultMusics[i].item_id %></td>
                                     <td><%= list.resultMusics.resultMusics[i].discriminator %></td>
                                     <td>
-                                        <a href="catalog/viewItem/<%= list.resultMusics.resultMusics[i].item_id %>">
+                                        <a href="/catalog/viewItem/<%= list.resultMusics.resultMusics[i].item_id %>">
                                             <%= list.resultMusics.resultMusics[i].title %>
                                         </a>
                                     </td>
                                     <td><%= list.resultMusics.resultMusics[i].artist %></td>
-                                    <td><%= list.resultMusics.resultMusics[i].quantity %></td>
                                 </tr>
                             <% } %>
                         </tbody>
