@@ -90,6 +90,20 @@ module.exports.updateItem = async function(req, item_id, discriminator) {
 }
 
 // ====================================== //
+// ====== Search Items Handler ======= //
+// ====================================== //
+module.exports.getSearchResults = async function(searched) {
+    try {
+        let search = searched.toLowerCase();
+        let result = await tdg.getSearchResults(search);
+        console.log("Result from model:", result);
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ====================================== //
 // ===== Delet an Item from the DB ====== //
 // ====================================== //
 // DELETE an ITEM from the database which
