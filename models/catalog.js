@@ -1,4 +1,5 @@
 var tdg = require('../TDG/itemsGateway');
+var imap = require('../IMAP/identitymap');
 
 // var item = require('../models/item');
 //list to be filled with item objects from item.js in models
@@ -9,9 +10,19 @@ var tdg = require('../TDG/itemsGateway');
 // ======================================== //
 // = GET LIST OF ALL ITEMS IN THE CATALOG = //
 // ======================================== //
+// used in viewing the entire catalog page
 module.exports.getCatalog = async function() {
     try {        
-        return await tdg.getCatalog();
+        //let foundCatalog = imap.checkFullCatalog();
+        let result = await tdg.getCatalog();
+        await imap.loadFullCatalog(result);
+        
+        // if full catalog not found in imap, get from tdg
+        //if (!foundCatalog)
+        return await result;
+
+        // else get full catalog from imap
+
     } catch (err) {
         console.error(err);
         // res.render('error', { error: err });
@@ -35,9 +46,27 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // ====================================== //
 // ===== GET ITEM BASED ON ITEM_ID ====== //
 // ====================================== //
+// used in view single item page
+// IMAP.find
+// if found IMAP.get() 
+// if not found IMAP.add() then IMAP.get()
 module.exports.getItemById = async function(item_id, discriminator) {
     try {
-        return await tdg.getItemByID(item_id, discriminator);
+        let item;
+        let found = await imap.find(item_id);
+        console.log("FOUND: "+found);
+        if(found){
+            // If item found in IMAP, get from IMAP
+            item = await imap.get(item_id);
+        }else{
+            let getFromTDG = await tdg.getItemByID(item_id, discriminator);
+            await imap.addItemToMap(getFromTDG);
+            // else if item not found in IMAP, add to IMAP through TDG
+            // and return that item from the IMAP
+            // await imap.addItemToMap(item_id, discriminator);
+            item = await imap.get(item_id);
+        }
+        return await item;
     } catch (err) {
         console.error(err);
     }
@@ -50,9 +79,11 @@ module.exports.getItemById = async function(item_id, discriminator) {
 module.exports.updateItem = async function(req, item_id, discriminator) {
     try {
         // get the item fromt he html form
-        let newItem = await this.getItemFromForm(req);
-
-        return tdg.updateItem(newItem, item_id, discriminator);
+        let updatedItem = await this.getItemFromForm(req);
+        console.log("UPDATED: " + updatedItem.title);
+        await imap.updateItem(updatedItem, item_id); // Update item on Imap.
+        return tdg.updateItem(updatedItem, item_id, discriminator); // Update the item in the DB
+        
     } catch (err) {
         console.error(err);
     }
@@ -66,7 +97,8 @@ module.exports.updateItem = async function(req, item_id, discriminator) {
 // book, magazine, movie or music
 module.exports.deleteItem = async function (item_id){
     try {
-        return await tdg.deleteItem(item_id);
+        await imap.deleteItemFromMap(item_id); // Delete item from Imap.
+        await tdg.deleteItem(item_id);
     } catch (err) {
         console.error(err);
     }        
