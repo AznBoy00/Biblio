@@ -19,13 +19,31 @@ var catalog = require('../models/catalog');
 router.get('/', async (req, res) => {
     try {
         let list = await catalog.getCatalog();
-        res.render('catalog/catalog', { list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        res.render('catalog/catalog', { list: list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
     }
 });
 
+// ============================================== //
+// ======== Get filtered catalog page ========== //
+// ============================================ //
+
+router.get('/filter/:filterType', async (req, res) => {
+    try {
+        let filteredList;
+        //filter A to Z
+        if (req.params.filterType === '1' || req.params.filterType === '2' ) {
+            let list = await catalog.getCatalogAlphaOrder(req.params.filterType);
+            filteredList = await list;
+        }
+        res.render('catalog/catalog', { list: await filteredList, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
 // ====================================== //
 // ======== View Single Item Page ======= //
 // ====================================== //
