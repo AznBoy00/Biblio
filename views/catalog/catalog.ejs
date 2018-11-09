@@ -1,6 +1,25 @@
 <html lang="en">
 <head>
     <%- include('../partials/_header'); -%>
+    <script>
+
+        function hideOthers(type){
+            console.log(type);
+            var list = ['books' , 'magazines', 'music', 'movies'];
+
+            if(!$('#' + type).hasClass("active")){
+                $('#' + type).addClass("active");
+                $('.' + type).show();
+                for(var i = 0; i < list.length; i++){
+                    if (list[i] !== type){
+                        $('.' + list[i]).hide();
+                    }
+                }
+            } else {
+
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -15,6 +34,13 @@
 
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+                <h4>Filters:</h4>
+                <a class="btn btn-outline-danger my-md-2 my-1 mr-2" href="/catalog/filter/1"> A-Z </a>
+                <a class="btn btn-outline-danger my-md-2 my-1 mr-2" href="/catalog/filter/2"> Z-A </a>
+                <button id="#books" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('books')">Book</button>
+                <button id="#magazines" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('magazines')">Magazine</button>
+                <button id="#music" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('music')">Music</button>
+                <button id="#movies" type="button" class="btn btn-outline-danger my-md-2 my-1 mr-2" onclick="hideOthers('movies')">Movie</button>
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
@@ -28,28 +54,18 @@
                             
                         <tbody>
                             <!-- Iterate over items -->
-                            <% for(var i in list) { %>
-                                <% for(var j in list[i]) { %>
-                                    <tr> 
-                                        <td><%= list[i][j].item_id %></td>
-                                        <td><%= list[i][j].discriminator %></td>
+                                <% for(var j in list['items']) { %>
+                                    <tr class="<%= list['items'][j].discriminator%>">
+                                        <td><%= list['items'][j].item_id %></td>
+                                        <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="catalog/view/<%= list[i][j].discriminator %>/<%= list[i][j].item_id %>">
-                                                <%= list[i][j].title %>
+                                            <a href="catalog/view/<%= list['items'][j].discriminator %>/<%= list['items'][j].item_id %>">
+                                                <%= list['items'][j].title %>
                                             </a>
                                         </td>
-                                        <% if (i == "books"){ %>
-                                            <td><%= list[i][j].author %></td>
-                                        <% } if (i == "magazines"){%>
-                                            <td><%= list[i][j].publisher %></td>
-                                        <% } if (i == "movies"){%>
-                                            <td><%= list[i][j].director %></td>
-                                        <% } if (i == "musics"){%>
-                                            <td><%= list[i][j].artist %></td>
-                                        <% } %>
+                                        <td><%= list['items'][j].author %></td>
                                     </tr>
                                 <% } %>
-                            <% } %>
                         </tbody>
                     </table>
                 </div>
