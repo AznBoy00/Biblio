@@ -6,6 +6,7 @@ Team 5's term project for SOEN 343 at Concordia University - Fall 2018
 1. Clone the [repo](https://github.com/AznBoy00/soen343team5.git)
 1. `$ cd into/project/directory`
 1. `$ export DATABASE_URL='postgres://hizxyalrympljm:3f4cd73544ce42e3aade5131e9d72f3d4032b8e69ac8fc37d8b8186cf3de4a3d@ec2-54-83-27-165.compute-1.amazonaws.com:5432/d6a0flgsl8bp0c'`
+    * **note**: this URL is only left here to allow the Professor and Teaching Assistants access to the project localy. Otherwise, for security reasons it would be taken down.
 1. `$ npm install`
 1. `$ npm start`
 1. visit [localhost:3000](http://localhost:3000) in your browser  
