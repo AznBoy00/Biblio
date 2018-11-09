@@ -45,11 +45,9 @@ module.exports.find = async function(item_id){
 module.exports.loadFullCatalog = async function(catalog){
     try{
         imap = [];
-        for (var h in catalog){// catalog[book,magazine,movie,music]
-            for (var i in catalog[h]){//catalog[book], catalog[magazine]...
-                let results = {'results': [catalog[h][i]]};
-                this.addItemToMap(results);
-            }
+        for (var i in catalog['items']){//catalog[book], catalog[magazine]...
+            let results = {'results': [catalog['items'][i]]};
+            this.addItemToMap(results);
         }
         this.showAllMap();
     }catch(err){
