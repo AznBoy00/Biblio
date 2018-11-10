@@ -55,13 +55,20 @@
                 <a class="footer-links" href="/catalog/filter/1?active=music">View Music</a>
                 <br/>
                 <% if (typeof is_logged !== 'undefined' && is_logged){ %>
-                    <a class="footer-links" href="/users/usercp">My Profile</a>
-                    <br/>
                     <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                         <a class="footer-links" href="/catalog/create">Insert New item</a>  
                         <br/>
                         <a class="footer-links" href="/admincp/manageusers">Manage Users</a>  
+                        <br/>
                     <% } %>
+                    <a class="footer-links" href="/users/usercp">My Profile</a>
+                    <br/>
+                    <a class="footer-links" href="/users/register">Register</a>
+                    <br/>
+                    <a class="footer-links" href="/users/login">Login</a>
+                    <br/>
+                    <a class="footer-links" href="/users/logout">Logout</a>
+                    <br/>
                 <% } %>
             </div>   
             <!-- ./ end col   -->                 
