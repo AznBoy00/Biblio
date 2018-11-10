@@ -24,11 +24,11 @@
                     <!-- display the attribute artist || publisher || author || director -->
                     <!-- depending on if it is typ music || magazine || book || movie -->
                     <!-- respectively -->
-                    <% if (results.results[0].discriminator == "Book"){ %>
+                    <% if (results.results[0].discriminator == "Books"){ %>
                         <%- "<p class='lead'>by "+results.results[0].author+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Magazine"){ %>
+                    <% } if (results.results[0].discriminator == "Magazines"){ %>
                         <%- "<p class='lead'>by "+results.results[0].publisher+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Movie"){ %>
+                    <% } if (results.results[0].discriminator == "Movies"){ %>
                         <%- "<p class='lead'>by "+results.results[0].director+"</p>" %> 
                     <% } if (results.results[0].discriminator == "Music"){ %>
                         <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
