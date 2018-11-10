@@ -5,7 +5,7 @@
 
 <body>
     <%- include('../partials/_navbar'); -%>
-    <div class="container">
+    <div class="container main">
         
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
@@ -42,7 +42,7 @@
                                         </td>
                                     <% } else if(results.results[i].is_admin == false) { %>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-success" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
+                                            <a class="btn btn-sm btn-outline-primary" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
                                         </td>
                                     <% } else { %>
                                         <td>
