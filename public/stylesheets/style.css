@@ -12,6 +12,8 @@ body {
 .main {
     /* the purpose of this 1 line is to float the footer to the bottom of the page */
     flex: 1 0 auto;
+    /* add some padding between main content and the footer */
+    padding-bottom: 50px;
 }
 .navbar-brand{
     color: var(--main-color)!important;
