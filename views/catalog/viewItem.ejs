@@ -55,30 +55,30 @@
                                 
                                 <!-- remove the disabled attribute on the input tag when you're ready to use this -->
                                 <!-- loan item -->
-                                <button class="form-group btn btn-sm btn-outline-success mr-1" 
+                                <button class="form-group btn btn-sm btn-outline-success mr-1 mt-2" 
                                         type="submit" disabled>
                                     Loan This Item
                                 </button>
-                                <button class="form-group btn btn-sm btn-outline-secondary mr-1" 
+                                <button class="form-group btn btn-sm btn-outline-secondary mr-1 mt-2" 
                                         type="submit" disabled>
                                     Duplicate This Item
                                 </button>
                                 
                                 <!--  update an item -->
-                                <a class="btn btn-sm btn-outline-warning form-group mr-1"
+                                <a class="btn btn-sm btn-outline-warning form-group mr-1 mt-2"
                                     href="/catalog/update/<%= results.results[0].discriminator %>/<%= results.results[0].item_id %>">
                                     Update
                                 </a>
 
                                 <!-- Delete an item -->
-                                <a class="btn btn-sm btn-outline-danger form-group mr-1"
+                                <a class="btn btn-sm btn-outline-danger form-group mr-1 mt-2"
                                     href="/catalog/deleteitem/<%= results.results[0].item_id %>" 
                                     onclick="return confirm('Are sure want to delete this record');">
                                     Delete
                                 </a>
 
                                 <!-- go back to the catalog --> 
-                                <a class="btn btn-sm btn-outline-primary mr-1" href="/catalog">Go back</a>	
+                                <a class="btn btn-sm btn-outline-primary mr-1 mt-2" href="/catalog">Go back</a>	
                             </form>
                         </div>
                     </div>

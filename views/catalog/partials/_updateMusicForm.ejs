@@ -1,21 +1,21 @@
 <div class="form-group">
     <label>Title</label>
-    <input type="text" class="form-control" name="title" value="<%= results.results[0].title %>">
+    <input type="text" class="form-control form-control-sm" name="title" value="<%= results.results[0].title %>">
 </div>
 
 <div class="form-group">
     <label>Artist</label>
-    <input type="text" class="form-control" name="artist" value="<%= results.results[0].artist %>">
+    <input type="text" class="form-control form-control-sm" name="artist" value="<%= results.results[0].artist %>">
 </div>
 
 <div class="form-group">
     <label>Label</label>
-    <input type="text" class="form-control" name="label" value="<%= results.results[0].label %>">
+    <input type="text" class="form-control form-control-sm" name="label" value="<%= results.results[0].label %>">
 </div>
 
 <div class="form-group">
     <label>Type of Media</label>
-    <input type="text" class="form-control" name="type" value="<%= results.results[0].type %>">
+    <input type="text" class="form-control form-control-sm" name="type" value="<%= results.results[0].type %>">
 </div>
 
 <div class="form-group">
@@ -25,20 +25,20 @@
     <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
     <% year = releasedate.getFullYear() %>
     <% newdate = year+"-"+month+"-"+day %>
-    <input type="date" class="form-control" name="release_date" value="<%= newdate %>">
+    <input type="date" class="form-control form-control-sm" name="release_date" value="<%= newdate %>">
 </div>
 
 <div class="form-group">
     <label>ASIN <small class="text-muted">(B008FOB124)</small></label>
-    <input type="text" maxlength="10" class="form-control" name="asin" value="<%= results.results[0].asin %>">
+    <input type="text" maxlength="10" class="form-control form-control-sm" name="asin" value="<%= results.results[0].asin %>">
 </div>
 
 <div class="form-group">
     <label>Loanable <small class="text-muted">(TRUE or FALSE)</small></label>
-    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
+    <input type="text" class="form-control form-control-sm" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
 </div>
     
 <div class="form-group">
     <label>Loan Period <small class="text-muted">(number of days)</small></label>
-    <input type="number" class="form-control" name="loan_period" value="<%= results.results[0].loan_period %>">
+    <input type="number" class="form-control form-control-sm" name="loan_period" value="<%= results.results[0].loan_period %>">
 </div>

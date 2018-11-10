@@ -1,36 +1,36 @@
 <div class="form-group">
     <label>Title</label>
-    <input type="text" class="form-control" name="title" value="<%= results.results[0].title %>">
+    <input type="text" class="form-control form-control-sm" name="title" value="<%= results.results[0].title %>">
 </div>
 
 <div class="form-group">
     <label>Director</label>
-    <input type="text" class="form-control" name="director" value="<%= results.results[0].director %>">
+    <input type="text" class="form-control form-control-sm" name="director" value="<%= results.results[0].director %>">
 </div>
 
 <div class="form-group">
     <label>Producers <small class="text-muted">(seperate by a comma)</small></label>
-    <input type="text" class="form-control" name="producers" value="<%= results.results[0].producers %>">
+    <input type="text" class="form-control form-control-sm" name="producers" value="<%= results.results[0].producers %>">
 </div>
 
 <div class="form-group">
     <label>Actors <small class="text-muted">(seperate by a comma)</small></label>
-    <input type="text" class="form-control" name="actors" value="<%= results.results[0].actors %>">
+    <input type="text" class="form-control form-control-sm" name="actors" value="<%= results.results[0].actors %>">
 </div>
 
 <div class="form-group">
     <label>Language</label>
-    <input type="text" class="form-control" name="language" value="<%= results.results[0].language %>">
+    <input type="text" class="form-control form-control-sm" name="language" value="<%= results.results[0].language %>">
 </div>
 
 <div class="form-group">
     <label>Dubbed Language</label>
-    <input type="text" class="form-control" name="dubbed" value="<%= results.results[0].dubbed %>">
+    <input type="text" class="form-control form-control-sm" name="dubbed" value="<%= results.results[0].dubbed %>">
 </div>
 
 <div class="form-group">
     <label>Subtitles Language</label>
-    <input type="text" class="form-control" name="subtitles" value="<%= results.results[0].subtitles %>">
+    <input type="text" class="form-control form-control-sm" name="subtitles" value="<%= results.results[0].subtitles %>">
 </div>
 
 <div class="form-group">
@@ -40,20 +40,20 @@
     <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
     <% year = releasedate.getFullYear() %>
     <% newdate = year+"-"+month+"-"+day %>
-    <input type="date" class="form-control" name="release_date" value="<%= newdate %>">
+    <input type="date" class="form-control form-control-sm" name="release_date" value="<%= newdate %>">
 </div>
 
 <div class="form-group">
     <label>Run Time <small class="text-muted">(in minutes)</small></label>
-    <input type="number" class="form-control" name="run_time" value="<%= results.results[0].run_time %>">
+    <input type="number" class="form-control form-control-sm" name="run_time" value="<%= results.results[0].run_time %>">
 </div>
 
 <div class="form-group">
     <label>Loanable <small class="text-muted">(TRUE or FALSE)</small></label>
-    <input type="text" class="form-control" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
+    <input type="text" class="form-control form-control-sm" name="loanable" maxlength="5" value="<%= results.results[0].loanable.toString().toUpperCase() %>">
 </div>
     
 <div class="form-group">
     <label>Loan Period <small class="text-muted">(number of days)</small></label>
-    <input type="number" class="form-control" name="loan_period" value="<%= results.results[0].loan_period %>">
+    <input type="number" class="form-control form-control-sm" name="loan_period" value="<%= results.results[0].loan_period %>">
 </div>
