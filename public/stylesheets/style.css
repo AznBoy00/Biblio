@@ -15,21 +15,14 @@ body {
     /* add some padding between main content and the footer */
     padding-bottom: 50px;
 }
-.text-biblio, .navbar-brand{
+.navbar-brand{
     color: var(--main-color)!important;
 }
 footer{
-    background-color: var(--main-color);
+    background-color:var(--main-color);
     color: white;
 }
-/* buttons */
-.btn-outline-primary, .btn-primary{
-    color: var(--main-color);;
-    border-color: var(--main-color);
-}
-.btn-outline-primary:hover, .btn-primary:hover{
-    background-color:var(--main-color);
-}
+
 /* Links */
 .footer-links{
     color: white;
