@@ -10,10 +10,23 @@
     <%- include('partials/_navbar'); -%>
     <div class="container main">
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
                 <%- include('partials/_error'); -%>
-                <h1>Soen 343 Team 5</h1>
-                <p>Team 5's term project for SOEN 343 in Concordia University - Fall 2018</p>
+                <h1 class="display-1 text-biblio text-center">Biblio</h1>
+                <p class="text-justify">
+                    Welcome to Biblio, a place where you can view magazines and 
+                    rent books, movies and music. You can <strong>search</strong> 
+                    the catalog for a publisher,author, director, artist or title. 
+                    Bibilio uses state of the art technologies like a 
+                    <strong>Table Data Gateway</strong>, <strong>Unit of Work</strong> 
+                    and <strong>Identity Mapper</strong> along with a well documented
+                    and maintained <strong>SRS</strong> and <strong>SAD</strong>
+                    to deliver you the best experience. 
+                </p>
+                <form class="search-form text-center" method="POST" action="/catalog/searchitems" onSubmit="return checkblank(this);">
+                    <input class="form-control form-control-xl" type="search" name="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-xl btn-outline-primary my-2" type="submit">Search</button> 
+                </form>                
             </div>
         </div>
 
