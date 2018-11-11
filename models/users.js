@@ -66,6 +66,15 @@ module.exports.displayAllUsers = async function() {
 	}
 };
 
+//display active users
+module.exports.displayActiveUsers = async function() {
+    try{
+        return await tdg.getActiveUsers();
+    } catch (err){
+        console.error(err);
+    }
+};
+
 //check for user if he's an admin or not
 async function checkIsAdmin(userid) {
 
