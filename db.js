@@ -6,7 +6,13 @@ const pool = new Pool({
   	ssl: true
 });
 pool.connect(function(err) {
-    if (err) throw err;
+    if (err) {
+        console.log("------------------------------------------------");
+        console.log("Can not connect to the DB");
+        console.log("Check the GitHub repo for instruction on how to connect");
+        console.log("https://github.com/AznBoy00/soen343team5");
+        console.log("------------------------------------------------");
+        console.log(err);
+    }
 });
-// pool.end()
 module.exports = pool;

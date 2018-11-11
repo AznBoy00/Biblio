@@ -8,7 +8,7 @@
 
 <body>
     <%- include('../partials/_navbar'); -%>
-    <div class="container">
+    <div class="container main">
         
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
@@ -24,7 +24,7 @@
 
                     <div class="form-group">
                         <label for="inputSelect">Select type of item to add to catalog:</label>
-                        <select class="form-control" id="inputSelect" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                        <select class="form-control form-control-sm" id="inputSelect" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                             <option value="">Select type</option>
                             <option value="/catalog/create/Books">Book</option>
                             <option value="/catalog/create/Magazines">Magazine</option>

@@ -8,28 +8,28 @@
 
 <body>
 	<%- include('../partials/_navbar'); -%>
-	<div class="container">
+	<div class="container main">
 
 		<div class="row">
 			<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-				<h2>Add a new Book</h2>
+                <h2>Insert <%= discriminator %></h2>				
 			</div>
 		</div>
 
-    <div class="row">
-		<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
-    
-        <form method="POST" action="/catalog/create/<%= discriminator %>" onSubmit="return checkblank(this);">
-					
-				    <%- include('../partials/_error'); -%>
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+        
+                <form method="POST" action="/catalog/create/<%= discriminator %>" onSubmit="return checkblank(this);">
+                        
+                    <%- include('../partials/_error'); -%>
                     
-				    <% let pagename = 'partials/_create'+discriminator+'Form'; %>
-				    <% console.log(pagename) %>
-				    <%- include(pagename) -%>
+                    <% let pagename = 'partials/_create'+discriminator+'Form'; %>
+                    <% console.log(pagename) %>
+                    <%- include(pagename) -%>
 
-				    <button class="btn btn-success" type="submit">Submit</button>
-				    <a class="btn btn-danger" href="/catalog/createItems">Cancel</a>					
-				</form>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Submit</button>
+                    <a class="btn btn-sm btn-outline-danger" href="/catalog/create">Cancel</a>					
+                </form>
         
 			</div>
 			<!-- ./ end col -->

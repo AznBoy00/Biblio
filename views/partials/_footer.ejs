@@ -1,3 +1,82 @@
+<footer>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 text-center text-sm-left">
+                <h5>Concordia University</h5>
+                <h6>Presented to Dr. C. Constantinides</h6>
+                <h6>Fall 2018 - SOEN 343-H - Team 5</h6>
+                <h6>Software Architecture and Design I</h6>
+            </div>
+            <!-- ./ end col -->
+            <div class="col-12 col-sm-4 text-center text-sm-left mt-3">
+                <h5>🎓 Project </h5>
+                <a class="footer-links" href="https://soen343t5.herokuapp.com/" target="_blank">Live Demo</a> <small>(free heroku dyno)</small>
+                <br/>
+                <a class="footer-links" href="https://github.com/AznBoy00/soen343team5" target="_blank">Github Repo</a> <small>(private)</small>
+                <br/>
+                <a class="footer-links" href="https://docs.google.com/document/d/12pFypLqLq2HGXtHhZYz-CggFGJwnFcUGHP_xX4t00Ms/edit?usp=sharing" target="_blank">SRS</a> <small>(colaborator only)</small>
+                <br/>
+                <a class="footer-links" href="https://docs.google.com/document/d/1zmdFFYL1p4VZ4vIP3dQlZ2MK9rv0G8gLOn0qgQbQJV8/edit?usp=sharing" target="_blank">SAD</a> <small>(colaborator only)</small>
+            </div>  
+            <!-- ./ end col   -->                     
+            <div class="col-12 col-sm-4 text-center text-sm-left mt-3">
+                <h5>👨‍💻 Authors</h5>
+                <a class="footer-links" href="https://github.com/Legendary-Griffin">Nizar Belhassan</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/WolfOfTheNorth">Dave Bhardwaj</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/bkenza">Kenza Boulisfane</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/kcamcam">Kevin Camellini</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/ggebran">Giovanni Gebran</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/kkhh001">Kayne Herrmann</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/AznBoy00">Kevin Lin</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/nourelnatour">Nour El Natour</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/Kycoding">Kevin Yau</a>
+                <br/>
+                <a class="footer-links" href="https://github.com/abdullahzen">Abdullah Alhaj Zen</a>
+            </div>
+            <!-- ./ end col   -->
+            <div class="col-12 col-sm-4 text-center text-sm-left mt-3">
+                <h5>🖥 Navigation </h5>
+                <a class="footer-links" href="/catalog">View Full Catalog</a>
+                <br/>
+                <a class="footer-links" href="/catalog/filter/1?active=books">View Books</a>
+                <br/>
+                <a class="footer-links" href="/catalog/filter/1?active=magazines">View Magazines</a>
+                <br/>
+                <a class="footer-links" href="/catalog/filter/1?active=movies">View Movies</a>
+                <br/>
+                <a class="footer-links" href="/catalog/filter/1?active=music">View Music</a>
+                <br/>
+                <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                    <% if (typeof is_admin !== 'undefined' && is_admin){ %>
+                        <a class="footer-links" href="/catalog/create">Insert New item</a>  
+                        <br/>
+                        <a class="footer-links" href="/admincp/manageusers">Manage Users</a>  
+                        <br/>
+                    <% } %>
+                    <a class="footer-links" href="/users/usercp">My Profile</a>
+                    <br/>
+                    <a class="footer-links" href="/users/register">Register</a>
+                    <br/>
+                    <a class="footer-links" href="/users/login">Login</a>
+                    <br/>
+                    <a class="footer-links" href="/users/logout">Logout</a>
+                    <br/>
+                <% } %>
+            </div>   
+            <!-- ./ end col   -->                 
+        </div>
+        <!-- ./ end row -->
+    </div>
+    <!-- ./ end container -->
+<footer>
 <!-- Custom Scripts-->
 <script src="/javascripts/script.js"></script>
 <!-- Optional JavaScript-->

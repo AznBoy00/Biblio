@@ -155,87 +155,132 @@ INSERT INTO Users
 /* ======== Insert New Books ======== */
 /* (book_id, item_id, title, author, publisher, isbn10, isbn13) */
 
-INSERT INTO Items (discriminator) VALUES ('Book');
+INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, isbn10, isbn13)
     SELECT select_id, 'War Dogs', 'Michael J. Fox', 801, 'Anton', 1234567890, 1234567890000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
-INSERT INTO Items (discriminator) VALUES ('Book');
+INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, isbn10, isbn13)
     SELECT select_id, 'Meditations', 'Marcus Aurelius', 532, 'Penguin', 1234567891, 1234567891000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;   
 
-INSERT INTO Items (discriminator) VALUES ('Book');
+INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, isbn10, isbn13)
     SELECT select_id, 'The Selfish Gene', 'Richard Dawkins', 443, 'Penguin', 1234567892, 1234567892000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
-INSERT INTO Items (discriminator) VALUES ('Book');
+INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, isbn10, isbn13)
     SELECT select_id, 'The Alchemist', 'Paolo Coelho', 661, 'Penguin', 1234567893, 1234567893000      
-    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;        
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;     
+
+INSERT INTO Items (discriminator) VALUES ('Books');
+INSERT INTO Books 
+    (item_id, title, author, pages, publisher, isbn10, isbn13)
+    SELECT select_id, 'The Golden mean', 'Annabel Lyon', 772, 'Penguin', 1234567897, 1234567893007      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;         
+
+INSERT INTO Items (discriminator) VALUES ('Books');
+INSERT INTO Books 
+    (item_id, title, author, pages, publisher, isbn10, isbn13)
+    SELECT select_id, 'SPQR: A History of Ancient Rome', 'Mary Beard', 608, 'Liveright', 1234564897, 1234564893007      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
+
+INSERT INTO Items (discriminator) VALUES ('Books');
+INSERT INTO Books 
+    (item_id, title, author, pages, publisher, isbn10, isbn13)
+    SELECT select_id, 'The Lessons of History', ' Will and Ariel Durant', 128, 'Simon & Schuster', 1439149950, 9781439149959      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
 /* ====== Insert New Magazines ====== */
 /* (magazine_id, item_id, title, publisher, isbn10, isbn13) */
 
-INSERT INTO Items (discriminator) VALUES ('Magazine');
+INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, isbn10, isbn13)
     SELECT select_id, 'BMW Magazine', 'BMW', 1234567899, 1234567899000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
-INSERT INTO Items (discriminator) VALUES ('Magazine');
+INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, isbn10, isbn13)
     SELECT select_id, 'Wired October', 'Wired', 1234567900, 1234567900000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
     
-INSERT INTO Items (discriminator) VALUES ('Magazine');
+INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, isbn10, isbn13)
     SELECT select_id, 'Wired November', 'Wired', 1234567901, 1234567901000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;        
 
-INSERT INTO Items (discriminator) VALUES ('Magazine');
+INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, isbn10, isbn13)
     SELECT select_id,'Wired December','Wired', 1234567902, 1234567902000
-    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
+
+INSERT INTO Items (discriminator) VALUES ('Magazines');
+INSERT INTO Magazines
+    (item_id, title, publisher, isbn10, isbn13)
+    SELECT select_id,'National Geographic','Wired', 1234567903, 1234567902003
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;           
 
 /* ======== Insert New Movies ======= */
 /* (movie_id, item_id, title, director, producers, dubbed, subtitles, actors, release_date, run_time) */
 
-INSERT INTO Items (discriminator) VALUES ('Movie');
+INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Oceans 11', 'Clint Eastwood', 'Michael Kane', 
         'English', 'English', 'German', 'George Cloney, Brad Pitt', '2001-09-04', 133
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
-INSERT INTO Items (discriminator) VALUES ('Movie');
+INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Oceans 12', 'Clint Eastwood', 'Michael Kane', 
         'English', 'English', 'German', 'George Cloney, Brad Pitt', '2004-09-05', 127
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
     
-INSERT INTO Items (discriminator) VALUES ('Movie');
+INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Oceans 13', 'Clint Eastwood', 'Michael Kane', 
         'English', 'English', 'German', 'George Cloney, Brad Pitt', '2005-09-05', 127
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
-INSERT INTO Items (discriminator) VALUES ('Movie');
+INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
     SELECT select_id, 'Oceans 14', 'Clint Eastwood', 'Michael Kane', 
         'English', 'English', 'Spanish', 'George Cloney, Brad Pitt', '2006-09-05', 127
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
+
+INSERT INTO Items (discriminator) VALUES ('Movies');
+INSERT INTO Movies 
+    (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
+    SELECT select_id, '2001: A Space Odyssey', 'Stanley Kubrick', 'Stanley Kubrick', 
+        'English', 'English', 'Spanish', 'Keir Dullra, Gary Lockwood', '1968-09-05', 149
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
+
+INSERT INTO Items (discriminator) VALUES ('Movies');
+INSERT INTO Movies 
+    (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
+    SELECT select_id, 'Ex Machina', 'Alex Garland', 'Eli Bush', 
+        'English', 'English', 'Spanish', 'Alicia Vikander, Domhnall Gleeson, Oscar Isaac', '2015-02-08', 108
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;        
+
+INSERT INTO Items (discriminator) VALUES ('Movies');
+INSERT INTO Movies 
+    (item_id, title, director, producers, language, dubbed, subtitles, actors, release_date, run_time)
+    SELECT select_id, 'Gladiator', 'Ridley Scott', 'David Franzoni', 
+        'English', 'English', 'Spanish', 'Russell Crowe, Joaquin Phoenix, Connie Nielsen', '2000-02-05', 155
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;       
 
 /* ======== Insert New Music ======== */
 /* (music_id, item_id, title, artist, label, release_date, asin) */
@@ -265,6 +310,12 @@ INSERT INTO Music
     SELECT select_id, 'For Now I Am Winter', 'Ólafur Arnalds', 'Brassland', '2001-01-01', 'B008FOB126'
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
 
+INSERT INTO Items (discriminator) VALUES ('Music');
+INSERT INTO Music 
+    (item_id, title, artist, label, release_date, asin)
+    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', '1980-01-01', 'B008FOB129'
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
+    
 /* ===== Insert New Transaction ===== */
 /* (transaction_id, client_id, item_id, loan_date, due_date, return_date) */
 INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date)

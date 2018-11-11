@@ -1,9 +1,45 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    /* the purpose of these 2 lines is to float the footer to the bottom of the page */
+    display: flex;
+    flex-direction: column;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* this variable changes the theme color of the website */
+    --main-color: #039be5;
 }
-
-a:hover{
-  text-decoration: none;
+.main {
+    /* the purpose of this 1 line is to float the footer to the bottom of the page */
+    flex: 1 0 auto;
+    /* add some padding between main content and the footer */
+    padding-bottom: 50px;
+}
+.text-biblio, .navbar-brand{
+    color: var(--main-color)!important;
+}
+footer{
+    background-color: var(--main-color);
+    color: white;
+}
+/* buttons */
+.btn-outline-primary, .btn-primary{
+    color: var(--main-color);;
+    border-color: var(--main-color);
+}
+.btn-outline-primary:hover, .btn-primary:hover{
+    background-color:var(--main-color);
+}
+/* Links */
+.footer-links{
+    color: white;
+}
+a {
+    color: var(--main-color);
+}
+.footer-links:hover{
+    color: #bdbdbd;
+}
+a:hover, .footer-links:hover{
+    text-decoration: none;
 }
