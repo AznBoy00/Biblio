@@ -40,6 +40,15 @@ module.exports.getAllUsers = async function(){
     return results;
 }
 
+//display active users
+module.exports.getActiveUsers = async function(){
+    const client = await pool.connect()
+    const result = await client.query('SELECT DISTINCT usename * FROM pg_stat_activity ORDER BY user_id ASC');
+    const results = { 'results': (result) ? result.rows : null};
+    client.release();
+    return results;
+}
+
 //toggleAdminStatus Model
 module.exports.changeAdminStatus = async function(userid, is_admin){
     let result;
