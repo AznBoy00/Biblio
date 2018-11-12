@@ -29,6 +29,16 @@
 </div>
 
 <div class="form-group">
+    <label>Release Date <small class="text-muted">(yyyy-mm-dd)</small></label>
+    <% releasedate = results.results[0].release_date %>
+    <% day = releasedate.getDate().toString().length < 2 ? '0' + releasedate.getDate() : releasedate.getDate() %>
+    <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
+    <% year = releasedate.getFullYear() %>
+    <% newdate = year+"-"+month+"-"+day %>
+    <input type="date" class="form-control form-control-sm" name="release_date" value="<%= newdate %>">
+</div>
+
+<div class="form-group">
     <label>ISBN10 <small class="text-muted">(1234567890)</small></label>
     <input type="number" maxlength="10" class="form-control form-control-sm" name="isbn10" value="<%= results.results[0].isbn10 %>">
 </div>
