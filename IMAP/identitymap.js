@@ -55,6 +55,19 @@ module.exports.loadFullCatalog = async function(catalog){
     }
 }
 
+module.exports.loadFullTransactionTable = async function(transactions){
+    try{
+        imap = [];
+        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
+            let results = {'results': [transactions['items'][i]]};
+            this.addItemToMap(results);
+        }
+        this.showAllMap();
+    }catch(err){
+        console.error(err);
+    }
+}
+
 // if find returns true, return that item from IMAP instead of making a databse call
 module.exports.get = async function(item_id){ 
     try{
