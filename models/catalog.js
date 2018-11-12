@@ -175,3 +175,17 @@ module.exports.getItemFromForm = async function(req) {
         console.error(err);
     }
 }
+// ===============================================//
+// === GET ALL TRANSACTIONS MADE ON THE SYSTEM == //
+// ============================================== //
+module.exports.getTransactionItems = async function() {
+    try {        
+        
+        let result = await tdg.getAllTransactions();
+        await imap.loadFullTransactionTable(result);
+        
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
