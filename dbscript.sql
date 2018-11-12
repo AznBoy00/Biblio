@@ -58,6 +58,7 @@ CREATE TABLE Books(
     pages INTEGER DEFAULT 800,
     publisher VARCHAR(50),
     language VARCHAR(50) DEFAULT 'English',
+    release_date DATE, /* YYYY-MM-DD */
     isbn10 FLOAT CHECK (isbn10 between 1000000000 and 9999999999),
     isbn13 FLOAT CHECK (isbn13 between 1000000000000 and 9999999999999),
 
@@ -75,6 +76,7 @@ CREATE TABLE Magazines(
     title VARCHAR(50),
     publisher VARCHAR(50),
     language VARCHAR(50) DEFAULT 'English',
+    release_date DATE, /* YYYY-MM-DD */
     isbn10 FLOAT CHECK (isbn10 between 1000000000 and 9999999999),
     isbn13 FLOAT CHECK (isbn13 between 1000000000000 and 9999999999999),
 
@@ -157,44 +159,44 @@ INSERT INTO Users
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'War Dogs', 'Michael J. Fox', 801, 'Anton', 1234567890, 1234567890000
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'War Dogs', 'Michael J. Fox', 801, 'Anton', '2018-10-01', 1234567890, 1234567890000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'Meditations', 'Marcus Aurelius', 532, 'Penguin', 1234567891, 1234567891000      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'Meditations', 'Marcus Aurelius', 532, 'Penguin', '2017-08-03', 1234567891, 1234567891000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;   
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'The Selfish Gene', 'Richard Dawkins', 443, 'Penguin', 1234567892, 1234567892000      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Selfish Gene', 'Richard Dawkins', 443, 'Penguin', '2012-01-02', 1234567892, 1234567892000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'The Alchemist', 'Paolo Coelho', 661, 'Penguin', 1234567893, 1234567893000      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Alchemist', 'Paolo Coelho', 661, 'Penguin', '2010-10-10', 1234567893, 1234567893000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;     
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'The Golden mean', 'Annabel Lyon', 772, 'Penguin', 1234567897, 1234567893007      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Golden mean', 'Annabel Lyon', 772, 'Penguin', '2011-05-20', 1234567897, 1234567893007      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;         
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'SPQR: A History of Ancient Rome', 'Mary Beard', 608, 'Liveright', 1234564897, 1234564893007      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'SPQR: A History of Ancient Rome', 'Mary Beard', 608, 'Liveright', '2005-07-22', 1234564897, 1234564893007      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
-    (item_id, title, author, pages, publisher, isbn10, isbn13)
-    SELECT select_id, 'The Lessons of History', ' Will and Ariel Durant', 128, 'Simon & Schuster', 1439149950, 9781439149959      
+    (item_id, title, author, pages, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Lessons of History', ' Will and Ariel Durant', 128, 'Simon & Schuster', '1995-12-13', 1439149950, 9781439149959      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
 /* ====== Insert New Magazines ====== */
@@ -202,32 +204,32 @@ INSERT INTO Books
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
-    (item_id, title, publisher, isbn10, isbn13)
-    SELECT select_id, 'BMW Magazine', 'BMW', 1234567899, 1234567899000
+    (item_id, title, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'BMW Magazine', 'BMW', '1997-05-08', 1234567899, 1234567899000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
-    (item_id, title, publisher, isbn10, isbn13)
-    SELECT select_id, 'Wired October', 'Wired', 1234567900, 1234567900000
+    (item_id, title, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'Wired October', 'Wired', '1998-03-03', 1234567900, 1234567900000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
     
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
-    (item_id, title, publisher, isbn10, isbn13)
-    SELECT select_id, 'Wired November', 'Wired', 1234567901, 1234567901000
+    (item_id, title, publisher, release_date, isbn10, isbn13)
+    SELECT select_id, 'Wired November', 'Wired', '2003-11-11', 1234567901, 1234567901000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;        
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
-    (item_id, title, publisher, isbn10, isbn13)
-    SELECT select_id,'Wired December','Wired', 1234567902, 1234567902000
+    (item_id, title, publisher, release_date, isbn10, isbn13)
+    SELECT select_id,'Wired December','Wired', '2006-06-15', 1234567902, 1234567902000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
-    (item_id, title, publisher, isbn10, isbn13)
-    SELECT select_id,'National Geographic','Wired', 1234567903, 1234567902003
+    (item_id, title, publisher, release_date, isbn10, isbn13)
+    SELECT select_id,'National Geographic','Wired', '2014-04-20', 1234567903, 1234567902003
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;           
 
 /* ======== Insert New Movies ======= */
