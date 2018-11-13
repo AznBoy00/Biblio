@@ -124,6 +124,8 @@ router.post('/login', async function (req, res) {
                 req.session.address = userInfo.address;
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
+                req.session.cart = [];
+                console.log(req.session);
                 res.redirect('/');
             } else {
                 return res.render('users/login', {errors: "Password Incorrect", title: "Login"});

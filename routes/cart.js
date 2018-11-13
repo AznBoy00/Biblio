@@ -9,6 +9,8 @@ router.use(session({
 }));
 var expressValidator = require('express-validator');
 router.use(expressValidator());
+var cart = require('../models/cart');
+var user = require('../models/users');
 
 // ====================================== //
 // == Get shopping cart page === //
@@ -16,7 +18,8 @@ router.use(expressValidator());
 router.get('/', async (req, res) => {
     try {
       //let cart = req.session.cart;
-      
+      // console.log("SESSION: " + req.session);
+      // console.log("Cart: " + req.session);
       res.render('cart', { title: 'Cart', is_logged: req.session.logged});
     } catch (err) {
       console.error(err);
@@ -27,7 +30,9 @@ router.get('/', async (req, res) => {
 router.get('/add/:item_id', async (req, res) => {
     try {
       // Add Item to cart
-      res.render('cart', { title: 'Cart', is_logged: req.session.logged});
+      //cart.addItemToCart(req);
+      // console.log("ITEM_ID: " + req.params.item_id);
+      res.redirect('/cart');
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
@@ -37,7 +42,7 @@ router.get('/add/:item_id', async (req, res) => {
 router.get('/remove/:item_id', async (req, res) => {
     try {
       // Remove Item from cart
-      res.render('cart', { title: 'Cart', is_logged: req.session.logged});
+      res.redirect('/cart');
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
