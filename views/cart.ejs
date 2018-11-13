@@ -21,29 +21,28 @@
                             <th>Remove</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         <!-- Iterate over items -->
-                            <% for(var j in list['items']) { %>
-                                <tr class="<%= list['items'][j].discriminator%>">
-                                    <td><%= list['items'][j].item_id %></td>
-                                    <td><%= list['items'][j].discriminator %></td>
+                            <% for(var i in list) { %>
+                                <tr class="<%= list[i].results[0].discriminator%>">
+                                    <td><%= list[i].results[0].item_id %></td>
+                                    <td><%= list[i].results[0].discriminator %></td>
                                     <td>
-                                        <a href="/catalog/view/<%= list['items'][j].discriminator %>/<%= list['items'][j].item_id %>">
-                                            <%= list['items'][j].title %>
+                                        <a href="/catalog/view/<%= list[i].results[0].discriminator %>/<%= list[i].results[0].item_id %>">
+                                            <%= list[i].results[0].title %>
                                         </a>
                                     </td>
-                                    <% if (list['items'][j].discriminator == "Books" || filter){ %>
-                                        <td><%= list['items'][j].author %></td>
-                                    <% } else if (list['items'][j].discriminator == "Magazines"){%>
-                                        <td><%= list['items'][j].publisher %></td>
-                                    <% } else if (list['items'][j].discriminator == "Movies"){%>
-                                        <td><%= list['items'][j].director %></td>
-                                    <% } else if (list['items'][j].discriminator == "Music"){%>
-                                        <td><%= list['items'][j].artist %></td>
+                                    <% if (list[i].results[0].discriminator == "Books" || filter){ %>
+                                        <td><%= list[i].results[0].author %></td>
+                                    <% } else if (list[i].results[0].discriminator == "Magazines"){%>
+                                        <td><%= list[i].results[0].publisher %></td>
+                                    <% } else if (list[i].results[0].discriminator == "Movies"){%>
+                                        <td><%= list[i].results[0].director %></td>
+                                    <% } else if (list[i].results[0].discriminator == "Music"){%>
+                                        <td><%= list[i].results[0].artist %></td>
                                     <% } %>
                                     <td>
-                                        <a href="/cart/remove/<%= list['items'][j].item_id %>">
+                                        <a href="/cart/remove/<%= list[i].item_id %>">
                                             X
                                         </a>
                                     </td>
@@ -52,7 +51,6 @@
                     </tbody>
                 </table>
             </div>
-
             <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>	
         </div>
     </div>

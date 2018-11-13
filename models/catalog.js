@@ -127,14 +127,14 @@ module.exports.getSearchResults = async function(searched) {
 // ====================================== //
 module.exports.getCartCatalog = async function(req) {
     try {
-        let result;
-        console.log("CART SIZE: " + req.session.cart.length);
-        for(i=0; i<req.session.cart.length; i++){
-            console.log("CART: " + JSON.stringify(req.session.cart));
-            console.log("CART ID at i: " + JSON.parse(req.session.cart[i]));
-            result[i] = await this.getItemById(JSON.parse(req.session.cart[i]));
+        let result = [];
+        // console.log("CART SIZE: " + req.session.cart.length);
+        for(var i=0; i<req.session.cart.length; i++){
+            // console.log("CART: " + JSON.stringify(req.session.cart));
+            // console.log("CART ID at i: " + JSON.parse(req.session.cart[i]));
+            result[i] = await imap.get(JSON.parse(req.session.cart[i]));
         }
-        console.log("Cart Item Objects: " + result);
+        // console.log("CART Result " + JSON.stringify(result));
         return await result;
     } catch (err) {
         console.error(err);
