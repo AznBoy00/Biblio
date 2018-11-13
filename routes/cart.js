@@ -11,15 +11,16 @@ var expressValidator = require('express-validator');
 router.use(expressValidator());
 var cart = require('../models/cart');
 var user = require('../models/users');
+var catalog = require('../models/catalog');
 
 // ====================================== //
 // == Get shopping cart page === //
 // ====================================== //
 router.get('/', async (req, res) => {
     try {
-      //let cart = req.session.cart;
+      let list = await catalog.getCatalog();
       console.log("SESSION: " + JSON.stringify(req.session));
-      res.render('cart', { title: 'Cart', is_logged: req.session.logged});
+      res.render('cart', { title: 'Cart', is_logged: req.session.logged, list: await list, filter: false});
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
