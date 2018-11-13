@@ -86,7 +86,7 @@ router.get('/create', function (req, res) {
 // Create a new book
 router.get('/create/:discriminator', function (req, res) {
     let discriminator = req.params.discriminator;
-    res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    res.render('catalog/createitem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 
 // ====================================== //
