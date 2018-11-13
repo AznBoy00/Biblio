@@ -123,7 +123,26 @@ module.exports.getSearchResults = async function(searched) {
 }
 
 // ====================================== //
-// ===== Delet an Item from the DB ====== //
+// ====== Get Items From Cart ======= //
+// ====================================== //
+module.exports.getCartCatalog = async function(req) {
+    try {
+        let result;
+        console.log("CART SIZE: " + req.session.cart.length);
+        for(i=0; i<req.session.cart.length; i++){
+            console.log("CART: " + JSON.stringify(req.session.cart));
+            console.log("CART ID at i: " + JSON.parse(req.session.cart[i]));
+            result[i] = await this.getItemById(JSON.parse(req.session.cart[i]));
+        }
+        console.log("Cart Item Objects: " + result);
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ====================================== //
+// ===== Delete an Item from the DB ====== //
 // ====================================== //
 // DELETE an ITEM from the database which
 // cascades down to delete the corresponding
