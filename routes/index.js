@@ -20,4 +20,18 @@ router.get('/', function(req, res, next) {
   }
 });
 
+// ====================================== //
+// == Get shopping cart page === //
+// ====================================== //
+router.get('/cart', async (req, res) => {
+  try {
+    let cart = req.session.cart;
+    
+    res.render('cart', { title: 'Cart', is_logged: is_logged});
+  } catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+  }
+});
+
 module.exports = router;

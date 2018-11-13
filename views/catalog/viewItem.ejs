@@ -62,12 +62,15 @@
                         <div class="col-12">
                             <form class="form-inline" method="POST" onSubmit="return checkblank(this);">
                                 
-                                <!-- remove the disabled attribute on the input tag when you're ready to use this -->
+                                <!-- cahnge the href, it should go to the cart -->
                                 <!-- loan item -->
-                                <button class="form-group btn btn-sm btn-outline-success mr-1 mt-2" 
-                                        type="submit" disabled>
-                                    Loan This Item
-                                </button>
+                                <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                                    <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
+                                            href="/catalog/cart/:discriminator/:item_id">
+                                        Add to cart
+                                    </a>
+                               <% } %>
+
                                 <% if (typeof is_logged !== 'undefined' && is_logged){ %>
                                     <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                                         <button class="form-group btn btn-sm btn-outline-secondary mr-1 mt-2" 
