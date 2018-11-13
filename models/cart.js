@@ -15,11 +15,8 @@ module.exports.addItemToCart = async function(req) {
 
 module.exports.deleteItemFromCart = async function(req) {
     try {
-        console.log("SESSION: " + JSON.stringify(req.session));
-        console.log("ITEM_ID: " + JSON.stringify(req.params.item_id));
-        let sessCart = req.session.cart;
-        let item = sessCart.indexOf('req.params.item_id');
-        sessCart.splice(item,1);
+        console.log("I: " + req.params.i);
+        req.session.cart.splice(req.params.i, 1);
     } catch (err) {
         console.error(err);
     }   

@@ -38,7 +38,7 @@ router.get('/add/:item_id', async (req, res) => {
     }
 });
   
-router.get('/remove/:item_id', async (req, res) => {
+router.get('/remove/:i', async (req, res) => {
     try {
 
       cart.deleteItemFromCart(req);
@@ -52,7 +52,17 @@ router.get('/remove/:item_id', async (req, res) => {
 
 router.get('/checkout', async (req, res) => {
   try {
-    // Remove Item from cart
+    
+    res.redirect('/cart');
+  } catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+  }
+});
+
+router.get('/clear', async (req, res) => {
+  try {
+    cart.deleteAllItemsFromCart(req);
     res.redirect('/cart');
   } catch (err) {
     console.error(err);
