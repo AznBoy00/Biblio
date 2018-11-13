@@ -50,11 +50,11 @@ module.exports.getCatalogAlphaOrder = async function(type) {
 // ====================================== //
 // ===== INSERT A NEW ITEM INTO DB ====== //
 // ====================================== //
-// insert into the items table dirst, then use the PSQL function to retrieve
+// insert into the items table first, then use the PSQL function to retrieve
 // the items_item_id_seq (item_id) that was just inserted to create a new item.
 module.exports.insertNewItem = async function(req, discriminator) {
     try {
-        // get the item fromt he html form
+        // get the item fromt the html form
         let newItem = await this.getItemFromForm(req);
         return await tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
