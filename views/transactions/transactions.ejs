@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+<body>
+    <%- include('../partials/_navbar'); -%>
+    <div class="container main">
+
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+                <h2>Loan Transactions: </h2>
+            </div>
+        </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Client ID</th>
+                                <th>Item ID</th>
+                                <th>Loan Made On</th>
+                                <th>Due By</th>
+                                <th>Returned On</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                                 <% for(var j in list['items']) { %>
+                                    <tr class="<%= list['items'][j]%>">
+                                        <td>
+                                        <a id="btn" onclick="display()">
+                                            <%= list['items'][j].transaction_id %>
+                                        </a>
+                                        </td>
+                                        <td><%= list['items'][j].client_id %></td>
+                                        <td><%= list['items'][j].item_id %></td>
+                                        <td><%= list['items'][j].loan_date %></td>
+                                        <td><%= list['items'][j].due_date %></td>
+                                        <td><%= list['items'][j].return_date %></td>
+                                    </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+    <%- include('../partials/_footer') -%>
+</body>
+</html>
