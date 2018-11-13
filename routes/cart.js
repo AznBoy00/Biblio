@@ -18,8 +18,7 @@ var user = require('../models/users');
 router.get('/', async (req, res) => {
     try {
       //let cart = req.session.cart;
-      // console.log("SESSION: " + req.session);
-      // console.log("Cart: " + req.session);
+      console.log("SESSION: " + JSON.stringify(req.session));
       res.render('cart', { title: 'Cart', is_logged: req.session.logged});
     } catch (err) {
       console.error(err);
@@ -30,7 +29,7 @@ router.get('/', async (req, res) => {
 router.get('/add/:item_id', async (req, res) => {
     try {
       // Add Item to cart
-      //cart.addItemToCart(req);
+      cart.addItemToCart(req);
       // console.log("ITEM_ID: " + req.params.item_id);
       res.redirect('/cart');
     } catch (err) {
