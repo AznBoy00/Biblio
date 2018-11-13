@@ -40,6 +40,8 @@ router.get('/add/:item_id', async (req, res) => {
   
 router.get('/remove/:item_id', async (req, res) => {
     try {
+
+      cart.deleteItemFromCart(req);
       // Remove Item from cart
       res.redirect('/cart');
     } catch (err) {
