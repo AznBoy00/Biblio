@@ -48,5 +48,15 @@ router.get('/remove/:item_id', async (req, res) => {
     }
 });
 
+router.get('/checkout', async (req, res) => {
+  try {
+    // Remove Item from cart
+    res.redirect('/cart');
+  } catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+  }
+});
+
 //keep the next line at the end of this script
 module.exports = router;
