@@ -25,7 +25,10 @@ router.get('/', async (req, res) => {
       res.render('error', { error: err });
     }
 });
-  
+
+// ====================================== //
+// == Add item to shopping cart === //
+// ====================================== //
 router.get('/add/:item_id', async (req, res) => {
     try {
       // Add Item to cart
@@ -38,6 +41,9 @@ router.get('/add/:item_id', async (req, res) => {
     }
 });
   
+// ====================================== //
+// ==  Delete item from shopping cart === //
+// ====================================== //
 router.get('/remove/:i', async (req, res) => {
     try {
 
@@ -50,6 +56,9 @@ router.get('/remove/:i', async (req, res) => {
     }
 });
 
+// ====================================== //
+// == Checkout entire shopping cart === //
+// ====================================== //
 router.get('/checkout', async (req, res) => {
   try {
     
@@ -60,6 +69,9 @@ router.get('/checkout', async (req, res) => {
   }
 });
 
+// ====================================== //
+// == Clear entire shopping cart === //
+// ====================================== //
 router.get('/clear', async (req, res) => {
   try {
     cart.deleteAllItemsFromCart(req);

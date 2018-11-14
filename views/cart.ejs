@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Iterate over items -->
+                        <!-- Iterate over items in cart -->
                             <% for(var i in list) { %>
                                 <tr class="<%= list[i].results[0].discriminator%>">
                                     <td><%= list[i].results[0].item_id %></td>
@@ -46,8 +46,9 @@
                                             X
                                         </a>
                                     </td>
-                                </tr>
+                                    </tr>
                             <% } %>
+                        <!-- End of iteration for cart item(s) -->
                     </tbody>
                 </table>
             </div>
