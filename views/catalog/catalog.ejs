@@ -96,6 +96,9 @@
                                 <th>Type</th>
                                 <th>Title</th>
                                 <th>By</th>
+                                <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                                    <th>Add</th>
+                               <% } %>
                             </tr>
                         </thead>
 
@@ -119,6 +122,14 @@
                                         <% } else if (list['items'][j].discriminator == "Music"){%>
                                             <td><%= list['items'][j].artist %></td>
                                         <% } %>
+                                        <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                                            <td>
+                                                <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
+                                                    href="/cart/add/<%= list['items'][j].item_id %>">
+                                                    Add to cart
+                                                </a>
+                                            </td>
+                                       <% } %>
                                     </tr>
                                 <% } %>
                         </tbody>

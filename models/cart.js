@@ -15,7 +15,7 @@ module.exports.addItemToCart = async function(req) {
 
 module.exports.deleteItemFromCart = async function(req) {
     try {
-        console.log("I: " + req.params.i);
+        // console.log("I: " + req.params.i);
         req.session.cart.splice(req.params.i, 1);
     } catch (err) {
         console.error(err);
@@ -24,7 +24,7 @@ module.exports.deleteItemFromCart = async function(req) {
 
 module.exports.deleteAllItemsFromCart = async function(req) {
     try {
-        req.session.cart = [];
+        req.session.cart.splice(0, JSON.parse(req.session.cart.length));
     } catch (err) {
         console.error(err);
     } 
