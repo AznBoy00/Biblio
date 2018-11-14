@@ -137,3 +137,12 @@ module.exports.deleteItem = async function(item_id){
     client.release();
 }
 
+module.exports.getAllTransactions = async function(){
+    const client = await pool.connect();
+    const resultTransaction = await client.query('SELECT * FROM transactions ORDER BY transaction_id ASC');
+    client.release();
+
+    let result = [];
+    result.items = (resultTransaction != null) ? resultTransaction.rows : null;
+    return result;
+}

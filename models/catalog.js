@@ -13,9 +13,24 @@ var imap = require('../IMAP/identitymap');
 // used in viewing the entire catalog page
 module.exports.getCatalog = async function() {
     try {        
-        //let foundCatalog = imap.checkFullCatalog();
-        let result = await tdg.getCatalog();
-        await imap.loadFullCatalog(result);
+        let foundCatalog = await imap.findFullCatalog();
+        let result;
+        if (foundCatalog){
+            console.log("----------------------------------------------");
+            console.log("Catalog has already been loaded into the IMAP:");
+            result = await imap.getFullCatalog();
+            console.log("Loading "+result.items.length+" items from the IMAP");
+            console.log("----------------------------------------------");
+            // console.log(result);
+        } else{
+            console.log("----------------------------------------------");
+            console.log("Catalog was not found in the IMAP:");
+            result = await tdg.getCatalog();
+            console.log("Loading "+result.items.length+" items from the DB");
+            console.log("----------------------------------------------");
+            // console.log(result);
+            await imap.loadFullCatalog(result);
+        }
         
         // if full catalog not found in imap, get from tdg
         //if (!foundCatalog)
@@ -73,17 +88,22 @@ module.exports.getItemById = async function(item_id, discriminator) {
     try {
         let item;
         let found = await imap.find(item_id);
-        console.log("FOUND: "+found);
         if(found){
-            // If item found in IMAP, get from IMAP
+            console.log("-------------------------------------");
+            console.log("Found Item In IMAP: loading from IMAP");
             item = await imap.get(item_id);
+            console.log(item.results[0]);
+            console.log("-------------------------------------");
+            // If item found in IMAP, get from IMAP
         }else{
             let getFromTDG = await tdg.getItemByID(item_id, discriminator);
             await imap.addItemToMap(getFromTDG);
-            // else if item not found in IMAP, add to IMAP through TDG
-            // and return that item from the IMAP
-            // await imap.addItemToMap(item_id, discriminator);
+            
+            console.log("---------------------------------------");
+            console.log("Item not found in IMAP: Loading from DB");
             item = await imap.get(item_id);
+            console.log(item.results[0]);
+            console.log("---------------------------------------");
         }
         return await item;
     } catch (err) {
@@ -190,6 +210,20 @@ module.exports.getItemFromForm = async function(req) {
             "asin": req.body.asin,
         }
         return await newItem;
+    } catch (err) {
+        console.error(err);
+    }
+}
+// ===============================================//
+// === GET ALL TRANSACTIONS MADE ON THE SYSTEM == //
+// ============================================== //
+module.exports.getTransactionItems = async function() {
+    try {        
+        
+        let result = await tdg.getAllTransactions();
+        await imap.loadFullTransactionTable(result);
+        
+        return await result;
     } catch (err) {
         console.error(err);
     }

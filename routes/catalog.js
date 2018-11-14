@@ -26,6 +26,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/transactions', async (req, res) => {
+    try {
+        let list = await catalog.getTransactionItems();
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
+
 // ============================================== //
 // ======== Get filtered catalog page ========== //
 // ============================================ //
@@ -86,7 +96,7 @@ router.get('/create', function (req, res) {
 // Create a new book
 router.get('/create/:discriminator', function (req, res) {
     let discriminator = req.params.discriminator;
-    res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    res.render('catalog/createitem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
 });
 
 // ====================================== //

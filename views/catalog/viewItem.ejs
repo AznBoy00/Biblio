@@ -45,6 +45,7 @@
                                 <!-- the attribute value -->
                                 <% if (i == "release_date"){ %>
                                     <% releasedate = results.results[0][i] %>
+                                    <% releasedate = new Date(releasedate) %>
                                     <% day = releasedate.getDate().toString().length < 2 ? '0' + releasedate.getDate() : releasedate.getDate() %>
                                     <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
                                     <% year = releasedate.getFullYear() %>

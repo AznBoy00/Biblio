@@ -10,16 +10,16 @@
 
 //Initialize map as empty.
 var imap=[];
-// var fullCatalog = false;
+var fullCatalogLoaded = false;
 
 //Check if full catalog has been loaded once.
-// module.exports.checkFullCatalog = async function(){
-//     try{
-//         return fullCatalog;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
+module.exports.findFullCatalog = async function(){
+    try{
+        return fullCatalogLoaded;
+    }catch(err){
+        console.error(err);
+    }
+}
 
 // This method checks to see if an item already exists in the IMAP
 // If it exists it returns TRUE
@@ -41,12 +41,42 @@ module.exports.find = async function(item_id){
 
 // load the full catalog into the imap 
 // reset the catalog to empty first since we are going to load it all into it
-// TODO do a check in the TDG to check if the catalog exists in IMAP already
 module.exports.loadFullCatalog = async function(catalog){
     try{
         imap = [];
         for (var i in catalog['items']){//catalog[book], catalog[magazine]...
             let results = {'results': [catalog['items'][i]]};
+            this.addItemToMap(results);
+        }
+        fullCatalogLoaded = true;
+        // this.showAllMap();
+    }catch(err){
+        console.error(err);
+    }
+}
+
+module.exports.getFullCatalog = async function(){
+    try{    
+        // console.log(imap[0].results[0]);
+        let temp = [];
+        for(var i = 0; i < imap.length; i++){
+            temp[i] = imap[i].results[0];
+        }
+        
+        let result = [];
+        result.items = temp;
+
+        return result;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+module.exports.loadFullTransactionTable = async function(transactions){
+    try{
+        imap = [];
+        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
+            let results = {'results': [transactions['items'][i]]};
             this.addItemToMap(results);
         }
         this.showAllMap();
@@ -58,7 +88,7 @@ module.exports.loadFullCatalog = async function(catalog){
 // if find returns true, return that item from IMAP instead of making a databse call
 module.exports.get = async function(item_id){ 
     try{
-        this.showAllMap();
+        // this.showAllMap();
         for(i = 0; i < imap.length; i++){
             if((imap[i].results[0].item_id == item_id))
                 return await imap[i];
