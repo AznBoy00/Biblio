@@ -254,12 +254,9 @@ module.exports.commitToDb = async function(){
             if(uowArray[i].results.deletebit == true){ // DELETE for items registeredDeleted in the UoW
                 let item_id = uowArray[i].results[0].item_id;
                 let result = await tdg.deleteItem(item_id);
-                console.log("Item deleted: " +  uowArray[i].results[0])
+                console.log("Item deleted: " + uowArray[i].results[0].title)
                 client.query(result);
             }
-            else
-                console.log("All your base are belong to us");
-
         }
         client.release();
 
