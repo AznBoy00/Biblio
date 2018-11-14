@@ -136,7 +136,7 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
 router.post('/update/:discriminator/:item_id', async (req, res) => {
     try {
         await catalog.updateItem(req, req.params.item_id, req.params.discriminator);
-        res.redirect('/catalog//view/'+req.params.discriminator+'/'+req.params.item_id);
+        res.redirect('/catalog/view/'+req.params.discriminator+'/'+req.params.item_id);
         // res.redirect('/catalog');
     } catch (err) {
         console.error(err);

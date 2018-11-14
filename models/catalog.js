@@ -1,5 +1,8 @@
 var tdg = require('../TDG/itemsGateway');
 var imap = require('../IMAP/identitymap');
+const pool = require('../db');
+//var uow = require('../uow/uow');
+
 
 // var item = require('../models/item');
 //list to be filled with item objects from item.js in models
@@ -87,18 +90,19 @@ module.exports.insertNewItem = async function(req, discriminator) {
 module.exports.getItemById = async function(item_id, discriminator) {
     try {
         let item;
-        let found = await imap.find(item_id);
-        if(found){
+        let foundInImap = await imap.find(item_id);
+        if(foundInImap){
             console.log("-------------------------------------");
             console.log("Found Item In IMAP: loading from IMAP");
             item = await imap.get(item_id);
-            console.log(item.results[0]);
+            await imap.registerClean(item);
+            console.log(item.results);
             console.log("-------------------------------------");
             // If item found in IMAP, get from IMAP
         }else{
             let getFromTDG = await tdg.getItemByID(item_id, discriminator);
             await imap.addItemToMap(getFromTDG);
-            
+            await imap.registerClean(getFromTDG); // <<<<<<<<<<<<
             console.log("---------------------------------------");
             console.log("Item not found in IMAP: Loading from DB");
             item = await imap.get(item_id);
@@ -119,10 +123,15 @@ module.exports.updateItem = async function(req, item_id, discriminator) {
     try {
         // get the item fromt he html form
         let updatedItem = await this.getItemFromForm(req);
+        // updatedItem.discriminator = discriminator;
+        // updatedItem.item_id = item_id;
+        // console.log(updatedItem);
         console.log("UPDATED: " + updatedItem.title);
         await imap.updateItem(updatedItem, item_id); // Update item on Imap.
-        return tdg.updateItem(updatedItem, item_id, discriminator); // Update the item in the DB
-        
+        let item = await imap.get(item_id);
+        await imap.registerDirty(item); // <<<<<<DIRTY THE ITEM
+        this.commitToDb();
+        // return tdg.updateItem(updatedItem, item_id, discriminator); // Update the item in the DB
     } catch (err) {
         console.error(err);
     }
@@ -207,5 +216,43 @@ module.exports.getTransactionItems = async function() {
         return await result;
     } catch (err) {
         console.error(err);
+    }
+}
+
+// n, d, c, 
+module.exports.commitToDb = async function(){
+    try{
+        let uow = await imap.commit();
+        const client = await pool.connect();
+
+        for (i in uow){
+            // if(uow[i].results.cleanbit == true){
+            //     let item_id = uow[i].results[0].item_id;           
+            //     tdg.getItemByID(item_id);
+            // }
+            if(uow[i].results.dirtybit == true){
+                console.log("STUFF TO COMMIT: " + uow[i].results[0]);
+                let updateItem = uow[i].results[0];
+                let item_id = uow[i].results[0].item_id; 
+                let discriminator = uow[i].results[0].discriminator;
+                let query = await tdg.updateItem(updateItem, item_id, discriminator); 
+                client.query(query);
+            }
+            // else if(uow[i].results.newbit == true){
+            //     let newItem = uow[i].results[0];
+                                
+            //     tdg.insertNewItem(newItem, req, discriminator);
+            // }
+            // else if(uowp[i].results.deletebit == true){
+            //     let item_id = uow[i].results[0].item_id;
+            //     tdg.deleteItem(item_id);
+            // }
+            else
+                console.log("All your base are belong to us");
+        }
+        client.release();
+    }catch(err){
+        console.error(err);
+
     }
 }

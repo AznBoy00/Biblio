@@ -20,36 +20,10 @@ var fullCatalogLoaded = false;
 
 // order of operations
 // UDPATE
-//  -> IMAP
-//  -> register dirty (item)
-//  -> register dirty (item)
-    //  -> commit(items) -> TDG
-    //    -> for (items in imap)
-    //          if(imap.results.dirtbity == true)
-    //              tdg.update(item)
-                //(new)
-                //(deleted)
-    
-    
-
-
-    // UoW = [], -> [0] = new, [1] = dirty, ...a    
-// open connection
-// For each UOW array
-//     TDG.update, TDG.delete, TDG.update
-// close connection
-//  -> register clean (imap.item)
-
-
-
-// Models
-    // let reulsts = uow.commit()
-    // connect()
-        // For each UOW array
-        // TDG.update, TDG.delete, TDG.update
-    // 
-
-
+//  -> register dirty
+//  -> commit -> TDG
+//      ->IMAP
+//  -> register clean
 
 // CREATE
 //  -> register new in UoW
@@ -57,8 +31,7 @@ var fullCatalogLoaded = false;
 //      -> TDG 
 
 // READ
-// -> IMAP
-// -> register clean (item)
+// -> register clean
 
 
 // DELETE
@@ -66,47 +39,34 @@ var fullCatalogLoaded = false;
 // -> commit -> TDG 
 //    ->IMAP
     
-let uowitems = [];
 
-module.exports.registerNew = async function(item){
+module.exports.registerNew = async function(){
     try{
-        item.results.createbit = true;
-        uowitems.push(item);
+
     }catch(err){
         console.error(err);
     }
 }
 
-// module.exports.printAllUoWItems = async function(items){
-//     try{
-//         return uowitems;
-//     }catch(err){
-//         console.error(err);
-//     } 
-// }
-
-module.exports.registerDirty = async function(item){
+module.exports.registerDirty = async function(){
     try{
-        item.results.dirtybit = true;
-        uowitems.push(item);
+
     }catch(err){
         console.error(err);
     }
 }
 
-module.exports.registerClean = async function(item){
+module.exports.registerClean = async function(){
     try{
-        item.results.cleanbit = true;
-        uowitems.push(item);
+
     }catch(err){
         console.error(err);
     }
 }
 
-module.exports.registerDeleted = async function(item){
+module.exports.registerDeleted = async function(){
     try{
-        item.results.deletebit = true;
-        uowitems.push(item);
+
     }catch(err){
         console.error(err);
     }    
@@ -114,7 +74,7 @@ module.exports.registerDeleted = async function(item){
 
 module.exports.commit = async function(){
     try{
-        return uowitems;
+        // TDG CALLS
     }catch(err){
         console.error(err);
     }    
@@ -122,40 +82,12 @@ module.exports.commit = async function(){
 
 module.exports.rollback = async function(){
     try{
-        uowitems = [];
+        // CLEANUP
     }catch(err){
         console.error(err);
     }    
 }
 
-// module.exports.getNew = async function(item){
-//     try{
-//         return item.results.newbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getDirty = async function(item){
-//     try{
-//        return  item.results.dirytbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getClean = async function(item){
-//     try{
-//         return item.results.clenbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getDeleted = async function(item){
-//     try{
-//         return item.results.deletebit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
 
 
 
@@ -221,10 +153,6 @@ module.exports.loadFullCatalog = async function(catalog){
         imap = [];
         for (var i in catalog['items']){//catalog[book], catalog[magazine]...
             let results = {'results': [catalog['items'][i]]};
-            results.results.dirtybit = null; //Access through item.results.dirtybit
-            results.results.cleanbit = null;
-            results.results.newbit = null;
-            results.results.deletebit = null; 
             this.addItemToMap(results);
         }
         fullCatalogLoaded = true;
@@ -300,17 +228,12 @@ module.exports.updateItem = async function(item, item_id){
 // if an item is not found, get query from the databse then store that item into the IMAP
 module.exports.addItemToMap = async function(item){
     try{
-        item.results.dirtybit = null; //Access through item.results.dirtybit
-        item.results.cleanbit = null;
-        item.results.newbit = null;
-        item.results.deletebit = null; 
-
+        item.dirtybit = true;
         imap.push(item);
     }catch(err){
         console.error(err);
     }
 }
-
 
 // delete an item from the IMAP after it has been deleted the IMAP
 // the model will delete it from the database model.tdg.delete()

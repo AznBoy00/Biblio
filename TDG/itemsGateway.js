@@ -1,4 +1,5 @@
 // DB Connection
+// once the UOW is implemented the DB connection should no longer reside in here
 const pool = require('../db');
 
 // getCatalog Module
@@ -119,14 +120,15 @@ module.exports.updateItem = async function(newItem, item_id, discriminator){
     // console.log(query);
     
     // open the connection as late as possible
-    const client = await pool.connect();
+    // const client = await pool.connect();
     // now query the database with the pre-built string
-    let result = await client.query(query);
+    // let result = await client.query(query);
     // close the connection
-    client.release();
+    // client.release();
 
-    return result;
-}    
+    // return result;
+    return query;
+}
 
 //delete Module
 module.exports.deleteItem = async function(item_id){
