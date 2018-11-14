@@ -76,15 +76,18 @@
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
                 <div class="row">
+                    <h4 class="ml-3">Filters</h4>
+                </div>
+                <div class="row">
                     <div class="col-12">
                         <!-- <span class="h4 align-middle ml-3 mb-0">Filters</span> -->
-                        <a id="#az" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('1');"> A-Z </a>
+                        Order by:  <a id="#az" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2 ml-2" href="#" onclick="getFilterUrl('1');"> A-Z </a>
                         <a id="#za" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('2')"> Z-A </a>
-                        <button id="#books" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 ml-2" onclick="hideOthers('books'); return false;">Book</button>
+                        Type: <button id="#books" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 ml-2" onclick="hideOthers('books'); return false;">Book</button>
                         <button id="#magazines" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('magazines'); return false;">Magazine</button>
                         <button id="#music" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('music'); return false;">Music</button>
                         <button id="#movies" type="button" class="btn btn-sm  btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('movies'); return false;">Movie</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger my-md-2 my-1 mr-2" onclick="window.location.replace('/catalog');">Clear Filters</button>
+                        <button type="button" class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2" onclick="window.location.replace('/catalog');">Clear Filters</button>
                     </div>
                 </div>
 
