@@ -189,6 +189,8 @@ module.exports.getItemFromForm = async function(req) {
             "type": req.body.type,
             "label": req.body.label,
             "asin": req.body.asin,
+            //common attribute
+            "quantity": req.body.quantity
         }
         return await newItem;
     } catch (err) {

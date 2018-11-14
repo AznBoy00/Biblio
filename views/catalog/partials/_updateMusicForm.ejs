@@ -19,8 +19,13 @@
 </div>
 
 <div class="form-group">
+    <label>Quantity <small class="text-muted">(number of albums in stock)</small></label>
+    <input type="number" class="form-control form-control-sm" name="quantity" value="<%= results.results[0].quantity %>">
+</div>
+
+<div class="form-group">
     <label>Release Date <small class="text-muted">(yyyy-mm-dd)</small></label>
-    <% releasedate = results.results[0].release_date %>
+    <% let releasedate = results.results[0].release_date %>
     <% day = releasedate.getDate().toString().length < 2 ? '0' + releasedate.getDate() : releasedate.getDate() %>
     <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
     <% year = releasedate.getFullYear() %>

@@ -117,7 +117,7 @@ module.exports.updateItem = async function(newItem, item_id, discriminator){
     query = query.slice(0, -2); //remove the last comma
     query = query + " WHERE item_id = " + item_id + ";";
     // console.log(query);
-    
+
     // open the connection as late as possible
     const client = await pool.connect();
     // now query the database with the pre-built string

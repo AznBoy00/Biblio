@@ -34,7 +34,7 @@
                         <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
                     <% } %>
 
-                    <!-- Loop over item attributes and siplay them-->
+                    <!-- Loop over item attributes and display them-->
                     <% for (let i in results.results[0]){ %>
                         <div class="row mb-2">
                             <div class="col-3">
@@ -43,16 +43,17 @@
                             </div>
                             <div class="col-9">
                                 <!-- the attribute value -->
+                                <!-- Converting the string to a date format in order to make it work-->
                                 <% if (i == "release_date"){ %>
-                                    <% releasedate = results.results[0][i] %>
-                                    <% releasedate = new Date(releasedate) %>
-                                    <% day = releasedate.getDate().toString().length < 2 ? '0' + releasedate.getDate() : releasedate.getDate() %>
-                                    <% month = (releasedate.getMonth()+1).toString().length < 2 ? '0' + (releasedate.getMonth()+1) : releasedate.getMonth()+1 %>
-                                    <% year = releasedate.getFullYear() %>
-                                    <% newdate = year+"-"+month+"-"+day %>
+                                    <% let datestring = results.results[0][i] %>
+                                    <% let release = new Date(datestring) %>
+                                    <% let day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                    <% let month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                    <% let year = release.getFullYear() %>
+                                    <% let newdate = year+"-"+month+"-"+day %>
                                     <span><%= newdate %></span>
                                 <% } else{ %>
-                                <span><%= results.results[0][i] %></span>
+                                    <span><%= results.results[0][i] %></span>
                                 <% } %>
                             </div>
                         </div>
@@ -71,10 +72,6 @@
                                 </button>
                                 <% if (typeof is_logged !== 'undefined' && is_logged){ %>
                                     <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                                        <button class="form-group btn btn-sm btn-outline-secondary mr-1 mt-2" 
-                                                type="submit" disabled>
-                                            Duplicate This Item
-                                        </button>
                                         
                                         <!--  update an item -->
                                         <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
