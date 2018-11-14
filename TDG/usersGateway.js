@@ -43,10 +43,23 @@ module.exports.getAllUsers = async function(){
 //display active users
 module.exports.getActiveUsers = async function(){
     const client = await pool.connect()
-    const result = await client.query('SELECT DISTINCT usename * FROM pg_stat_activity ORDER BY user_id ASC');
+    const result = await client.query('SELECT  * FROM users WHERE Users.is_active = 1 ORDER BY user_id ASC');
     const results = { 'results': (result) ? result.rows : null};
     client.release();
     return results;
+}
+
+
+// Set user to active
+module.exports.changeUserStatus = async function(userid, is_active){
+    let result;
+    var toggle;
+    const client = await pool.connect();
+    if (is_active == false)
+        toggle = 't';
+    else
+        toggle = 'f';
+    result = await client.query("UPDATE users SET is_active = '" + toggle + "' WHERE user_id = ($1)", [userid]);
 }
 
 //toggleAdminStatus Model
