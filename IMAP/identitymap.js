@@ -1,182 +1,7 @@
-// let imap = require('../IMAP/identitymap');
-// -------IMAP
 //Initialize map as empty.
 var imap=[];
 var fullCatalogLoaded = false;
-// -------IMAP
 
-// Mapper -> IMAP -> UoW -> Mapper -> TDG -> DB?
-// Mapper -> UoW
-//        -> IMAP
-//        -> TDG
-// 
-
-//When will we be using IMAP?
-//
-
-//Purpose is limit DB call to minimum by grouping all changes done in a transaction
-//When will we be using UoW?
-//
-
-// order of operations
-// UDPATE
-//  -> IMAP
-//  -> register dirty (item)
-//  -> register dirty (item)
-    //  -> commit(items) -> TDG
-    //    -> for (items in imap)
-    //          if(imap.results.dirtbity == true)
-    //              tdg.update(item)
-                //(new)
-                //(deleted)
-    
-    
-
-
-    // UoW = [], -> [0] = new, [1] = dirty, ...a    
-// open connection
-// For each UOW array
-//     TDG.update, TDG.delete, TDG.update
-// close connection
-//  -> register clean (imap.item)
-
-
-
-// Models
-    // let reulsts = uow.commit()
-    // connect()
-        // For each UOW array
-        // TDG.update, TDG.delete, TDG.update
-    // 
-
-
-
-// CREATE
-//  -> register new in UoW
-//  -> Mapper calls commit, UoW returns objects inside registerNew
-//      -> TDG 
-
-// READ
-// -> IMAP
-// -> register clean (item)
-
-
-// DELETE
-// -> register deleted 
-// -> commit -> TDG 
-//    ->IMAP
-    
-let uowitems = [];
-
-module.exports.registerNew = async function(item){
-    try{
-        item.results.createbit = true;
-        uowitems.push(item);
-    }catch(err){
-        console.error(err);
-    }
-}
-
-// module.exports.printAllUoWItems = async function(items){
-//     try{
-//         return uowitems;
-//     }catch(err){
-//         console.error(err);
-//     } 
-// }
-
-module.exports.registerDirty = async function(item){
-    try{
-        item.results.dirtybit = true;
-        uowitems.push(item);
-    }catch(err){
-        console.error(err);
-    }
-}
-
-module.exports.registerClean = async function(item){
-    try{
-        item.results.cleanbit = true;
-        uowitems.push(item);
-    }catch(err){
-        console.error(err);
-    }
-}
-
-module.exports.registerDeleted = async function(item){
-    try{
-        item.results.deletebit = true;
-        uowitems.push(item);
-    }catch(err){
-        console.error(err);
-    }    
-}
-
-module.exports.commit = async function(){
-    try{
-        return uowitems;
-    }catch(err){
-        console.error(err);
-    }    
-}
-
-module.exports.rollback = async function(){
-    try{
-        uowitems = [];
-    }catch(err){
-        console.error(err);
-    }    
-}
-
-// module.exports.getNew = async function(item){
-//     try{
-//         return item.results.newbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getDirty = async function(item){
-//     try{
-//        return  item.results.dirytbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getClean = async function(item){
-//     try{
-//         return item.results.clenbit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-// module.exports.getDeleted = async function(item){
-//     try{
-//         return item.results.deletebit;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// -------IMAP
 // Authors: Kevin Yau and Kevin Camellini 
 // Date: November 8, 2018
 // Description:
@@ -311,7 +136,6 @@ module.exports.addItemToMap = async function(item){
     }
 }
 
-
 // delete an item from the IMAP after it has been deleted the IMAP
 // the model will delete it from the database model.tdg.delete()
 module.exports.deleteItemFromMap = async function(item_id){
@@ -323,7 +147,7 @@ module.exports.deleteItemFromMap = async function(item_id){
                 imap.splice(i, 1);
             }
         }
-        this.showAllMap(); //show the IMAP after an item has been deleted
+        // this.showAllMap(); //show the IMAP after an item has been deleted
     }catch(err){
         console.error(err);
     }
@@ -341,4 +165,3 @@ module.exports.showAllMap = async function(){
         console.error(err);
     }
 }
-// -------IMAP

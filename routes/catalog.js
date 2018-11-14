@@ -104,10 +104,12 @@ router.get('/create/:discriminator', function (req, res) {
 // ====================================== //
 router.post('/create/:discriminator', async (req, res) => {
     try {
-        let results = await catalog.insertNewItem(req, req.params.discriminator);
-        let item_id = results.item_id.rows[0].currval;
-        let discriminator = req.params.discriminator;
-        res.redirect('/catalog/view/'+discriminator+'/'+item_id);
+        await catalog.insertNewItem(req, req.params.discriminator);
+        // let results = await catalog.insertNewItem(req, req.params.discriminator);
+        // let item_id = results.item_id.rows[0].currval;
+        // let discriminator = req.params.discriminator;
+        // res.redirect('/catalog/view/'+discriminator+'/'+item_id);
+        res.redirect('/catalog');
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });

@@ -53,7 +53,7 @@ module.exports.getSearchResults = async function(search) {
 
 
 // insertNewItem Module
-module.exports.insertNewItem = async function(newItem,req, discriminator){
+module.exports.insertNewItem = async function(newItem, discriminator){
 
     // build the query string in the format: 
     // insert into the Item table first, in order to get the item_id later
@@ -65,7 +65,7 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
             query = query + i + ", ";
         }
     }
-        //remove the last comma
+    //remove the last comma
     query = query.slice(0, -2);
     query = query + ") SELECT select_id, "
     // iterate over attribute values
@@ -79,14 +79,9 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
     query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
     
     let result = [];
-    // open the connection as late as possible
-    const client = await pool.connect();
-    // now query the database with the pre-built string
-    result.insert1 = await client.query(itemQuery);
-    result.insert2 = await client.query(query);
-    result.item_id = await client.query('SELECT CURRVAL(\'items_item_id_seq\')');
-    client.release();        
-    
+      
+    result.itemQuery = itemQuery
+    result.discriminatorQuery = query;
     return result;
 }
 
@@ -112,31 +107,17 @@ module.exports.updateItem = async function(newItem, item_id, discriminator){
         if(newItem[i] != null){
             // set attribute name = attribute value
             query = query + i + " = \'" + newItem[i] + "\', ";
-            // console.log(i+": "+newItem[i]);
         }
     }
     query = query.slice(0, -2); //remove the last comma
     query = query + " WHERE item_id = " + item_id + ";";
-    // console.log(query);
-    
-    // open the connection as late as possible
-    // const client = await pool.connect();
-    // now query the database with the pre-built string
-    // let result = await client.query(query);
-    // close the connection
-    // client.release();
-
-    // return result;
     return query;
 }
 
 //delete Module
 module.exports.deleteItem = async function(item_id){
     let query = "DELETE FROM Items WHERE item_id = " + item_id + ";"
-    
-    const client = await pool.connect();
-    let result = await client.query(query);
-    client.release();
+    return query;
 }
 
 module.exports.getAllTransactions = async function(){

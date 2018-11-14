@@ -1,14 +1,11 @@
+// Table Data Gateway
 var tdg = require('../TDG/itemsGateway');
-var imap = require('../IMAP/identitymap');
+// Identity Mapper
+ var imap = require('../IMAP/identitymap');
+// Unit of Work
+var uow = require('../uow/uow');
+// Database Connection
 const pool = require('../db');
-//var uow = require('../uow/uow');
-
-
-// var item = require('../models/item');
-//list to be filled with item objects from item.js in models
-// var itemsList = [];
-//below is an example of using the constructor of the object
-// itemsList = item.constructor(item_id, discriminator, properties (as an object));
 
 // ======================================== //
 // = GET LIST OF ALL ITEMS IN THE CATALOG = //
@@ -18,6 +15,7 @@ module.exports.getCatalog = async function() {
     try {        
         let foundCatalog = await imap.findFullCatalog();
         let result;
+        // if full catalog found in imap
         if (foundCatalog){
             console.log("----------------------------------------------");
             console.log("Catalog has already been loaded into the IMAP:");
@@ -25,6 +23,7 @@ module.exports.getCatalog = async function() {
             console.log("Loading "+result.items.length+" items from the IMAP");
             console.log("----------------------------------------------");
             // console.log(result);
+        // else get full catalog from imap
         } else{
             console.log("----------------------------------------------");
             console.log("Catalog was not found in the IMAP:");
@@ -34,13 +33,7 @@ module.exports.getCatalog = async function() {
             // console.log(result);
             await imap.loadFullCatalog(result);
         }
-        
-        // if full catalog not found in imap, get from tdg
-        //if (!foundCatalog)
         return await result;
-
-        // else get full catalog from imap
-
     } catch (err) {
         console.error(err);
         // res.render('error', { error: err });
@@ -73,8 +66,18 @@ module.exports.getCatalogAlphaOrder = async function(type) {
 module.exports.insertNewItem = async function(req, discriminator) {
     try {
         // get the item fromt he html form
-        let newItem = await this.getItemFromForm(req);
-        return await tdg.insertNewItem(newItem,req, discriminator);
+        
+        let temp = await this.getItemFromForm(req);
+        temp.discriminator = discriminator;
+        let shit = []
+        shit[0] = temp;
+
+        let newItem = {"results": shit};
+        
+        // console.log(newItem.results);
+        await uow.registerNew(newItem);
+        await this.commitToDb();                            
+        // return await tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
         console.error(err);
     }
@@ -95,14 +98,14 @@ module.exports.getItemById = async function(item_id, discriminator) {
             console.log("-------------------------------------");
             console.log("Found Item In IMAP: loading from IMAP");
             item = await imap.get(item_id);
-            await imap.registerClean(item);
+            await uow.registerClean(item);
             console.log(item.results);
             console.log("-------------------------------------");
             // If item found in IMAP, get from IMAP
         }else{
             let getFromTDG = await tdg.getItemByID(item_id, discriminator);
             await imap.addItemToMap(getFromTDG);
-            await imap.registerClean(getFromTDG); // <<<<<<<<<<<<
+            await uow.registerClean(getFromTDG);
             console.log("---------------------------------------");
             console.log("Item not found in IMAP: Loading from DB");
             item = await imap.get(item_id);
@@ -121,15 +124,12 @@ module.exports.getItemById = async function(item_id, discriminator) {
 // ====================================== //
 module.exports.updateItem = async function(req, item_id, discriminator) {
     try {
-        // get the item fromt he html form
+        // get the item from the html form
         let updatedItem = await this.getItemFromForm(req);
-        // updatedItem.discriminator = discriminator;
-        // updatedItem.item_id = item_id;
-        // console.log(updatedItem);
         console.log("UPDATED: " + updatedItem.title);
         await imap.updateItem(updatedItem, item_id); // Update item on Imap.
         let item = await imap.get(item_id);
-        await imap.registerDirty(item); // <<<<<<DIRTY THE ITEM
+        await uow.registerDirty(item); // <<<<<< DIRTY THE ITEM
         this.commitToDb();
         // return tdg.updateItem(updatedItem, item_id, discriminator); // Update the item in the DB
     } catch (err) {
@@ -152,15 +152,18 @@ module.exports.getSearchResults = async function(searched) {
 }
 
 // ====================================== //
-// ===== Delet an Item from the DB ====== //
+// ===== Delete an Item from the DB ====== //
 // ====================================== //
 // DELETE an ITEM from the database which
 // cascades down to delete the corresponding
 // book, magazine, movie or music
 module.exports.deleteItem = async function (item_id){
     try {
+        let item = await imap.get(item_id);
         await imap.deleteItemFromMap(item_id); // Delete item from Imap.
-        await tdg.deleteItem(item_id);
+        await uow.registerDeleted(item);
+        this.commitToDb();
+        // await tdg.deleteItem(item_id);
     } catch (err) {
         console.error(err);
     }        
@@ -219,38 +222,48 @@ module.exports.getTransactionItems = async function() {
     }
 }
 
-// n, d, c, 
-module.exports.commitToDb = async function(){
+// ===============================================//
+// ===          UoW CRUD FUNCTIONS             == //
+// ============================================== //
+module.exports.commitToDb = async function(){ 
     try{
-        let uow = await imap.commit();
+        let uowArray = await uow.commit();
+        
+        // Limit the number of open connections to only 1, for all CRUD operations!
         const client = await pool.connect();
-
-        for (i in uow){
-            // if(uow[i].results.cleanbit == true){
-            //     let item_id = uow[i].results[0].item_id;           
-            //     tdg.getItemByID(item_id);
-            // }
-            if(uow[i].results.dirtybit == true){
-                console.log("STUFF TO COMMIT: " + uow[i].results[0]);
-                let updateItem = uow[i].results[0];
-                let item_id = uow[i].results[0].item_id; 
-                let discriminator = uow[i].results[0].discriminator;
+        for (i in uowArray){
+            if(uowArray[i].results.cleanbit == true){ // READ useless?
+                //console.log("Found clean bit, do nothing as item has only been read.");
+                //If we decide to implement something in for the Clean bit, remember to set back to false when registering dirty, new, delete
+                //Now when we registerDirty, clean remains TRUE.
+            }
+            if(uowArray[i].results.dirtybit == true){ // UPDATE for items registeredDirty in the UoW
+                let updateItem = uowArray[i].results[0];
+                let item_id = uowArray[i].results[0].item_id; 
+                let discriminator = uowArray[i].results[0].discriminator;
                 let query = await tdg.updateItem(updateItem, item_id, discriminator); 
                 client.query(query);
             }
-            // else if(uow[i].results.newbit == true){
-            //     let newItem = uow[i].results[0];
-                                
-            //     tdg.insertNewItem(newItem, req, discriminator);
-            // }
-            // else if(uowp[i].results.deletebit == true){
-            //     let item_id = uow[i].results[0].item_id;
-            //     tdg.deleteItem(item_id);
-            // }
+            if(uowArray[i].results.newbit == true){ // CREATE for items registeredNew in the UoW
+                let newItem = uowArray[i].results[0];
+                let discriminator = uowArray[i].results[0].discriminator;                                
+                let result = await tdg.insertNewItem(newItem, discriminator);
+                client.query(result.itemQuery);
+                client.query(result.discriminatorQuery);
+            }
+            if(uowArray[i].results.deletebit == true){ // DELETE for items registeredDeleted in the UoW
+                let item_id = uowArray[i].results[0].item_id;
+                let result = await tdg.deleteItem(item_id);
+                console.log("Item deleted: " +  uowArray[i].results[0])
+                client.query(result);
+            }
             else
                 console.log("All your base are belong to us");
+
         }
         client.release();
+
+        await uow.rollback(); // clear the UoW after completing CRUD operations
     }catch(err){
         console.error(err);
 
