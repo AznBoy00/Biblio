@@ -36,7 +36,7 @@ router.get('/add/:item_id', async (req, res) => {
         cart.addItemToCart(req);
         // console.log("ITEM_ID: " + req.params.item_id);
       }
-      res.redirect('/cart');
+      res.redirect('back');
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
