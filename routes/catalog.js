@@ -26,6 +26,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/transactions', async (req, res) => {
+    try {
+        let list = await catalog.getTransactionItems();
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
+
 // ============================================== //
 // ======== Get filtered catalog page ========== //
 // ============================================ //
