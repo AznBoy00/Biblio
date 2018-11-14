@@ -74,7 +74,7 @@
         </div>
 
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1">
                 <div class="row">
                     <div class="col-12">
                         <!-- <span class="h4 align-middle ml-3 mb-0">Filters</span> -->
@@ -101,7 +101,6 @@
                                <% } %>
                             </tr>
                         </thead>
-
                         <tbody>
                             <!-- Iterate over items -->
                                 <% for(var j in list['items']) { %>
@@ -122,9 +121,9 @@
                                         <% } else if (list['items'][j].discriminator == "Music"){%>
                                             <td><%= list['items'][j].artist %></td>
                                         <% } %>
-                                        <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
+                                        <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin && !JSON.stringify(cart).includes(list['items'][j].item_id)){ %>
                                             <td>
-                                                <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
+                                                <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
                                                     href="/cart/add/<%= list['items'][j].item_id %>">
                                                     Add to cart
                                                 </a>
