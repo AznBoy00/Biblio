@@ -33,36 +33,22 @@ router.get('/admincp/manageusers', async (req, res) => {
 });
 
 
-//view active users
-router.get('/admincp/viewactiveusers', async (req, res) =>{
-    //check if user is admin (to be able to view the table)
-    if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin) {
-        //check for current sessions aka logged in users
-        if (typeof req.session !== 'undefined' && typeof req.session.logged !== 'undefined' && req.session && req.session.user) {
-            //display users that are active only
-            try {
-                let results = await user.displayActiveUsers();
-                res.render('users/viewactiveusers', {
-                    results,
-                    title: 'Admin CP',
-                    is_logged: req.session.logged,
-                    is_admin: req.session.is_admin
-                });
-            } catch (err) {
-                console.error(err);
-                res.send("error" + err);
-            }
+// view active users
+router.get('/admincp/viewactiveusers', async (req, res) => {
+    if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
+        try {
+            let results = await user.displayActiveUsers();
+            res.render('users/viewactiveusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin} );
+        } catch (err) {
+            console.error(err);
+            res.send("error" + err);
         }
-        else {
-            res.render('index', {
-                title: 'Home',
-                is_logged: req.session.logged,
-                is_admin: req.session.is_admin,
-                errors: [{msg: "You are not an admin!"}]
-            });
-        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
     }
 });
+
+
 
 
 // promote users to admin page
