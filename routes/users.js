@@ -22,7 +22,7 @@ router.get('/admincp/manageusers', async (req, res) => {
     if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
         try {
             let results = await user.displayAllUsers();
-            res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin} );
+            res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin, admin_email: req.session.email} );
         } catch (err) {
             console.error(err);
             res.send("error" + err);
