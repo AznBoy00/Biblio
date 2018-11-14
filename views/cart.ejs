@@ -52,8 +52,10 @@
                     </tbody>
                 </table>
             </div>
-            <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>	
-            <a class="form-group btn btn-sm btn-outline-success mr-1 mt-2" style="float:right" href="/cart/checkout">Checkout</a>	
+            <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>
+            <% if(typeof is_admin !== 'undefined' && !is_admin) {%>
+                <a class="form-group btn btn-sm btn-outline-success mr-1 mt-2" style="float:right" href="/cart/checkout">Checkout</a>	
+            <% } %>
             <a class="form-group btn btn-sm btn-outline-danger mr-1 mt-2" style="float:right" href="/cart/clear">Clear Cart</a>	
         </div>
     </div>

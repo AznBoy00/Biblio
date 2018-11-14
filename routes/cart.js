@@ -19,7 +19,7 @@ var catalog = require('../models/catalog');
 router.get('/', async (req, res) => {
     try {
       let list = await catalog.getCartCatalog(req);
-      res.render('cart', { title: 'Cart', is_logged: req.session.logged, list: await list, filter: false});
+      res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false});
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
@@ -31,9 +31,11 @@ router.get('/', async (req, res) => {
 // ====================================== //
 router.get('/add/:item_id', async (req, res) => {
     try {
-      // Add Item to cart
-      cart.addItemToCart(req);
-      // console.log("ITEM_ID: " + req.params.item_id);
+      if (!req.session.is_admin) {
+        // Add Item to cart
+        cart.addItemToCart(req);
+        // console.log("ITEM_ID: " + req.params.item_id);
+      }
       res.redirect('/cart');
     } catch (err) {
       console.error(err);
@@ -61,7 +63,8 @@ router.get('/remove/:i', async (req, res) => {
 // ====================================== //
 router.get('/checkout', async (req, res) => {
   try {
-    
+    if (!req.session.is_admin) {
+    }
     res.redirect('/cart');
   } catch (err) {
     console.error(err);

@@ -96,7 +96,7 @@
                                 <th>Type</th>
                                 <th>Title</th>
                                 <th>By</th>
-                                <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                                <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                     <th>Add</th>
                                <% } %>
                             </tr>
@@ -122,7 +122,7 @@
                                         <% } else if (list['items'][j].discriminator == "Music"){%>
                                             <td><%= list['items'][j].artist %></td>
                                         <% } %>
-                                        <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                                        <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                             <td>
                                                 <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
                                                     href="/cart/add/<%= list['items'][j].item_id %>">
