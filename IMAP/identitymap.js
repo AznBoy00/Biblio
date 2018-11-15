@@ -156,3 +156,14 @@ module.exports.showAllMap = async function(){
         console.error(err);
     }
 }
+
+//reset the imap array to empty, and the check fullCatalogLoaded to false.
+//this allows the imap to start fresh with new login/logout
+module.exports.resetImap = async function(){
+    try{
+        imap = [];
+        fullCatalogLoaded = false;
+    }catch(err){
+        console.error(err);
+    }
+}
