@@ -66,6 +66,9 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-12">
                         <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                            <% if (typeof is_admin !== 'undefined' && !is_admin){ %>
+
+                            <% } %>
                             <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                                 <a class="footer-links" href="/catalog/create">Insert New item</a>
                                 <br/>

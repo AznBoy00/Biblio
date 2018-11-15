@@ -17,12 +17,16 @@ var catalog = require('../models/catalog');
 // == Get shopping cart page === //
 // ====================================== //
 router.get('/', async (req, res) => {
-    try {
-      let list = await catalog.getCartCatalog(req);
-      res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
-    } catch (err) {
-      console.error(err);
-      res.render('error', { error: err });
+    if (!currentUserIsAdmin(req)){
+      try {
+        let list = await cart.getCartCatalog(req);
+        res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
+      } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+      }
+    } else {
+      res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "Admins can not loan items"}]});
     }
 });
 
@@ -87,3 +91,7 @@ router.get('/clear', async (req, res) => {
 
 //keep the next line at the end of this script
 module.exports = router;
+
+let currentUserIsAdmin = function (req){
+  return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
+};

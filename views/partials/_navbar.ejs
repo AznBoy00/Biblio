@@ -45,7 +45,7 @@
                 </li>
             <% } %>
             
-            <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+            <% if (typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin){ %>
                 <li class="nav-item">
                     <a class="btn btn-sm btn-outline-success my-md-2 my-1" href="/cart">Cart</a>
                 </li>
