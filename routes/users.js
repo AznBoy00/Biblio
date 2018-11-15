@@ -41,8 +41,8 @@ router.get('/admincp/viewactiveusers', async (req, res) => {
     if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
         try {
             let results = await user.displayActiveUsers();
-            res.render('users/viewactiveusers', {results, title: 'Admin CP', is_logged: req.session.logged,
-                is_admin: req.session.is_admin, is_active: req.session.is_active} );
+            console.log('Active users: ' + results.results);
+            res.render('users/viewactiveusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin, admin_email: req.session.email, is_active: req.session.is_active} );
         } catch (err) {
             console.error(err);
             res.send("error" + err);
@@ -52,8 +52,6 @@ router.get('/admincp/viewactiveusers', async (req, res) => {
             is_active: req.session.is_active, errors: [{msg: "You are not an admin!"}]});
     }
 });
-
-
 
 // promote users to admin page
 router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
@@ -158,8 +156,9 @@ router.post('/login', async function (req, res) {
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
                 req.session.cart = [];
-                req.session.is_active = user.toggleUserStatus(req.params.email, false);
-                console.log("LOGGING IN: "+ req.params.email);
+                req.session.is_active = true;
+                await user.setUserStatusActive(email);
+                console.log("LOGGING IN: "+ email);
                 console.log(req.session);
 
                 res.redirect('/');
@@ -173,12 +172,20 @@ router.post('/login', async function (req, res) {
     }
 });
 
-router.get("/logout", function(req, res){
-    req.session.is_active = user.toggleUserStatus(req.params.email, true);
-    console.log("LOGGING OUT: "+ req.params.email);
-    req.session.destroy();
-    catalog.flushImap();//reset imap on logout
-    res.redirect('/');
+router.post('/logout', async function (req, res) {
+// router.get("/logout", function(req, res){
+    try {
+        req.session.is_active = false;
+        //req.session.is_active = user.toggleUserStatus(req.params.email, true);
+        await user.setUserStatusInactive(req.session.email);
+        // console.log("LOGGING OUT: "+ req.params.email);
+        req.session.destroy();
+        catalog.flushImap();//reset imap on logout
+        res.redirect('/');
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
 });
 
 // get request for updating user profile information

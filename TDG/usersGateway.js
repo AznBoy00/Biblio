@@ -42,24 +42,32 @@ module.exports.getAllUsers = async function(){
 
 //display active users
 module.exports.getActiveUsers = async function(){
+    let query = "SELECT * FROM Users WHERE is_active = TRUE";
+
     const client = await pool.connect()
-    const result = await client.query("SELECT * FROM users WHERE Users.is_active = 'true'");
-    const results = { 'results': (result) ? result.rows : null};
+    const result = await client.query(query);
     client.release();
+
+    const results = { 'results': (result) ? result.rows : null};
     return results;
 }
 
 
 // Set user to active
-module.exports.changeUserStatus = async function(email, is_active){
-    let result;
-    var toggle;
+module.exports.setUserStatusActive = async function(email){
     const client = await pool.connect();
-    if (is_active == false)
-        toggle = 't';
-    else
-        toggle = 'f';
-    result = await client.query("UPDATE users SET is_active = '" + toggle + "' WHERE email = ($1)", [email]);
+    // await client.query("UPDATE users SET is_active = '" + toggle + "' WHERE email = ($1)", [email]);
+    let query = "UPDATE Users SET is_active = 't' WHERE email = '" + email+"'";
+    await client.query(query);
+    client.release();
+}
+
+module.exports.setUserStatusInactive = async function(email) {
+    const client = await pool.connect();
+    // await client.query("UPDATE users SET is_active = '" + toggle + "' WHERE email = ($1)", [email]);
+    let query = "UPDATE Users SET is_active = 'f' WHERE email = '" + email+"'";
+    await client.query(query);
+    client.release();
 }
 
 //toggleAdminStatus Model
@@ -72,6 +80,7 @@ module.exports.changeAdminStatus = async function(userid, is_admin){
     else
         toggle = 'f';
     result = await client.query("UPDATE users SET is_admin = '" + toggle + "' WHERE user_id = ($1)", [userid]);
+    client.release();
 }
 
 //getUserInfo Model
