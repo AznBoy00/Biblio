@@ -21,13 +21,15 @@ module.exports.getCatalog = async function(){
 }
 
 //filter Module
-module.exports.getCatalogAlphaOrder = async function(type){
+module.exports.getFilteredCatalog = async function(type){
     const client = await pool.connect();
-    const resultBook = await client.query('SELECT item_id, discriminator, title, author, release_date, quantity FROM books ' +
-        'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity FROM magazines ' +
-        'UNION SELECT item_id, discriminator, title, director, release_date, quantity FROM movies ' +
-        'UNION SELECT item_id, discriminator, title, artist, release_date, quantity FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
+    console.log(getFilterType(type));
+    const resultBook = await client.query('SELECT * FROM (SELECT item_id, discriminator, title, author, release_date, quantity, loanable FROM books ' +
+        'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity, loanable FROM magazines ' +
+        'UNION SELECT item_id, discriminator, title, director, release_date, quantity, loanable FROM movies ' +
+        'UNION SELECT item_id, discriminator, title, artist, release_date, quantity, loanable FROM music )'+ getFilterType(type));
     client.release();
+    console.log( await resultBook);
 
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : [];
@@ -128,4 +130,17 @@ module.exports.getAllTransactions = async function(){
     let result = [];
     result.items = (resultTransaction != null) ? resultTransaction.rows : null;
     return result;
+}
+
+let getFilterType = function (type) {
+    if(type === '1')
+        return 'AS U ORDER BY title ASC';
+    else if(type === '2')
+        return 'AS U ORDER BY title DESC';
+    else if(type === '3')
+        return 'AS U ORDER BY release_date DESC';
+    else if(type === '4')
+        return 'AS U ORDER BY release_date ASC';
+    else if(type === '5')
+        return "AS U WHERE loanable = 't' ORDER BY item_id ASC";
 }
