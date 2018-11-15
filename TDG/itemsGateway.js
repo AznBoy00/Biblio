@@ -1,4 +1,5 @@
 // DB Connection
+// once the UOW is implemented the DB connection should no longer reside in here
 const pool = require('../db');
 
 // getCatalog Module
@@ -22,10 +23,10 @@ module.exports.getCatalog = async function(){
 //filter Module
 module.exports.getCatalogAlphaOrder = async function(type){
     const client = await pool.connect();
-    const resultBook = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
-        'UNION SELECT item_id, discriminator, title, publisher FROM magazines ' +
-        'UNION SELECT item_id, discriminator, title, director FROM movies ' +
-        'UNION SELECT item_id, discriminator, title, artist FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
+    const resultBook = await client.query('SELECT item_id, discriminator, title, author, release_date, quantity FROM books ' +
+        'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity FROM magazines ' +
+        'UNION SELECT item_id, discriminator, title, director, release_date, quantity FROM movies ' +
+        'UNION SELECT item_id, discriminator, title, artist, release_date, quantity FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
     client.release();
 
     let result = [];
@@ -52,7 +53,7 @@ module.exports.getSearchResults = async function(search) {
 
 
 // insertNewItem Module
-module.exports.insertNewItem = async function(newItem,req, discriminator){
+module.exports.insertNewItem = async function(newItem, discriminator){
 
     // build the query string in the format: 
     // insert into the Item table first, in order to get the item_id later
@@ -64,7 +65,7 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
             query = query + i + ", ";
         }
     }
-        //remove the last comma
+    //remove the last comma
     query = query.slice(0, -2);
     query = query + ") SELECT select_id, "
     // iterate over attribute values
@@ -78,14 +79,9 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
     query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
     
     let result = [];
-    // open the connection as late as possible
-    const client = await pool.connect();
-    // now query the database with the pre-built string
-    result.insert1 = await client.query(itemQuery);
-    result.insert2 = await client.query(query);
-    result.item_id = await client.query('SELECT CURRVAL(\'items_item_id_seq\')');
-    client.release();        
-    
+      
+    result.itemQuery = itemQuery
+    result.discriminatorQuery = query;
     return result;
 }
 
@@ -111,29 +107,25 @@ module.exports.updateItem = async function(newItem, item_id, discriminator){
         if(newItem[i] != null){
             // set attribute name = attribute value
             query = query + i + " = \'" + newItem[i] + "\', ";
-            // console.log(i+": "+newItem[i]);
         }
     }
     query = query.slice(0, -2); //remove the last comma
     query = query + " WHERE item_id = " + item_id + ";";
-    // console.log(query);
-    
-    // open the connection as late as possible
-    const client = await pool.connect();
-    // now query the database with the pre-built string
-    let result = await client.query(query);
-    // close the connection
-    client.release();
-
-    return result;
-}    
+    return query;
+}
 
 //delete Module
 module.exports.deleteItem = async function(item_id){
     let query = "DELETE FROM Items WHERE item_id = " + item_id + ";"
-    
-    const client = await pool.connect();
-    let result = await client.query(query);
-    client.release();
+    return query;
 }
 
+module.exports.getAllTransactions = async function(){
+    const client = await pool.connect();
+    const resultTransaction = await client.query('SELECT * FROM transactions ORDER BY transaction_id ASC');
+    client.release();
+
+    let result = [];
+    result.items = (resultTransaction != null) ? resultTransaction.rows : null;
+    return result;
+}

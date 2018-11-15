@@ -1,3 +1,7 @@
+//Initialize map as empty.
+var imap=[];
+var fullCatalogLoaded = false;
+
 // Authors: Kevin Yau and Kevin Camellini 
 // Date: November 8, 2018
 // Description:
@@ -8,18 +12,14 @@
 // if it is not found, it will call and ask the database for that object, once
 // retrieved it will store that newly retrieved object in the IMAP object.
 
-//Initialize map as empty.
-var imap=[];
-// var fullCatalog = false;
-
 //Check if full catalog has been loaded once.
-// module.exports.checkFullCatalog = async function(){
-//     try{
-//         return fullCatalog;
-//     }catch(err){
-//         console.error(err);
-//     }
-// }
+module.exports.findFullCatalog = async function(){
+    try{
+        return fullCatalogLoaded;
+    }catch(err){
+        console.error(err);
+    }
+}
 
 // This method checks to see if an item already exists in the IMAP
 // If it exists it returns TRUE
@@ -41,15 +41,53 @@ module.exports.find = async function(item_id){
 
 // load the full catalog into the imap 
 // reset the catalog to empty first since we are going to load it all into it
-// TODO do a check in the TDG to check if the catalog exists in IMAP already
 module.exports.loadFullCatalog = async function(catalog){
     try{
         imap = [];
         for (var i in catalog['items']){//catalog[book], catalog[magazine]...
             let results = {'results': [catalog['items'][i]]};
+            results.results.dirtybit = null; //Access through item.results.dirtybit
+            results.results.cleanbit = null;
+            results.results.newbit = null;
+            results.results.deletebit = null; 
             this.addItemToMap(results);
         }
-        this.showAllMap();
+        fullCatalogLoaded = true;
+        // this.showAllMap();
+    }catch(err){
+        console.error(err);
+    }
+}
+
+module.exports.getFullCatalog = async function(){
+    try{    
+        // console.log(imap[0].results[0]);
+        let temp = [];
+        for(var i = 0; i < imap.length; i++){
+            temp[i] = imap[i].results[0];
+        }
+        
+        let result = [];
+        result.items = temp;
+
+        return result;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+var inTransaction = false;
+var transactionMap=[];
+module.exports.loadFullTransactionTable = async function(transactions){
+    try{
+        transactionMap = [];
+        inTransaction = true;
+        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
+            let results = {'results': [transactions['items'][i]]};
+            this.addItemToMap(results);
+        }
+        inTransaction = false;
+        //this.showAllMap();
     }catch(err){
         console.error(err);
     }
@@ -58,7 +96,7 @@ module.exports.loadFullCatalog = async function(catalog){
 // if find returns true, return that item from IMAP instead of making a databse call
 module.exports.get = async function(item_id){ 
     try{
-        this.showAllMap();
+        // this.showAllMap();
         for(i = 0; i < imap.length; i++){
             if((imap[i].results[0].item_id == item_id))
                 return await imap[i];
@@ -91,7 +129,16 @@ module.exports.updateItem = async function(item, item_id){
 // if an item is not found, get query from the databse then store that item into the IMAP
 module.exports.addItemToMap = async function(item){
     try{
-        imap.push(item);
+        item.results.dirtybit = null; //Access through item.results.dirtybit
+        item.results.cleanbit = null;
+        item.results.newbit = null;
+        item.results.deletebit = null; 
+
+        if(inTransaction==false){
+            imap.push(item);
+        }else if(inTransaction==true){
+            transactionMap.push(item);
+        }
     }catch(err){
         console.error(err);
     }
@@ -108,7 +155,7 @@ module.exports.deleteItemFromMap = async function(item_id){
                 imap.splice(i, 1);
             }
         }
-        this.showAllMap(); //show the IMAP after an item has been deleted
+        // this.showAllMap(); //show the IMAP after an item has been deleted
     }catch(err){
         console.error(err);
     }
@@ -122,6 +169,17 @@ module.exports.showAllMap = async function(){
             console.log("Imap["+i+"] \n" + JSON.stringify(imap[i].results[0]));
             console.log("=======================================================");
         }
+    }catch(err){
+        console.error(err);
+    }
+}
+
+//reset the imap array to empty, and the check fullCatalogLoaded to false.
+//this allows the imap to start fresh with new login/logout
+module.exports.resetImap = async function(){
+    try{
+        imap = [];
+        fullCatalogLoaded = false;
     }catch(err){
         console.error(err);
     }

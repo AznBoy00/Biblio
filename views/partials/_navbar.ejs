@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-md navbar-light bg-light mb-3">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light mb-3">
     <a class="navbar-brand" href="/">Biblio</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mynavbar">
         <span class="navbar-toggler-icon"></span>
@@ -6,22 +6,17 @@
 
     <div class="collapse navbar-collapse" id="mynavbar">
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-        
+
             <li <%- title === "Home" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                 <a class="nav-link my-md-2 my-1" href="/">Home</a>
             </li>
-            
+
             <li <%- title === "Catalog" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                 <a class="nav-link my-md-2 my-1" href="/catalog">Catalog</a>
             </li>
             <% if (typeof is_logged !== 'undefined' && is_logged){ %>
-                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                    <li <%- title === "Create Item" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                        <a class="nav-link my-md-2 my-1" href="/catalog/create">Insert New Item</a>
-                    </li>
-                <% } %>
                 <li <%- title === "User CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                    <a class="nav-link my-md-2 my-1" href="/users/usercp">User Profile</a>
+                    <a class="nav-link my-md-2 my-1" href="/users/usercp">My Profile</a>
                 </li>
                 <% if (typeof is_admin !== 'undefined' && is_admin){ %>
                     <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
@@ -38,8 +33,9 @@
 
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <form class="search-form form-inline mb-0" method="POST" action="/catalog/searchitems" onSubmit="return checkblank(this);">
-                <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button> 
+                <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search" aria-label="Search"
+                    value="<% if(typeof search !== 'undefined'){ %><%= search %><% } %>">
+                <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button>
             </form>
             <% if (typeof is_logged === 'undefined' || !is_logged){ %>
                 <li <%- title === "Register" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
@@ -49,12 +45,37 @@
                     <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" href="/users/login">Login</a>
                 </li>
             <% } %>
-
-            <% if (typeof is_logged !== 'undefined' && is_logged){ %>
-            <li class="nav-item">
-                <a class="btn btn-sm btn-outline-danger my-md-2 my-1" href="/users/logout">Logout</a>
-            </li>
+            
+            <% if (typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin){ %>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" href="/cart">
+                        <% if (typeof cart !== 'undefined' && cart != null){ %>
+                            <span class="badge badge-dark">
+                                <%= cart.length %>
+                            </span>
+                        <% } %>
+                        Cart
+                    </a>
+                </li>
             <% } %>
+            <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+
+                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
+                    <li class="nav-item dropdown">
+                        <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2" data-toggle="dropdown" href="#" role="button">Admin Menu</a>
+                        <div class="dropdown-menu bg-light">
+                            <a class="nav-link small text-muted" href="/catalog/create">Insert New Item</a>
+                            <a class="nav-link small text-muted" href="/catalog/transactions">View Transactions</a>
+                            <a class="nav-link small text-muted" href="/users/admincp/manageusers">Manage Users</a>
+                        </div>
+                    </li>
+                <% } %>
+
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-danger my-md-2 my-1" href="/users/logout">Logout</a>
+                </li>
+            <% } %>
+
         </ul>
     </div>
 </nav>
