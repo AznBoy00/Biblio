@@ -82,7 +82,7 @@ router.get('/view/:discriminator/:item_id', async (req, res) => {
 router.post('/searchitems', async (req, res) => {
     try {
         let list = await catalog.getSearchResults(req.body.search);
-        res.render('catalog/catalog', {filter: false, active: "", list: list, title: 'CatalogSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, cart: req.session.cart});
+        res.render('catalog/catalog', {filter: false, active: "", list: list, title: 'CatalogSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, cart: req.session.cart, search: req.body.search});
     } catch (err) {
         console.error("Error Has Occured during search :" + err);
         res.render('error', { error: err });
