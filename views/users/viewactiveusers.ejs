@@ -22,14 +22,10 @@
                 <table class="table table-hover">
                     <thead>
                     <tr class="text-center">
-                        <th scope="col">Promote</th>
-                        <th scope="col">is_admin</th>
                         <th scope="col">user_id</th>
                         <th scope="col">f_name</th>
                         <th scope="col">l_name</th>
                         <th scope="col">email</th>
-                        <th scope="col">address</th>
-                        <th scope="col">num_permitted_items</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,25 +34,12 @@
                         <tr>
                             <!-- USES BOOLEAN -->
                             <% if(results.results[i].user_id == 1) { %>
-                                <td>
 
-                                </td>
-                            <% } else if(results.results[i].is_admin == false) { %>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-primary" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
-                                </td>
-                            <% } else { %>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-danger" href="/users/admincp/manageusers/demote/<%= results.results[i].user_id %>">Demote</a>
-                                </td>
-                            <% } %>
-                            <td style="text-transform: uppercase;"><%= results.results[i].is_admin %></td>
-                            <td><%= results.results[i].user_id %></td>
+                             <td><%= results.results[i].user_id %></td>
                             <td><%= results.results[i].f_name %></td>
                             <td><%= results.results[i].l_name %></td>
                             <td><%= results.results[i].email %></td>
-                            <td><%= results.results[i].address %></td>
-                            <td><%= results.results[i].num_permitted_items %></td>
+                            <% } %>
                         </tr>
                     <% } %>
                     </tbody>

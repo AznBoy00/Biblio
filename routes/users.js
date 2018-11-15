@@ -38,16 +38,17 @@ router.get('/admincp/viewactiveusers', async (req, res) => {
     if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
         try {
             let results = await user.displayActiveUsers();
-            res.render('users/viewactiveusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin} );
+            res.render('users/viewactiveusers', {results, title: 'Admin CP', is_logged: req.session.logged,
+                is_admin: req.session.is_admin, is_active: req.session.is_active} );
         } catch (err) {
             console.error(err);
             res.send("error" + err);
         }
     } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin,
+            is_active: req.session.is_active, errors: [{msg: "You are not an admin!"}]});
     }
 });
-
 
 
 
@@ -143,6 +144,8 @@ router.post('/login', async function (req, res) {
                 req.session.address = userInfo.address;
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
+                req.session.is_active = user.toggleUserStatus(req.params.email, false);
+                console.log("LOGGING IN: "+ req.params.email);
                 res.redirect('/');
             } else {
                 return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
@@ -155,6 +158,8 @@ router.post('/login', async function (req, res) {
 });
 
 router.get("/logout", function(req, res){
+    req.session.is_active = user.toggleUserStatus(req.params.email, true);
+    console.log("LOGGING OUT: "+ req.params.email);
     req.session.destroy();
     res.redirect('/');
 });

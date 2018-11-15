@@ -43,7 +43,7 @@ module.exports.getAllUsers = async function(){
 //display active users
 module.exports.getActiveUsers = async function(){
     const client = await pool.connect()
-    const result = await client.query("SELECT * FROM users WHERE users.is_active = 'true'");
+    const result = await client.query("SELECT * FROM users WHERE Users.is_active = 'true'");
     const results = { 'results': (result) ? result.rows : null};
     client.release();
     return results;
@@ -56,9 +56,9 @@ module.exports.changeUserStatus = async function(email, is_active){
     var toggle;
     const client = await pool.connect();
     if (is_active == false)
-        toggle = 'true';
+        toggle = 't';
     else
-        toggle = 'false';
+        toggle = 'f';
     result = await client.query("UPDATE users SET is_active = '" + toggle + "' WHERE email = ($1)", [email]);
 }
 
