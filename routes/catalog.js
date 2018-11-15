@@ -112,7 +112,7 @@ router.get('/create/:discriminator', function (req, res) {
     if (currentUserIsAdmin(req)){
         try {
             let discriminator = req.params.discriminator;
-            res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+            res.render('catalog/createitem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });
@@ -149,8 +149,8 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
             let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
-            let discriminator = results.results[0].discriminator;
-            res.render('catalog/updateitem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+            let discriminator = req.params.discriminator;
+            res.render('catalog/updateItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });
