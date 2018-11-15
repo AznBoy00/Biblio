@@ -42,7 +42,7 @@ module.exports.getAllUsers = async function(){
 
 //display active users
 module.exports.getActiveUsers = async function(){
-    let query = "SELECT * FROM Users WHERE is_active = TRUE";
+    let query = "SELECT * FROM Users WHERE is_active = 't'";
 
     const client = await pool.connect()
     const result = await client.query(query);
