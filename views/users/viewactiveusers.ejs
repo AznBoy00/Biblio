@@ -9,7 +9,7 @@
 
     <div class="row">
         <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
-            <h2>Manage Users <small>(admin)</small></h2>
+            <h2>Active Users <small>(admin)</small></h2>
         </div>
     </div>
 
@@ -29,17 +29,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% console.log('hi', results)%>
+                    <!--<% console.log('hi', results)%>-->
                     <% for(var i = 0; i < results.results.length; i++) { %>
                         <tr>
-                            <!-- USES BOOLEAN -->
-                            <% if(results.results[i].user_id == 1) { %>
-
                              <td><%= results.results[i].user_id %></td>
                             <td><%= results.results[i].f_name %></td>
                             <td><%= results.results[i].l_name %></td>
                             <td><%= results.results[i].email %></td>
-                            <% } %>
                         </tr>
                     <% } %>
                     </tbody>
