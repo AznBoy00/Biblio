@@ -23,7 +23,8 @@
 
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <form class="search-form form-inline mb-0" method="POST" action="/catalog/searchitems" onSubmit="return checkblank(this);">
-                <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search" aria-label="Search"
+                    value="<% if(typeof search !== 'undefined'){ %><%= search %><% } %>">
                 <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button>
             </form>
             <% if (typeof is_logged === 'undefined' || !is_logged){ %>
