@@ -90,6 +90,7 @@ module.exports.commitCartToDB = async function (req){
 
         // DB Connection
         const client = await pool.connect();
+        console.log("-------------------------------------------------");
         for(i in cart){
             for(j in uowArray){
                 // if the dirty bit is set to true AND same item_id exist in cart, 
@@ -103,6 +104,7 @@ module.exports.commitCartToDB = async function (req){
                 }
             }
         }
+        console.log("-------------------------------------------------");
         // close DB connection
         client.release();
 
