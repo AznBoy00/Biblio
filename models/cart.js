@@ -54,6 +54,7 @@ module.exports.deleteItemFromCart = async function(req) {
         console.error(err);
     }   
 }
+
 // ====================================== //
 // ======= Clear the entire cart ======== //
 // ====================================== //
@@ -63,6 +64,51 @@ module.exports.deleteAllItemsFromCart = async function(req) {
     } catch (err) {
         console.error(err);
     } 
+}
+
+// ====================================== //
+// ======= Check the cart if items are checkoutable ======== //
+// ====================================== //
+module.exports.canCheckCart = async function(req) {
+    let errorString = "";
+    let item;
+    let quantity;
+    let loaned;
+    let loanable;
+    try {
+        for (let i = 0; i < req.session.cart.length; i++) {
+            item = tdg.checkLoanable(JSON.parse(req.session.cart[i]), imap.get(JSON.parse(req.session.cart[i])).discriminator);
+            console.log("ITEM: " + item);
+            quantity = item.quantity;
+            loaned = item.loaned;
+            loanable = item.loanable;
+            console.log("ITEM: " + quantity + " AAA " + loaned + "AAA" + loanable);
+            if ((quantity == loaned) || loanable == false) {
+                errorString.concat(imap.get(JSON.parse(req.session.cart[i]).title) + "cannot be loaned. \n");
+            }
+        }
+        console.error("errorString for CART: \n" + errorString);
+        return errorString;
+    } catch (err) {
+        console.error(err);
+    } 
+}
+
+// ====================================== //
+// ======= Loan Item ======== //
+// ====================================== //
+module.exports.loanItem = async function(item_id, discriminator) {
+    try {
+        if(quantity > loaned && loanable == true && discriminator !== "Magasines" ){
+        result = cartGateway.updateItem(item_id, discriminator);
+        } else {
+                   
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    
+    return result;
 }
 
 
@@ -78,7 +124,7 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 // well, before commiting the loan to the DB through the TDG.
 // ====================================== //
 
-module.exports.commitCartToDB = async function (req){
+module.exports.checkoutCart = async function (req){
     try{
         //get the items from the uow
         let uowArray = await uow.commit();

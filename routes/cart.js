@@ -66,10 +66,14 @@ router.get('/remove/:i', async (req, res) => {
 // ====================================== //
 router.get('/checkout', async (req, res) => {
   try {
-    if (!req.session.is_admin) {
-        await cart.commitCartToDB(req);
+    let list = await cart.getCartCatalog(req);
+    let cartError = cart.canCheckCart(req);
+    if (!req.session.is_admin && cartError == "") {
+      //await cart.checkoutCart(req);
+      res.redirect('back');
+    } else {
+      res.render('cart', { title: 'Cart', error: cartError, is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
     }
-    res.redirect('/cart');
   } catch (err) {
     console.error(err);
     res.render('error', { error: err });
