@@ -138,7 +138,7 @@ module.exports.updateItem = async function(req, item_id, discriminator) {
 }
 
 // ====================================== //
-// ====== Search Items Handler ======= //
+// ======== Search Items Handler ======== //
 // ====================================== //
 module.exports.getSearchResults = async function(searched) {
     try {
@@ -151,9 +151,9 @@ module.exports.getSearchResults = async function(searched) {
     }
 }
 
-// ====================================== //
+// ======================================= //
 // ===== Delete an Item from the DB ====== //
-// ====================================== //
+// ======================================= //
 // DELETE an ITEM from the database which
 // cascades down to delete the corresponding
 // book, magazine, movie or music
@@ -224,8 +224,8 @@ module.exports.getTransactionItems = async function() {
     }
 }
 
-// ===============================================//
-// === FLUSH THE IMAP ON LOGOUT == //
+// ============================================== //
+// ========== FLUSH THE IMAP ON LOGOUT ========== //
 // ============================================== //
 module.exports.flushImap = async function() {
     try{
@@ -235,17 +235,29 @@ module.exports.flushImap = async function() {
     }
 }
 
-// ===          UoW CRUD FUNCTIONS             == //
+// ============================================== //
+// ============= UoW CRUD FUNCTIONS ============= //
 // ============================================== //
 module.exports.commitToDb = async function(){ 
     try{
         let uowArray = await uow.commit();
         
         // Limit the number of open connections to only 1, for all CRUD operations!
+        
         const client = await pool.connect();
+
+        // debug purposes
+        // for(j in uowArray){
+        //     console.log(uowArray[j].results[0].title + " deletebit: " + uowArray[j].results.deletebit);
+        //     console.log(uowArray[j].results[0].title + " cleanbit: " + uowArray[j].results.cleanbit);
+        //     console.log(uowArray[j].results[0].title + " newbit: " + uowArray[j].results.newbit);
+        // }
+
+        //
         for (i in uowArray){
+            // console.log("UoW Array item: " + uowArray[i].results[0].title);
             if(uowArray[i].results.cleanbit == true){ // READ useless?
-                //console.log("Found clean bit, do nothing as item has only been read.");
+                // console.log("Found clean bit, do nothing as item has only been read ID = ["+uowArray[i].results[0].item_id+"]");
                 //If we decide to implement something in for the Clean bit, remember to set back to false when registering dirty, new, delete
                 //Now when we registerDirty, clean remains TRUE.
             }
@@ -260,13 +272,14 @@ module.exports.commitToDb = async function(){
                 let newItem = uowArray[i].results[0];
                 let discriminator = uowArray[i].results[0].discriminator;                                
                 let result = await tdg.insertNewItem(newItem, discriminator);
+                console.log("Item created: " + uowArray[i].results[0].title)
                 client.query(result.itemQuery);
                 client.query(result.discriminatorQuery);
             }
             if(uowArray[i].results.deletebit == true){ // DELETE for items registeredDeleted in the UoW
                 let item_id = uowArray[i].results[0].item_id;
                 let result = await tdg.deleteItem(item_id);
-                console.log("Item deleted: " + uowArray[i].results[0].title)
+                // console.log("Item deleted: " + uowArray[i].results[0].title)
                 client.query(result);
             }
         }

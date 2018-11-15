@@ -18,15 +18,15 @@ var catalog = require('../models/catalog');
 // ====================================== //
 router.get('/', async (req, res) => {
     if (!currentUserIsAdmin(req)){
-      try {
-        let list = await cart.getCartCatalog(req);
-        res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
-      } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-      }
+        try {
+            let list = await cart.getCartCatalog(req);
+            res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
+        } catch (err) {
+            console.error(err);
+            res.render('error', { error: err });
+        }
     } else {
-      res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "Admins can not loan items"}]});
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "Admins can not loan items"}]});
     }
 });
 
@@ -35,12 +35,12 @@ router.get('/', async (req, res) => {
 // ====================================== //
 router.get('/add/:item_id', async (req, res) => {
     try {
-      if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
+        if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
         // Add Item to cart
         cart.addItemToCart(req);
         // console.log("ITEM_ID: " + req.params.item_id);
-      }
-      res.redirect('back');
+        }
+        res.redirect('back');
     } catch (err) {
       console.error(err);
       res.render('error', { error: err });
@@ -52,7 +52,6 @@ router.get('/add/:item_id', async (req, res) => {
 // ====================================== //
 router.get('/remove/:i', async (req, res) => {
     try {
-
       cart.deleteItemFromCart(req);
       // Remove Item from cart
       res.redirect('/cart');
@@ -68,6 +67,7 @@ router.get('/remove/:i', async (req, res) => {
 router.get('/checkout', async (req, res) => {
   try {
     if (!req.session.is_admin) {
+        await cart.commitCartToDB(req);
     }
     res.redirect('/cart');
   } catch (err) {

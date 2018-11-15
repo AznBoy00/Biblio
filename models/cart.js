@@ -1,9 +1,14 @@
 // ====================================== //
 // =========== Cart Model JS ============ //
 // ====================================== //
-
+// Table Data Gateway
+var tdg = require('../TDG/cartGateway');
 // Identity Mapper
 var imap = require('../IMAP/identitymap');
+// Unit of Work
+var uow = require('../uow/uow');
+// Database Connection
+const pool = require('../db');
 
 // ====================================== //
 // ====== Get Items From Cart ======= //
@@ -29,13 +34,9 @@ module.exports.getCartCatalog = async function(req) {
 // ====================================== //
 module.exports.addItemToCart = async function(req) {
     try {
-        // console.log("SESSION: " + JSON.stringify(req.session));
-        // console.log("ITEM_ID: " + JSON.stringify(req.params.item_id));
-    
-        console.log("===================== BEFORE ADD to Cart :" + req.session.cart);
-        req.session.cart.push(req.params.item_id);
-        console.log("===================== AFTER ADD to Cart :" + req.session.cart[0].item_id);
-
+        await req.session.cart.push(req.params.item_id);
+        let cartItem = await imap.get(req.params.item_id);
+        await uow.registerDirty(cartItem);
     } catch (err) {
         console.error(err);
     }   
@@ -47,6 +48,7 @@ module.exports.addItemToCart = async function(req) {
 module.exports.deleteItemFromCart = async function(req) {
     try {
         // console.log("I: " + req.params.i);
+        // console.log(req.params.i);
         req.session.cart.splice(req.params.i, 1);
     } catch (err) {
         console.error(err);
@@ -66,36 +68,53 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 
 // ====================================== //
 // ============= UOW with CART ========== //
+// Authors: Kayne, KC, KY
+// Date: November 15, 2018
+// Descritpion: 
+// UoW applied to the cart limits the DB calls when pressing checkout to  
+// only one call and updating the quantity and loaned attribute to true.
+// Each item added to the cart is set to dirty, and the whole UoW will be 
+// compared to the cart's content to see if it exists inside the cart as 
+// well, before commiting the loan to the DB through the TDG.
 // ====================================== //
-//Logic
-// UoW should return an array of 
-//items that has been viewed. Since adding to cart is just viewing 
-//and not performing and update so it's not set dirty but clean.
-//...
-//this list of item already returned when commit is called...
-// maybe use it in the Mapper (catalog.js)?
-// in Mapper(Cat.js) compare the items with cleanbit == true w/ cart item_id
-// if true, then run a TDG that decreases the quantity by 1?
-// Copy pasting this into end of Mapper(Catalog.js).
 
-
-//Start attempt to UoW Cart
-//
-var uow = require('../uow/uow')
-
-module.exports.commitCarttoDB = async function (req){
+module.exports.commitCartToDB = async function (req){
     try{
         //get the items from the uow
-        let result = uow.commit();
+        let uowArray = await uow.commit();
 
-        //get the req.session.cart
-        let cart = req.session.cart;
-        console.log(cart);        
-            //KL = Cart = initialized as empty array when first Logged in.
+        //get cart from the request
+        //Kevin Link said cart is initialized as empty array when logging in
+        let cart = await req.session.cart;
+        // console.log(cart);        
 
-        //for loop 
+        // DB Connection
+        const client = await pool.connect();
+        for(i in cart){
+            for(j in uowArray){
+                // if the dirty bit is set to true AND same item_id exist in cart, 
+                // call the DB and update that item to loaned_out = true
+                if(uowArray[j].results.dirtybit == true && uowArray[j].results[0].item_id == cart[i]){
+                    // loanableitem contains the full item (item_id, title, author, pages... etc)
+                    let loanableitem = uowArray[j].results[0];                                        
+                    console.log("This item has been checkedout: " + loanableitem.title);
+                    // let updatequery = tdg.checkoutCart(loanableitem);
+                    // client.query(updatequery);
+                }
+            }
+        }
+        // close DB connection
+        client.release();
+
+        //Reset the cart upon checkout.
+        req.session.cart = [];
+
+        // Clean the cart after checkout
+        await uow.rollback();
+        //for loop
 
     }catch(err){
         console.error(err);
     }
 }
+

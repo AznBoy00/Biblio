@@ -75,6 +75,7 @@ module.exports.getFullCatalog = async function(){
         console.error(err);
     }
 }
+
 var inTransaction = false;
 var transactionMap=[];
 module.exports.loadFullTransactionTable = async function(transactions){
