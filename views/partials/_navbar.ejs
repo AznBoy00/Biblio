@@ -44,7 +44,13 @@
                     <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" href="/users/login">Login</a>
                 </li>
             <% } %>
-
+            
+            <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-success my-md-2 my-1" href="/cart">Cart</a>
+                </li>
+            <% } %>
+            &nbsp&nbsp
             <% if (typeof is_logged !== 'undefined' && is_logged){ %>
 
                 <% if (typeof is_admin !== 'undefined' && is_admin){ %>

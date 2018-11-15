@@ -65,11 +65,11 @@ module.exports.getCatalogAlphaOrder = async function(type) {
 // ====================================== //
 // ===== INSERT A NEW ITEM INTO DB ====== //
 // ====================================== //
-// insert into the items table dirst, then use the PSQL function to retrieve
+// insert into the items table first, then use the PSQL function to retrieve
 // the items_item_id_seq (item_id) that was just inserted to create a new item.
 module.exports.insertNewItem = async function(req, discriminator) {
     try {
-        // get the item fromt he html form
+        // get the item fromt the html form
         let newItem = await this.getItemFromForm(req);
         return await tdg.insertNewItem(newItem,req, discriminator);
     } catch (err) {
@@ -143,7 +143,26 @@ module.exports.getSearchResults = async function(searched) {
 }
 
 // ====================================== //
-// ===== Delet an Item from the DB ====== //
+// ====== Get Items From Cart ======= //
+// ====================================== //
+module.exports.getCartCatalog = async function(req) {
+    try {
+        let result = [];
+        // console.log("CART SIZE: " + req.session.cart.length);
+        for(var i=0; i<req.session.cart.length; i++){
+            // console.log("CART: " + JSON.stringify(req.session.cart));
+            // console.log("CART ID at i: " + JSON.parse(req.session.cart[i]));
+            result[i] = await imap.get(JSON.parse(req.session.cart[i]));
+        }
+        // console.log("CART Result " + JSON.stringify(result));
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ====================================== //
+// ===== Delete an Item from the DB ====== //
 // ====================================== //
 // DELETE an ITEM from the database which
 // cascades down to delete the corresponding

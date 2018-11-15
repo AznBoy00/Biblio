@@ -66,15 +66,17 @@
 <body>
     <%- include('../partials/_navbar'); -%>
     <div class="container main">
-
+        
+        
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1 my-2">
                 <h2>List of Items in the Catalog</h2>
+                <%- include('../partials/_error'); -%>
             </div>
         </div>
-
+        
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1">
                 <div class="row">
                     <h4 class="ml-3">Filters</h4>
                 </div>
@@ -99,12 +101,17 @@
                                 <th>Type</th>
                                 <th>Title</th>
                                 <th>By</th>
+                                <th>Year</th>
+                                <th>Qty</th>
+                                <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
+                                    <th>Add</th>
+                               <% } %>
                             </tr>
                         </thead>
-
                         <tbody>
                             <!-- Iterate over items -->
-                                <% for(var j in list['items']) { %>
+                            <% for(var j in list['items']) { %>
+                                <% if (typeof cart !== 'undefined' && !JSON.stringify(cart).includes(list['items'][j].item_id)){ %>
                                     <tr class="<%= list['items'][j].discriminator%>">
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
@@ -122,8 +129,42 @@
                                         <% } else if (list['items'][j].discriminator == "Music"){%>
                                             <td><%= list['items'][j].artist %></td>
                                         <% } %>
+                                        <% let year = new Date(list['items'][j].release_date).getFullYear() %>
+                                        <td><%= year %></td>
+                                        <td><%= list['items'][j].quantity %></td>
+                                        <td>
+                                            <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
+                                                href="/cart/add/<%= list['items'][j].item_id %>">
+                                                Add to cart
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% } else if (typeof cart !== 'undefined' && JSON.stringify(cart).includes(list['items'][j].item_id)) { %>
+                                <!-- do nothing, dont display it  -->
+                                <% } else { %>
+                                    <tr class="<%= list['items'][j].discriminator%>">
+                                        <td><%= list['items'][j].item_id %></td>
+                                        <td><%= list['items'][j].discriminator %></td>
+                                        <td>
+                                            <a href="/catalog/view/<%= list['items'][j].discriminator %>/<%= list['items'][j].item_id %>">
+                                                <%= list['items'][j].title %>
+                                            </a>
+                                        </td>
+                                        <% if (list['items'][j].discriminator == "Books" || filter){ %>
+                                            <td><%= list['items'][j].author %></td>
+                                        <% } else if (list['items'][j].discriminator == "Magazines"){%>
+                                            <td><%= list['items'][j].publisher %></td>
+                                        <% } else if (list['items'][j].discriminator == "Movies"){%>
+                                            <td><%= list['items'][j].director %></td>
+                                        <% } else if (list['items'][j].discriminator == "Music"){%>
+                                            <td><%= list['items'][j].artist %></td>
+                                        <% } %>
+                                        <% let year = new Date(list['items'][j].release_date).getFullYear() %>
+                                        <td><%= year %></td>
+                                        <td><%= list['items'][j].quantity %></td>
                                     </tr>
                                 <% } %>
+                            <% } %>
                         </tbody>
                     </table>
                 </div>
