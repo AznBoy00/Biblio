@@ -62,7 +62,7 @@ router.get('/filter/:filterType', async (req, res) => {
 router.get('/view/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
-        let discriminator = results.results[0].discriminator;
+        let discriminator = req.params.discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
 
     } catch (err) {
@@ -91,12 +91,22 @@ router.post('/searchitems', async (req, res) => {
 // Page to select which item ti unsert. Upon selecting
 // the specific item create/discriminator is rendered
 router.get('/create', function (req, res) {
-    res.render('catalog/createItems', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    try {
+        res.render('catalog/createItems', { title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
 });
 // Create a new book
 router.get('/create/:discriminator', function (req, res) {
-    let discriminator = req.params.discriminator;
-    res.render('catalog/createitem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    try {
+        let discriminator = req.params.discriminator;
+        res.render('catalog/createItem', { discriminator, title: 'Create Item', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
 });
 
 // ====================================== //
@@ -122,7 +132,7 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
         let discriminator = results.results[0].discriminator;
-        res.render('catalog/updateItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        res.render('catalog/updateitem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -135,9 +145,11 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
 // ======================================= //
 router.post('/update/:discriminator/:item_id', async (req, res) => {
     try {
-        await catalog.updateItem(req, req.params.item_id, req.params.discriminator);
-        res.redirect('/catalog//view/'+req.params.discriminator+'/'+req.params.item_id);
+        let item_id = req.params.item_id;
+        let discriminator = req.params.discriminator;
+        await catalog.updateItem(req, item_id, discriminator);
         // res.redirect('/catalog');
+        res.redirect('/catalog/view/'+discriminator+'/'+item_id);
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
