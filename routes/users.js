@@ -95,6 +95,7 @@ router.post('/register', function (req, res) {
     req.checkBody('address', 'Address is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
+    req.checkBody('confirmpassword', 'Confirm password does not match the password').equals(req.body.password);
 
     var errors = req.validationErrors();
     if (errors) {
