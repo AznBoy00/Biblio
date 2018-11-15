@@ -22,10 +22,10 @@ module.exports.getCatalog = async function(){
 //filter Module
 module.exports.getCatalogAlphaOrder = async function(type){
     const client = await pool.connect();
-    const resultBook = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
-        'UNION SELECT item_id, discriminator, title, publisher FROM magazines ' +
-        'UNION SELECT item_id, discriminator, title, director FROM movies ' +
-        'UNION SELECT item_id, discriminator, title, artist FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
+    const resultBook = await client.query('SELECT item_id, discriminator, title, author, release_date, quantity FROM books ' +
+        'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity FROM magazines ' +
+        'UNION SELECT item_id, discriminator, title, director, release_date, quantity FROM movies ' +
+        'UNION SELECT item_id, discriminator, title, artist, release_date, quantity FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
     client.release();
 
     let result = [];
