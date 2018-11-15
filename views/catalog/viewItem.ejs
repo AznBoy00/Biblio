@@ -39,7 +39,75 @@
                         <div class="row mb-2">
                             <div class="col-3">
                                 <!-- the attribute title -->
+                                <% if (i == "magazine_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Magazine ID" %>
+                                    <strong><%= updateName %><strong>
+                                <% }
+                                else if (i == "book_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Book ID" %>
+                                    <strong><%= updateName %><strong>
+                                <% } 
+                                else if (i == "music_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Music ID" %>
+                                    <strong><%= updateName %><strong>
+
+                               <% }
+                               else if (i == "movie_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Movie ID" %>
+                                    <strong><%= updateName %><strong>
+                               <% }
+                               else if (i == "item_id"){ %>
+                                <% let updateName = results.results[i] %>
+                                <% updateName = "Item ID" %>
+                                <strong><%= updateName %><strong>
+                           <% }
+                                else if (i == "discriminator"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Discriminator" %>
+                                    <strong><%= updateName %><strong>
+                           <% }
+                                else if (i == "loan_period"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loan Period" %>
+                                    <strong><%= updateName %><strong>
+                           <% }
+                                else if (i == "loanable"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loanable" %>
+                                    <strong><%= updateName %><strong>
+                           <% }
+                                else if (i == "quantity"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Quantity" %>
+                                    <strong><%= updateName %><strong>
+                           <% }
+                                else if (i == "loaned"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loaned" %>
+                                    <strong><%= updateName %><strong>
+                            <% }
+                                else if (i == "title"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Title" %>
+                                    <strong><%= updateName %><strong>
+                            <% }
+                                else if (i == "author"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Author" %>
+                                    <strong><%= updateName %><strong>
+                            <% }
+                                else if (i == "format"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Format" %>
+                                    <strong><%= updateName %><strong>
+                            <% }
+                                else { %>
                                 <strong><%= i %></strong>
+                                <% } %>
                             </div>
                             <div class="col-9">
                                 <!-- the attribute value -->
@@ -52,7 +120,16 @@
                                     <% let year = release.getFullYear() %>
                                     <% let newdate = year+"-"+month+"-"+day %>
                                     <span><%= newdate %></span>
-                                <% } else{ %>
+                                <% } 
+                                <!-- converts the isbn13 in the appropriate format -->
+                                else if (i == "isbn13"){ %>
+                                    <% let isbn_13 = results.results[0][i] %>
+                                    <% first3 = isbn_13.toString().slice(0, 3) %>
+                                    <% last10 = isbn_13.toString().slice(4, 13) %>
+                                    <% newISBN13 = first3+"-"+last10 %>
+                                    <span><%= newISBN13 %></span>
+                                <% } 
+                                else{ %>
                                     <span><%= results.results[0][i] %></span>
                                 <% } %>
                             </div>
