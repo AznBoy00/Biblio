@@ -107,7 +107,7 @@ module.exports.commitCartToDB = async function (req){
         client.release();
 
         //Reset the cart upon checkout.
-        req.session.cart = [];
+        this.deleteAllItemsFromCart(req);
 
         // Clean the cart after checkout
         await uow.rollback();
