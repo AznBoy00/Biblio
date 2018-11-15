@@ -1,89 +1,93 @@
 <footer>
     <div class="container py-5">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4 text-center text-md-left mt-2">
-                <h5>Concordia University</h5>
-                <h6>Presented to Dr. C. Constantinides</h6>
-                <h6>Fall 2018 - SOEN 343-H - Team 5</h6>
-                <h6>Software Architecture and Design I</h6>
+            <div class="col-12 col-md-6 col-lg-4 text-center text-md-left mt-3">
+                <a class="h5 footer-links" data-toggle="collapse" href="#collapseConcordia">Concordia University</a>
+                <br/>
+                <div class="collapse mt-2" id="collapseConcordia">
+                    <h6>Presented to Dr. C. Constantinides</h6>
+                    <h6>Fall 2018 - SOEN 343-H - Team 5</h6>
+                    <h6>Software Architecture and Design I</h6>
+                </div>
             </div>
             <!-- ./ end col -->
-            <div class="col-12 col-md-6 col-lg-3 text-center text-md-left mt-2">
-                <h5>🎓 Project </h5>
-                <a class="footer-links" href="https://soen343t5.herokuapp.com/" target="_blank">Live Demo</a> <small>(free heroku dyno)</small>
-                <br/>
-                <a class="footer-links" href="https://github.com/AznBoy00/soen343team5" target="_blank">Github Repo</a> <small>(private)</small>
-                <br/>
-                <a class="footer-links" href="https://docs.google.com/document/d/12pFypLqLq2HGXtHhZYz-CggFGJwnFcUGHP_xX4t00Ms/edit?usp=sharing" target="_blank">SRS</a> <small>(colaborator only)</small>
-                <br/>
-                <a class="footer-links" href="https://docs.google.com/document/d/1zmdFFYL1p4VZ4vIP3dQlZ2MK9rv0G8gLOn0qgQbQJV8/edit?usp=sharing" target="_blank">SAD</a> <small>(colaborator only)</small>
-            </div>
-            <!-- ./ end col   -->
-            <div class="col-12 col-md-6 col-lg-3 text-center text-md-left mt-2">
-                <h5>👨‍💻 Authors</h5>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-12">
-                        <a class="footer-links" href="https://github.com/abdullahzen">Abdullah Alhaj Zen</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/WolfOfTheNorth">Dave Bhardwaj</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/ggebran">Giovanni Gebran</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/kkhh001">Kayne Herrmann</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/bkenza">Kenza Boulisfane</a>
-                        <br/>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-12">
-                        <a class="footer-links" href="https://github.com/kcamcam">Kevin Camellini</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/AznBoy00">Kevin Lin</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/Kycoding">Kevin Yau</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/Legendary-Griffin">Nizar Belhassan</a>
-                        <br/>
-                        <a class="footer-links" href="https://github.com/nourelnatour">Nour El Natour</a>
-                        <br/>
-                    </div>
+            <div class="col-12 col-md-6 col-lg-3 text-center text-md-left mt-3">
+                <a class="h5 footer-links" data-toggle="collapse" href="#collapseProject">🎓&nbsp;Project </a>
+                <br>
+                <div class="collapse" id="collapseProject">
+                    <a class="footer-links" href="https://soen343t5.herokuapp.com/" target="_blank">Live Demo</a> <small>(free heroku dyno)</small>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/AznBoy00/soen343team5" target="_blank">Github Repo</a> <small>(private)</small>
+                    <br/>
+                    <a class="footer-links" href="https://docs.google.com/document/d/12pFypLqLq2HGXtHhZYz-CggFGJwnFcUGHP_xX4t00Ms/edit?usp=sharing" target="_blank">SRS</a> <small>(colaborator only)</small>
+                    <br/>
+                    <a class="footer-links" href="https://docs.google.com/document/d/1zmdFFYL1p4VZ4vIP3dQlZ2MK9rv0G8gLOn0qgQbQJV8/edit?usp=sharing" target="_blank">SAD</a> <small>(colaborator only)</small>
                 </div>
             </div>
             <!-- ./ end col   -->
-            <div class="col-12 col-md-6 col-lg-2 text-center text-md-left mt-2">
-                <h5>🖥 Navigation </h5>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-12">
-                        <a class="footer-links" href="/catalog">View Full Catalog</a>
-                        <br/>
-                        <a class="footer-links" href="/catalog/filter/1?active=books">View Books</a>
-                        <br/>
-                        <a class="footer-links" href="/catalog/filter/1?active=magazines">View Magazines</a>
-                        <br/>
-                        <a class="footer-links" href="/catalog/filter/1?active=movies">View Movies</a>
-                        <br/>
-                        <a class="footer-links" href="/catalog/filter/1?active=music">View Music</a>
-                        <br/>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-12">
-                        <% if (typeof is_logged !== 'undefined' && is_logged){ %>
-                            <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                                <a class="footer-links" href="/catalog/create">Insert New item</a>
-                                <br/>
-                                <a class="footer-links" href="/admincp/manageusers">Manage Users</a>
-                                <br/>
-                                <a class="footer-links" href="/catalog/transactions">View Transactions</a>
-                                <br/>
-                            <% } %>
-                            <a class="footer-links" href="/users/usercp">My Profile</a>
+            <div class="col-12 col-md-6 col-lg-3 text-center text-md-left mt-3">
+                <a class="h5 footer-links" data-toggle="collapse" href="#collapseAuthors">👨‍💻&nbsp;Authors</a>
+                <br/>
+                <div class="collapse mt-2" id="collapseAuthors">
+                    <a class="footer-links" href="https://github.com/abdullahzen">Abdullah Alhaj Zen</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/WolfOfTheNorth">Dave Bhardwaj</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/ggebran">Giovanni Gebran</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/kkhh001">Kayne Herrmann</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/bkenza">Kenza Boulisfane</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/kcamcam">Kevin Camellini</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/AznBoy00">Kevin Lin</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/Kycoding">Kevin Yau</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/Legendary-Griffin">Nizar Belhassan</a>
+                    <br/>
+                    <a class="footer-links" href="https://github.com/nourelnatour">Nour El Natour</a>
+                    <br/>
+                </div>
+            </div>
+            <!-- ./ end col   -->
+            <div class="col-12 col-md-6 col-lg-2 text-center text-md-left mt-3">
+                <a class="h5 footer-links" data-toggle="collapse" href="#collapseNav">🖥&nbsp;Navigation</a>
+                <br/>
+                <div class="collapse mt-2" id="collapseNav">
+                    <a class="footer-links" href="/catalog">View Full Catalog</a>
+                    <br/>
+                    <a class="footer-links" href="/catalog/filter/1?active=books">View Books</a>
+                    <br/>
+                    <a class="footer-links" href="/catalog/filter/1?active=magazines">View Magazines</a>
+                    <br/>
+                    <a class="footer-links" href="/catalog/filter/1?active=movies">View Movies</a>
+                    <br/>
+                    <a class="footer-links" href="/catalog/filter/1?active=music">View Music</a>
+                    <br/>
+                    <% if (typeof is_logged !== 'undefined' && is_logged){ %>
+                        <% if (typeof is_admin !== 'undefined' && !is_admin){ %>
+                            <a class="footer-links" href="/cart">Cart</a>
+                            </br>
+                        <% } %>
+                        <% if (typeof is_admin !== 'undefined' && is_admin){ %>
+                            <a class="footer-links" href="/catalog/create">Insert New item</a>
                             <br/>
-                            <a class="footer-links" href="/users/register">Register</a>
+                            <a class="footer-links" href="/admincp/manageusers">Manage Users</a>
                             <br/>
-                            <a class="footer-links" href="/users/login">Login</a>
-                            <br/>
-                            <a class="footer-links" href="/users/logout">Logout</a>
+                            <a class="footer-links" href="/catalog/transactions">View Transactions</a>
                             <br/>
                         <% } %>
-                    </div>
+                        <a class="footer-links" href="/users/usercp">My Profile</a>
+                        <br/>
+                        <a class="footer-links" href="/users/register">Register</a>
+                        <br/>
+                        <a class="footer-links" href="/users/login">Login</a>
+                        <br/>
+                        <a class="footer-links" href="/users/logout">Logout</a>
+                        <br/>
+                    <% } %>
                 </div>
             </div>
             <!-- ./ end col   -->
@@ -91,11 +95,12 @@
         <!-- ./ end row -->
     </div>
     <!-- ./ end container -->
-    <footer>
-        <!-- Custom Scripts-->
-        <script src="/javascripts/script.js"></script>
-        <!-- Optional JavaScript-->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</footer>
+<!-- Custom Scripts-->
+<script src="/javascripts/script.js"></script>
+<!-- Optional JavaScript-->
+<!-- jQuery first, then Popper.js, then Bootstrap JS-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
