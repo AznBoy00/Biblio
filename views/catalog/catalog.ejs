@@ -132,12 +132,14 @@
                                         <% let year = new Date(list['items'][j].release_date).getFullYear() %>
                                         <td><%= year %></td>
                                         <td><%= list['items'][j].quantity %></td>
-                                        <td>
-                                            <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
-                                                href="/cart/add/<%= list['items'][j].item_id %>">
-                                                Add to cart
-                                            </a>
-                                        </td>
+                                        <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
+                                            <td>
+                                                <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
+                                                    href="/cart/add/<%= list['items'][j].item_id %>">
+                                                    Add to cart
+                                                </a>
+                                            </td>
+                                        <% } %>
                                     </tr>
                                 <% } else if (typeof cart !== 'undefined' && JSON.stringify(cart).includes(list['items'][j].item_id)) { %>
                                 <!-- do nothing, dont display it  -->
