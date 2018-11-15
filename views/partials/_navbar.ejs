@@ -16,18 +16,8 @@
             </li>
             <% if (typeof is_logged !== 'undefined' && is_logged){ %>
                 <li <%- title === "User CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                    <a class="nav-link my-md-2 my-1" href="/users/usercp">User Profile</a>
+                    <a class="nav-link my-md-2 my-1" href="/users/usercp">My Profile</a>
                 </li>
-                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                    <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                        <a class="nav-link my-md-2 my-1" href="/users/admincp/manageusers">Manage Users</a>
-                    </li>
-                <% } %>
-                <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                    <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                        <a class="nav-link my-md-2 my-1" href="/catalog/transactions">View Transactions</a>
-                    </li>
-                <% } %>
             <% } %>
         </ul>
 
@@ -47,15 +37,26 @@
             
             <% if (typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin){ %>
                 <li class="nav-item">
-                    <a class="btn btn-sm btn-outline-success my-md-2 my-1" href="/cart">Cart</a>
+                    <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" href="/cart">
+                        <% if (typeof cart !== 'undefined' && cart != null){ %>
+                            <span class="badge badge-dark">
+                                <%= cart.length %>
+                            </span>
+                        <% } %>
+                        Cart
+                    </a>
                 </li>
             <% } %>
-            &nbsp&nbsp
             <% if (typeof is_logged !== 'undefined' && is_logged){ %>
 
                 <% if (typeof is_admin !== 'undefined' && is_admin){ %>
-                    <li <%- title === "Create Item" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
-                        <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2" href="/catalog/create">Insert New Item</a>
+                    <li class="nav-item dropdown">
+                        <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2" data-toggle="dropdown" href="#" role="button">Admin Menu</a>
+                        <div class="dropdown-menu bg-light">
+                            <a class="nav-link small text-muted" href="/catalog/create">Insert New Item</a>
+                            <a class="nav-link small text-muted" href="/catalog/transactions">View Transactions</a>
+                            <a class="nav-link small text-muted" href="/users/admincp/manageusers">Manage Users</a>
+                        </div>
                     </li>
                 <% } %>
 
