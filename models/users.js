@@ -88,6 +88,16 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
         console.error(err);
     }
 };
+
+//toggles the user status
+module.exports.toggleUserStatus = async function(email, is_active) {
+    try {
+        return await tdg.changeUserStatus(email, is_active);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 //getter for user profile information
 module.exports.getUserInfo = async function(email) {
     try {
