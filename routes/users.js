@@ -4,6 +4,9 @@ var user = require('../models/users');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var router = express.Router();
+
+var catalog = require('../models/catalog');
+
 const bcrypt = require('bcrypt-nodejs');
 router.use(expressValidator());
 router.use(session({
@@ -116,6 +119,7 @@ router.post('/login', async function (req, res) {
         if (userExists){
             var passwordIsCorrect = await user.checkPassword(email, password);
             if (passwordIsCorrect){
+                catalog.flushImap(); //reset imap on login
                 var userRaw = await user.findUserByEmail(email);
                 var userInfo = await userRaw.rows[0];
                 req.session.logged = true;
@@ -137,6 +141,7 @@ router.post('/login', async function (req, res) {
 
 router.get("/logout", function(req, res){
     req.session.destroy();
+    catalog.flushImap();//reset imap on logout
     res.redirect('/');
 });
 

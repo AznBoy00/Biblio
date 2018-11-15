@@ -211,3 +211,14 @@ module.exports.getTransactionItems = async function() {
         console.error(err);
     }
 }
+
+// ===============================================//
+// === FLUSH THE IMAP ON LOGOUT == //
+// ============================================== //
+module.exports.flushImap = async function() {
+    try{
+        await imap.resetImap();
+    }catch(err){
+        console.error(err);
+    }
+}
