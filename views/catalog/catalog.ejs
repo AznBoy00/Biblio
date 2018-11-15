@@ -52,10 +52,19 @@
                 for(var i = 0; i < activeL.length; i++) {
                     hideOthers(activeL[i]);
                 }
-                if (window.location.href.includes("1")){
+                if (window.location.href.includes("filter/1")){
                     document.getElementById('#az').classList.add('active');
-                } else if (window.location.href.includes("2")){
+                } else if (window.location.href.includes("filter/2")){
                     document.getElementById('#za').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/3")){
+                    document.getElementById('#newdate').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/4")){
+                    document.getElementById('#old').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/5")){
+                    document.getElementById('#loanable').classList.add('active');
                 }
             }
         }
@@ -92,6 +101,9 @@
                         <!-- <span class="h4 align-middle ml-3 mb-0">Filters</span> -->
                         Order by:  <a id="#az" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2 ml-2" href="#" onclick="getFilterUrl('1');"> A-Z </a>
                         <a id="#za" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('2')"> Z-A </a>
+                        <a id="#newdate" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('3')"> Date New to Old </a>
+                        <a id="#old" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('4')"> Date Old to New </a>
+                        <a id="#loanable" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('5')"> Loanable </a>
                         Type: <button id="#books" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 ml-2" onclick="hideOthers('books'); return false;">Book</button>
                         <button id="#magazines" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('magazines'); return false;">Magazine</button>
                         <button id="#music" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('music'); return false;">Music</button>
