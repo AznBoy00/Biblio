@@ -172,12 +172,11 @@ router.post('/login', async function (req, res) {
     }
 });
 
-router.post('/logout', async function (req, res) {
-// router.get("/logout", function(req, res){
+router.get("/logout", function(req, res){
     try {
         req.session.is_active = false;
         //req.session.is_active = user.toggleUserStatus(req.params.email, true);
-        await user.setUserStatusInactive(req.session.email);
+        user.setUserStatusInactive(req.session.email);
         // console.log("LOGGING OUT: "+ req.params.email);
         req.session.destroy();
         catalog.flushImap();//reset imap on logout
