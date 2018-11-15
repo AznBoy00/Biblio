@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 
 // manage users page
 router.get('/admincp/manageusers', async (req, res) => {
-    if (typeof req.session.is_admin !== 'undefined' && req.session.is_admin){
+    if (currentUserIsAdmin(req)){
         try {
             let results = await user.displayAllUsers();
             res.render('users/manageusers', {results, title: 'Admin CP', is_logged: req.session.logged, is_admin: req.session.is_admin, admin_email: req.session.email} );
@@ -37,25 +37,33 @@ router.get('/admincp/manageusers', async (req, res) => {
 
 // promote users to admin page
 router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
-	try {
-        user.toggleAdminStatus(req.params.userid, false);
-        console.log("PROMOTING: " + req.params.userid);
-        res.redirect('/users/admincp/manageusers');
-	} catch (err) {
-        console.error(err);
-        res.send("error" + err);
+    if (currentUserIsAdmin(req)) {
+        try {
+            user.toggleAdminStatus(req.params.userid, false);
+            console.log("PROMOTING: " + req.params.userid);
+            res.redirect('/users/admincp/manageusers');
+        } catch (err) {
+            console.error(err);
+            res.send("error" + err);
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
     }
 });
 
 // demote users to admin page
 router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
-	try {
-        user.toggleAdminStatus(req.params.userid, true);
-        console.log("DEMOTING: "+ req.params.userid);
-        res.redirect('/users/admincp/manageusers');
-    } catch (err) {
-        console.error(err);
-        res.send("error " + err);
+    if (currentUserIsAdmin(req)){
+        try {
+            user.toggleAdminStatus(req.params.userid, true);
+            console.log("DEMOTING: "+ req.params.userid);
+            res.redirect('/users/admincp/manageusers');
+        } catch (err) {
+            console.error(err);
+            res.send("error " + err);
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
     }
 });
 
@@ -149,61 +157,79 @@ router.get("/logout", function(req, res){
 
 // get request for updating user profile information
 router.get('/usercp', async (req, res) => {
-    try {
-        var email = req.session.email;
-        let results = await user.getUserInfo(email);
-        res.render('users/usercp', { results, title: 'User CP', is_logged: req.session.logged, is_admin: req.session.is_admin});
-        } catch (err) {
-          console.error(err);
-          res.render('error', { error: err });
-      }
-  });
-
-// post request for updating user profile information
-router.post('/usercp', async (req, res) => {
-    //Fetch user info.
-    var email = req.session.email;
-    let newUserInfo;
-    let results = await user.getUserInfo(email);
-    let oldPassHash = results.results[0].password;
-    var oldPassMatched = false;
-
-    //Validate current session password and user input old password to be identical.
-    if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)) {
-        oldPassMatched = true;
-    }
-
-    //Check form fields for empty fields/match.
-    req.checkBody('f_name', 'First name field is empty.').notEmpty();
-    req.checkBody('l_name', 'Last name field is empty.').notEmpty();
-    req.checkBody('phone', 'Phone number field is empty.').notEmpty();
-    req.checkBody('oldpassword', 'Old password field is empty.').notEmpty();
-    //req.checkBody('password','New password field is empty.').notEmpty();
-    if(!oldPassMatched)
-        req.checkBody('oldpassword', 'Current password must match to make changes.').isEmpty();
-    if(req.body.password != '') {
-        req.checkBody('confirmpassword', 'Confirm new password field is empty.').notEmpty();
-        req.checkBody('confirmpassword', 'Confirmation password does not match.').equals(req.body.password);
-    }
-    const err = req.validationErrors();
-    if(err){
-        res.render('users/usercp', {results, errors:err, title: 'User CP', is_logged: req.session.logged});
-    } else {
+    if (currentUserIsUser(req)){
         try {
-            //Validate new password and confirm new password to be identical, new pass is different than previous pass, and that oldpassword has been validated.
-            if((req.body.password == req.body.confirmpassword) && (req.body.password!=req.body.oldpassword) && oldPassMatched){
-                newUserInfo = await user.getNewUserInfo(email, req);
-                results = await user.updateUserInfo(newUserInfo, email);
-                //console.log("User account info UPDATE SUCCESSFUL.");
-            }
-            results = await user.getUserInfo(email);
-            const success = ['Update Complete!'];
-            res.render('users/usercp', {results, success:success, title: 'User CP', is_logged: req.session.logged});
+            var email = req.session.email;
+            let results = await user.getUserInfo(email);
+            res.render('users/usercp', { results, title: 'User CP', is_logged: req.session.logged, is_admin: req.session.is_admin});
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });
         }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not a user!"}]});
     }
+  });
+
+// post request for updating user profile information
+router.post('/usercp', async (req, res) => {
+    if (currentUserIsUser(req)){
+
+        //Fetch user info.
+        var email = req.session.email;
+        let newUserInfo;
+        let results = await user.getUserInfo(email);
+        let oldPassHash = results.results[0].password;
+        var oldPassMatched = false;
+
+        //Validate current session password and user input old password to be identical.
+        if(bcrypt.compareSync(req.body.oldpassword, oldPassHash)) {
+            oldPassMatched = true;
+        }
+
+        //Check form fields for empty fields/match.
+        req.checkBody('f_name', 'First name field is empty.').notEmpty();
+        req.checkBody('l_name', 'Last name field is empty.').notEmpty();
+        req.checkBody('phone', 'Phone number field is empty.').notEmpty();
+        req.checkBody('oldpassword', 'Old password field is empty.').notEmpty();
+        //req.checkBody('password','New password field is empty.').notEmpty();
+        if(!oldPassMatched)
+            req.checkBody('oldpassword', 'Current password must match to make changes.').isEmpty();
+        if(req.body.password != '') {
+            req.checkBody('confirmpassword', 'Confirm new password field is empty.').notEmpty();
+            req.checkBody('confirmpassword', 'Confirmation password does not match.').equals(req.body.password);
+        }
+        const err = req.validationErrors();
+        if(err){
+            res.render('users/usercp', {results, errors:err, title: 'User CP', is_logged: req.session.logged});
+        } else {
+            try {
+                //Validate new password and confirm new password to be identical, new pass is different than previous pass, and that oldpassword has been validated.
+                if ((req.body.password == req.body.confirmpassword) && (req.body.password != req.body.oldpassword) && oldPassMatched) {
+                    newUserInfo = await user.getNewUserInfo(email, req);
+                    results = await user.updateUserInfo(newUserInfo, email);
+                    //console.log("User account info UPDATE SUCCESSFUL.");
+                }
+                results = await user.getUserInfo(email);
+                const success = ['Update Complete!'];
+                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged});
+            } catch (err) {
+                console.error(err);
+                res.render('error', {error: err});
+            }
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not a user!"}]});
+    }
+
 });
 
 module.exports = router;
+
+let currentUserIsAdmin = function (req){
+    return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
+};
+
+let currentUserIsUser = function (req){
+    return !!(typeof req.session.logged !== 'undefined' && req.session.logged);
+};
