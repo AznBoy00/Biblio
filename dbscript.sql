@@ -126,7 +126,7 @@ CREATE TABLE Music(
     artist VARCHAR(50),
     label VARCHAR(50),
     release_date DATE,
-    asin CHAR(10),
+    asin CHAR(10) UNIQUE,
     PRIMARY KEY (music_id),
     FOREIGN KEY (item_id) REFERENCES Items (item_id) ON DELETE CASCADE
 );
@@ -175,7 +175,7 @@ INSERT INTO Books
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'Meditations', 'Marcus Aurelius', 532, 'Penguin', 6, '2017-08-03', 1234567891, 1234567891000      
+    SELECT select_id, 'Meditations', 'Marcus Aurelius', 532, 'Penguin', 6, '0181-03-15', 1234567891, 1234567891000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;   
 
 INSERT INTO Items (discriminator) VALUES ('Books');
@@ -318,13 +318,13 @@ INSERT INTO Music
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music
     (item_id, title, artist, label, quantity, release_date, asin)
-    SELECT select_id, 'For Now I Am Winter', 'Ólafur Arnalds', 'Brassland', 1, '2001-01-01', 'B008FOB126'
+    SELECT select_id, 'For Now I Am Winter', 'Ólafur Arnalds', 'Brassland', 1, '2001-01-01', 'B008FOB127'
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
 
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music
     (item_id, title, artist, label, quantity, release_date, asin)
-    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB129'
+    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB127'
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
     
 /* ===== Insert New Transaction ===== */
