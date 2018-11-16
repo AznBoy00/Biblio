@@ -198,7 +198,9 @@
                             <div class="col-8">
                                 <!-- the attribute value -->
                                 <!-- Converting the string to a date format in order to make it work-->
-                                <% if (i == "loan_period"){ %>
+                                <% if (i == "loanable"){ %>
+                                    <span><%= results.results[0][i] == true ? 'Yes' : 'No' %></span>
+                                <% } else if (i == "loan_period"){ %>
                                     <span><%= results.results[0][i] %> days</span>
                                 <% } else if (i == "quantity"){ %>
                                     <span><%= results.results[0][i] %> in stock</span>
