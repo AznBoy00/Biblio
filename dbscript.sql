@@ -324,7 +324,7 @@ INSERT INTO Music
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music
     (item_id, title, artist, label, quantity, release_date, asin)
-    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB127'
+    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB128'
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
     
 /* ===== Insert New Transaction ===== */
