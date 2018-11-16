@@ -114,6 +114,7 @@ module.exports.getItemById = async function(item_id) {
             console.log("---------------------------------------");
         }
         item.itemIdArray = itemIdArray;
+        console.log(item.itemIdArray);
         return await item;
     } catch (err) {
         console.error(err);
