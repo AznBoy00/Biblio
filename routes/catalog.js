@@ -64,12 +64,12 @@ router.get('/filter/:filterType', async (req, res) => {
 // ====================================== //
 // ======== View Single Item Page ======= //
 // ====================================== //
-router.get('/view/:discriminator/:item_id', async (req, res) => {
+router.get('/view/:item_id', async (req, res) => {
     try {
-        let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
-        let discriminator = req.params.discriminator;
+        let discriminator;
+        let results = await catalog.getItemById(req.params.item_id);
+        discriminator = await results.results[0].discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
-
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -147,11 +147,11 @@ if (currentUserIsAdmin(req)){
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/update/:discriminator/:item_id', async (req, res) => {
+router.get('/update/:item_id', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
-            let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
-            let discriminator = req.params.discriminator;
+            let results = await catalog.getItemById(req.params.item_id);
+            let discriminator = await results.results[0].discriminator;
             res.render('catalog/updateItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
         } catch (err) {
             console.error(err);
@@ -166,14 +166,13 @@ router.get('/update/:discriminator/:item_id', async (req, res) => {
 // ======================================= //
 // == POST Requests for Updating Items === //
 // ======================================= //
-router.post('/update/:discriminator/:item_id', async (req, res) => {
+router.post('/update/:item_id', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
             let item_id = req.params.item_id;
-            let discriminator = req.params.discriminator;
-            await catalog.updateItem(req, item_id, discriminator);
+            await catalog.updateItem(req, item_id);
             // res.redirect('/catalog');
-            res.redirect('/catalog/view/'+discriminator+'/'+item_id);
+            res.redirect('/catalog/view/'+item_id);
         } catch (err) {
             console.error(err);
             res.render('error', { error: err });
