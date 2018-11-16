@@ -20,6 +20,7 @@ CREATE TABLE Users(
     l_name VARCHAR(50),
     num_permitted_items INTEGER DEFAULT 0,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT FALSE,
 
     PRIMARY KEY (user_id)
 );
