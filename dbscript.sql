@@ -324,5 +324,10 @@ INSERT INTO Music
 INSERT INTO Items (discriminator) VALUES ('Music');
 INSERT INTO Music
     (item_id, title, artist, label, quantity, release_date, asin)
-    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB129'
+    SELECT select_id, 'Emotional Rescue', 'The Rolling Stones', 'The Glimmer Twins', 2, '1980-01-01', 'B008FOB128'
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
+    
+/* ===== Insert New Transaction ===== */
+/* (transaction_id, client_id, item_id, loan_date, due_date, return_date) */
+INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date)
+    VALUES(2,2,CURRENT_TIMESTAMP,'2018-02-02 00:00:00','2018-03-03 00:00:00');

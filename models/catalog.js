@@ -89,20 +89,22 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // IMAP.find
 // if found IMAP.get() 
 // if not found IMAP.add() then IMAP.get()
-module.exports.getItemById = async function(item_id, discriminator) {
+module.exports.getItemById = async function(item_id) {
     try {
+        let itemIdArray = await tdg.getAllIds();
         let item;
         let foundInImap = await imap.find(item_id);
+
         if(foundInImap){
-            console.log("-------------------------------------");
-            console.log("Found Item In IMAP: loading from IMAP");
-            item = await imap.get(item_id);
-            await uow.registerClean(item);
-            console.log(item.results);
-            console.log("-------------------------------------");
-            // If item found in IMAP, get from IMAP
-        }else{
-            let getFromTDG = await tdg.getItemByID(item_id, discriminator);
+                console.log("-------------------------------------");
+                console.log("Found Item In IMAP: loading from IMAP");
+                item = await imap.get(item_id);
+                await uow.registerClean(item);
+                console.log(item.results);
+                console.log("-------------------------------------");
+                // If item found in IMAP, get from IMAP
+        } else {
+            let getFromTDG = await tdg.getItemByID(item_id);
             await imap.addItemToMap(getFromTDG);
             await uow.registerClean(getFromTDG);
             console.log("---------------------------------------");
@@ -111,6 +113,8 @@ module.exports.getItemById = async function(item_id, discriminator) {
             console.log(item.results[0]);
             console.log("---------------------------------------");
         }
+        item.itemIdArray = itemIdArray;
+        console.log(item.itemIdArray);
         return await item;
     } catch (err) {
         console.error(err);
@@ -118,10 +122,15 @@ module.exports.getItemById = async function(item_id, discriminator) {
 }
 
 
+//Check if this is the last item
+module.exports.isLastItem = async function (item_id){
+    return await imap.isLastItem(item_id);
+}
+
 // ====================================== //
 // ====== UPDATE AN EXISTING ITEM ======= //
 // ====================================== //
-module.exports.updateItem = async function(req, item_id, discriminator) {
+module.exports.updateItem = async function(req, item_id) {
     try {
         // get the item from the html form
         let updatedItem = await this.getItemFromForm(req);

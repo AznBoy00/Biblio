@@ -3,7 +3,13 @@
 
 <head>
     <%- include('../partials/_header') -%>
-    <script>function redirect(){window.location="/";}</script>
+    <script>
+        function redirect(){window.location="/";}
+        function getItemURL(item_id){
+            var curr = window.location.href;
+            window.location.replace(curr.substring(0, curr.lastIndexOf('/') + 1) + item_id);
+        }
+    </script>
 </head>
 
 <body>
@@ -192,7 +198,9 @@
                             <div class="col-8">
                                 <!-- the attribute value -->
                                 <!-- Converting the string to a date format in order to make it work-->
-                                <% if (i == "loan_period"){ %>
+                                <% if (i == "loanable"){ %>
+                                    <span><%= results.results[0][i] == true ? 'Yes' : 'No' %></span>
+                                <% } else if (i == "loan_period"){ %>
                                     <span><%= results.results[0][i] %> days</span>
                                 <% } else if (i == "quantity"){ %>
                                     <span><%= results.results[0][i] %> in stock</span>
@@ -231,9 +239,9 @@
                                 <!-- loan item -->
                                 <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin && !JSON.stringify(cart).includes(results.results[0].item_id)){ %>
                                     <% if(results.results[0].discriminator == "Magazines") { %> 
-                                        <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
+                                        <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
                                     <% } else if (results.results[0].loanable == false) { %>
-                                        <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
+                                        <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                     <% } else { %>
                                         <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
                                             href="/cart/add/<%= results.results[0].item_id %>">
@@ -247,7 +255,7 @@
                                         
                                         <!--  update an item -->
                                         <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
-                                            href="/catalog/update/<%= results.results[0].discriminator %>/<%= results.results[0].item_id %>">
+                                            href="/catalog/update/<%= results.results[0].item_id %>">
                                             Update
                                         </a>
 
@@ -261,7 +269,30 @@
                                 <% } %>
 
                                 <!-- go back to the catalog --> 
-                                <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>	
+                                <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back to Catalog</a>
+                                <!-- go to the next item in catalog -->
+                                <% for(var i = 0; i < results.itemIdArray.length; i++){
+                                    if (results.itemIdArray[i].item_id === results.currentItemId){
+                                        if (i < results.itemIdArray.length - 1){
+                                            results.nextItemId = results.itemIdArray[++i].item_id;
+                                            i--;
+                                        }
+                                        if (i != 0){
+                                            results.previousItemId = results.itemIdArray[--i].item_id;
+                                        }
+                                        break;
+                                    }
+                                }
+                                %>
+
+                                <% if (results.currentItemId !== results.itemIdArray[0].item_id) { %>
+                                    <button type="button" class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" onclick="getItemURL(<%- JSON.stringify(results.previousItemId)%>);">Previous Item</button>
+                                <%}%>
+
+                                <% if (results.currentItemId !== results.itemIdArray[results.itemIdArray.length - 1].item_id) { %>
+                                    <button type="button" class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" onclick="getItemURL(<%- JSON.stringify(results.nextItemId)%>);">Next Item</button>
+                                <%}%>
+
                             </form>
                         </div>
                     </div>

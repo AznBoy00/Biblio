@@ -141,7 +141,7 @@
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].discriminator %>/<%= list['items'][j].item_id %>">
+                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
                                                 <%= list['items'][j].title %>
                                             </a>
                                         </td>
@@ -160,9 +160,9 @@
                                         <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                             <td>
                                                 <% if(list['items'][j].discriminator == 'Magazines') { %> 
-                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
+                                                    <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
                                                 <% } else if (list['items'][j].loanable == false) { %>
-                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
+                                                    <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                                 <% } else { %>
                                                     <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
                                                         href="/cart/add/<%= list['items'][j].item_id %>">
@@ -179,7 +179,7 @@
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].discriminator %>/<%= list['items'][j].item_id %>">
+                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
                                                 <%= list['items'][j].title %>
                                             </a>
                                         </td>

@@ -17,8 +17,12 @@ module.exports.getCatalog = async function(){
     (resultMovie != null) ? result.items = result.items.concat(resultMovie.rows) : null;
     (resultMusic != null) ? result.items = result.items.concat(resultMusic.rows) : null;
 
+    result.items.sort(function (a, b) {
+        return a.item_id - b.item_id;
+    });
+
     return result;
-}
+};
 
 //filter Module
 module.exports.getFilteredCatalog = async function(type){
@@ -57,7 +61,7 @@ module.exports.getSearchResults = async function(search) {
 // insertNewItem Module
 module.exports.insertNewItem = async function(newItem, discriminator){
 
-    // build the query string in the format: 
+    // build the query string in the format:
     // insert into the Item table first, in order to get the item_id later
     let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
     let query = "INSERT INTO " + discriminator + " (item_id, ";
@@ -82,9 +86,18 @@ module.exports.insertNewItem = async function(newItem, discriminator){
     
     let result = [];
       
-    result.itemQuery = itemQuery
+    result.itemQuery = itemQuery;
     result.discriminatorQuery = query;
     return result;
+}
+
+//get all Ids
+module.exports.getAllIds = async function() {
+    let query = "SELECT item_id FROM Items";
+    const client = await pool.connect();
+    const result = await client.query(query);
+    client.release();
+    return result.rows;
 }
 
 // get the most recent item insterted into the item table
@@ -95,14 +108,21 @@ module.exports.getMostRecentItemId = async function(){
 }
 
 // getItemByID Module
-module.exports.getItemByID = async function(item_id, discriminator){
+module.exports.getItemByID = async function(item_id){
 
-    let query = "SELECT * FROM " + discriminator + " WHERE item_id = " + item_id + ";";
+    let query = "SELECT items.discriminator FROM items WHERE items.item_id = " + item_id;
     
-    const client = await pool.connect()
-    let result = await client.query(query);
-    client.release();
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    //console.log(await res1.rows);
+    const result1 = (res1 != null) ? res1.rows : null;
 
+    let discriminator = await result1[0].discriminator;
+
+    let query2 = "SELECT * FROM " + discriminator + " WHERE item_id = " + item_id + ";";
+    let result = await client.query(query2);
+
+    client.release();
     const results = { 'results': (result) ? result.rows : null};
     return await results;
 }
