@@ -329,5 +329,4 @@ INSERT INTO Music
     
 /* ===== Insert New Transaction ===== */
 /* (transaction_id, client_id, item_id, loan_date, due_date, return_date) */
-INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date)
-    VALUES(2,2,CURRENT_TIMESTAMP,'2018-02-02 00:00:00','2018-03-03 00:00:00');
+INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date);
