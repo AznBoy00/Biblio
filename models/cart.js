@@ -69,7 +69,7 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 // ====================================== //
 // ======= Check the cart if items are checkoutable ======== //
 // ====================================== //
-module.exports.canCheckCart = async function(req) {
+module.exports.checkCart = async function(req) {
     let errorString = "";
     let item, quantity, loaned,loanable, discriminator, imapItem;
     try {
@@ -82,8 +82,9 @@ module.exports.canCheckCart = async function(req) {
             loaned = item.results[0].loaned;
             loanable = item.results[0].loanable;
             //console.log("ITEM: " + quantity + ", " + loaned + ", " + loanable);
+            //Magazines are not loanable by default || quantity - loaned = available copies || loanable boolean
             if (discriminator == 'Magazines' || quantity == loaned || loanable == false)
-                errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
+            errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
         }
         console.error("errorString for CART: \n" + errorString);
         return errorString;

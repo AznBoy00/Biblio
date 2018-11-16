@@ -67,9 +67,9 @@ router.get('/remove/:i', async (req, res) => {
 router.get('/checkout', async (req, res) => {
   try {
     let list = await cart.getCartCatalog(req);
-    let errors = await cart.canCheckCart(req);
+    let errors = await cart.checkCart(req);
     if (!req.session.is_admin && errors == "") {
-      //await cart.checkoutCart(req);
+      await cart.checkoutCart(req);
       res.redirect('back');
     } else {
       console.log('CART HAS ERROR');
