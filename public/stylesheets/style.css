@@ -30,6 +30,12 @@ footer{
 .btn-outline-primary:hover, .btn-primary:hover{
     background-color:var(--main-color);
 }
+.sort-dropdown.active, .sort-dropdown:focus{
+    background-color: #28a745!important;
+}
+.type-dropdown.active, .type-dropdown:focus{
+    background-color:#343a40;
+}
 /* Links */
 .footer-links{
     color: white;

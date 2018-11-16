@@ -49,8 +49,8 @@ router.get('/filter/:filterType', async (req, res) => {
     try {
         let filteredList;
         //filter A to Z
-        if (req.params.filterType === '1' || req.params.filterType === '2' ) {
-            let list = await catalog.getCatalogAlphaOrder(req.params.filterType);
+        if (req.params.filterType === '1' || req.params.filterType === '2' || req.params.filterType === '3' || req.params.filterType === '4' || req.params.filterType === '5') {
+            let list = await catalog.getFilteredCatalog(req.params.filterType);
             filteredList = await list;
         }
         let activeList = req.query.active;
@@ -67,6 +67,13 @@ router.get('/filter/:filterType', async (req, res) => {
 router.get('/view/:discriminator/:item_id', async (req, res) => {
     try {
         let results = await catalog.getItemById(req.params.item_id, req.params.discriminator);
+        if (!req.session.is_admin){
+            for (var i in results.results[0]){
+                if (i == "book_id" || i == "magazine_id" || i == "music_id" || i == "movie_id" 
+                    || i == "item_id" || i == "discriminator" || i == "loaned")
+                    delete results.results[0][i];
+            }
+        }
         let discriminator = req.params.discriminator;
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
 
