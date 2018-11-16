@@ -3,6 +3,7 @@
 // ====================================== //
 // Table Data Gateway
 var tdg = require('../TDG/cartGateway');
+var users_tdg = require('../TDG/usersGateway');
 // Identity Mapper
 var imap = require('../IMAP/identitymap');
 // Unit of Work
@@ -83,7 +84,7 @@ module.exports.checkCart = async function(req) {
             loanable = item.results[0].loanable;
             //console.log("ITEM: " + quantity + ", " + loaned + ", " + loanable);
             //Magazines are not loanable by default || quantity - loaned = available copies || loanable boolean
-            if (discriminator == 'Magazines' || quantity == loaned || loanable == false)
+            if (discriminator == 'Magazines' || quantity <= loaned || loanable == false)
             errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
         }
         console.error("errorString for CART: \n" + errorString);
@@ -106,7 +107,6 @@ module.exports.loanItem = async function(item_id, discriminator) {
     } catch (err) {
         console.error(err);
     }
-    
     return result;
 }
 
@@ -127,13 +127,13 @@ module.exports.checkoutCart = async function (req){
     try{
         //get the items from the uow
         let uowArray = await uow.commit();
-
-        //get cart from the request
         //Kevin Link said cart is initialized as empty array when logging in
-        let cart = await req.session.cart;
-        // console.log(cart);        
+        let cart = await req.session.cart; 
+        let loanableitem;
+        //2 days for loaning musics or movies, 7 days for loaning books
+        let timestamp = 2;
+        let client_id = (await users_tdg.getUserInfo(req.session.email)).results[0].user_id;
 
-        // DB Connection
         const client = await pool.connect();
         console.log("-------------------------------------------------");
         for(i in cart){
@@ -142,10 +142,12 @@ module.exports.checkoutCart = async function (req){
                 // call the DB and update that item to loaned_out = true
                 if(uowArray[j].results.dirtybit == true && uowArray[j].results[0].item_id == cart[i]){
                     // loanableitem contains the full item (item_id, title, author, pages... etc)
-                    let loanableitem = uowArray[j].results[0];                                        
+                    loanableitem = await uowArray[j].results[0];
+                    if (loanableitem.discriminator == "Books")
+                        timestamp = 7;
+                    let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, timestamp);
+                    client.query(query);
                     console.log("This item has been checkedout: " + loanableitem.title);
-                    // let updatequery = tdg.checkoutCart(loanableitem);
-                    // client.query(updatequery);
                 }
             }
         }
@@ -160,7 +162,7 @@ module.exports.checkoutCart = async function (req){
         await uow.rollback();
         //for loop
 
-    }catch(err){
+    } catch(err) {
         console.error(err);
     }
 }

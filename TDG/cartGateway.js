@@ -1,13 +1,14 @@
 // DB Connection
 const pool = require('../db');
 
-module.exports.updateItem = async function(item_id, discriminator) {
+module.exports.loan = async function(item_id, discriminator, client_id, return_date) {
     // build the query string
-    let query = 'UPDATE ' + discriminator + ' SET ' + 
-                discriminator + '.quantity = quantity +1, ' + 
-                discriminator + '.loaned = loaned +1 ' +
-                ' WHERE item_id = ' + item_id + ' UNION ' +
-                '';
+    let query = await 'UPDATE ' + discriminator + ' SET loaned = loaned+1 WHERE item_id = ' + item_id + '; ' +
+                'INSERT INTO transactions (client_id, item_id, due_date) VALUES (' +
+                client_id + ', ' +
+                item_id + ', ' +
+                "CURRENT_DATE + INTERVAL '" + return_date + " day 23:59:59');";
+    console.log(query);
     return query;
 }
 
