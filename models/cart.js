@@ -115,7 +115,7 @@ module.exports.checkoutCart = async function (req){
         let cart = await req.session.cart; 
         let loanableitem;
         //2 days for loaning musics or movies, 7 days for loaning books
-        let timestamp = 2;
+        var timestamp;
         let client_id = (await users_tdg.getUserInfo(req.session.email)).results[0].user_id;
 
         const client = await pool.connect();
@@ -127,8 +127,11 @@ module.exports.checkoutCart = async function (req){
                 if(uowArray[j].results.dirtybit == true && uowArray[j].results[0].item_id == cart[i]){
                     // loanableitem contains the full item (item_id, title, author, pages... etc)
                     loanableitem = await uowArray[j].results[0];
-                    if (loanableitem.discriminator == "Books")
+                    if (loanableitem.discriminator == "Books") {
                         timestamp = 7;
+                    } else {
+                        timestamp = 2;
+                    }
                     let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, timestamp);
                     client.query(query);
                     console.log("This item has been checkedout: " + loanableitem.title);
