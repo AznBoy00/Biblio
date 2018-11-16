@@ -94,22 +94,6 @@ module.exports.checkCart = async function(req) {
     } 
 }
 
-// ====================================== //
-// ======= Loan Item ======== //
-// ====================================== //
-module.exports.loanItem = async function(item_id, discriminator) {
-    try {
-        if(quantity > loaned && loanable == true && discriminator !== "Magasines" ){
-        result = cartGateway.updateItem(item_id, discriminator);
-        } else {
-                   
-        }
-    } catch (err) {
-        console.error(err);
-    }
-    return result;
-}
-
 
 // ====================================== //
 // ============= UOW with CART ========== //
