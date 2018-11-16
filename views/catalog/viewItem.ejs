@@ -230,7 +230,7 @@
                                         <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                     <% } else { %>
                                         <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
-                                            href="/cart/add/<%= list['items'][j].item_id %>">
+                                            href="/cart/add/<%= results.results[0].item_id %>">
                                             Add to cart
                                         </a>
                                     <% } %>
