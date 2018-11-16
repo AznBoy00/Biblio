@@ -85,6 +85,13 @@ module.exports.insertNewItem = async function(newItem, discriminator){
     return result;
 }
 
+// get the most recent item insterted into the item table
+// this query makes use of the auto generated postgresql items_item_id_seq table
+module.exports.getMostRecentItemId = async function(){
+    //accessed as varaibleName.rows[0].item_id
+    return "SELECT currval('items_item_id_seq') AS item_id;";
+}
+
 // getItemByID Module
 module.exports.getItemByID = async function(item_id, discriminator){
 

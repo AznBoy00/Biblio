@@ -66,14 +66,13 @@ module.exports.getCatalogAlphaOrder = async function(type) {
 module.exports.insertNewItem = async function(req, discriminator) {
     try {
         // get the item fromt he html form
-        
         let temp = await this.getItemFromForm(req);
         temp.discriminator = discriminator;
-        let shit = []
+        let shit = [];
         shit[0] = temp;
 
         let newItem = {"results": shit};
-        
+        // console.log(newItem);
         // console.log(newItem.results);
         await uow.registerNew(newItem);
         await this.commitToDb();                            
@@ -254,6 +253,7 @@ module.exports.commitToDb = async function(){
         // }
 
         //
+        console.log("----------------------------------------------");
         for (i in uowArray){
             // console.log("UoW Array item: " + uowArray[i].results[0].title);
             if(uowArray[i].results.cleanbit == true){ // READ useless?
@@ -272,9 +272,17 @@ module.exports.commitToDb = async function(){
                 let newItem = uowArray[i].results[0];
                 let discriminator = uowArray[i].results[0].discriminator;                                
                 let result = await tdg.insertNewItem(newItem, discriminator);
+                await client.query(result.itemQuery);
+                await client.query(result.discriminatorQuery);
                 console.log("Item created: " + uowArray[i].results[0].title)
-                client.query(result.itemQuery);
-                client.query(result.discriminatorQuery);
+                
+                // get the item_id from the items_item_id_seq auto generated postgres table
+                let itemId = await client.query(await tdg.getMostRecentItemId());
+                itemId = itemId.rows[0].item_id;
+                // get the full item from the TDG
+                let getFromTDG = await tdg.getItemByID(itemId, discriminator);
+                // add the newly created item into the imap
+                await imap.addItemToMap(getFromTDG);
             }
             if(uowArray[i].results.deletebit == true){ // DELETE for items registeredDeleted in the UoW
                 let item_id = uowArray[i].results[0].item_id;
@@ -284,6 +292,7 @@ module.exports.commitToDb = async function(){
             }
         }
         client.release();
+        console.log("----------------------------------------------");
 
         await uow.rollback(); // clear the UoW after completing CRUD operations
     }catch(err){
