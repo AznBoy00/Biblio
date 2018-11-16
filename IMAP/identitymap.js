@@ -27,15 +27,18 @@ module.exports.findFullCatalog = async function(){
 module.exports.find = async function(item_id){
     try{
         let found = false;
-        for(i=0; i<imap.length; i++){
-            if(imap[i].results[0].item_id == item_id){
-                found = true;
-                return found;
+        if (typeof imap !== 'undefined' && imap.length > 0){
+            for(i=0; i<imap.length; i++){
+                if(imap[i].results[0].item_id == item_id){
+                    found = true;
+                    return found;
+                }
             }
+            return found;
         }
-        return found;
     }catch(err){
         console.error(err);
+        return false;
     }
 }
 
@@ -180,6 +183,17 @@ module.exports.resetImap = async function(){
     try{
         imap = [];
         fullCatalogLoaded = false;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+//return last item in catalog
+module.exports.isLastItem = async function(item_id){
+    try{
+        if (imap.length !== 0){
+            return imap[imap.length -1].results[0].item_id == item_id;
+        }
     }catch(err){
         console.error(err);
     }
