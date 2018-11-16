@@ -24,20 +24,20 @@
                     <!-- display the attribute artist || publisher || author || director -->
                     <!-- depending on if it is typ music || magazine || book || movie -->
                     <!-- respectively -->
-                    <% if (results.results[0].discriminator == "Books"){ %>
+                    <% if (results.results[0].author){ %>
                         <%- "<p class='lead'>by "+results.results[0].author+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Magazines"){ %>
+                    <% } if (results.results[0].publisher){ %>
                         <%- "<p class='lead'>by "+results.results[0].publisher+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Movies"){ %>
+                    <% } if (results.results[0].director){ %>
                         <%- "<p class='lead'>by "+results.results[0].director+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Music"){ %>
+                    <% } if (results.results[0].artist){ %>
                         <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
                     <% } %>
 
                     <!-- Loop over item attributes and display them-->
                     <% for (let i in results.results[0]){ %>
                         <div class="row mb-2">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <!-- the attribute title -->
                                 <% if (i == "magazine_id"){ %>
                                     <% let updateName = results.results[i] %>
@@ -189,10 +189,16 @@
                                 <strong><%= i %></strong>
                                 <% } %>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 <!-- the attribute value -->
                                 <!-- Converting the string to a date format in order to make it work-->
-                                <% if (i == "release_date"){ %>
+                                <% if (i == "loan_period"){ %>
+                                    <span><%= results.results[0][i] %> days</span>
+                                <% } else if (i == "quantity"){ %>
+                                    <span><%= results.results[0][i] %> in stock</span>
+                                <% } else if (i == "loaned"){ %>
+                                    <span><%= results.results[0][i] %> loaned out</span>
+                                <% } else if (i == "release_date"){ %>
                                     <% let datestring = results.results[0][i] %>
                                     <% let release = new Date(datestring) %>
                                     <% let day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
