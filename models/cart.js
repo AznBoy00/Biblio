@@ -77,14 +77,13 @@ module.exports.canCheckCart = async function(req) {
             imapItem = await (imap.get(JSON.parse(req.session.cart[i])));
             discriminator = imapItem.results[0].discriminator;
             item = await tdg.checkLoanable(JSON.parse(req.session.cart[i]), discriminator);
-            console.log("ITEM: " + JSON.stringify(item));
-            quantity = item.quantity;
-            loaned = item.loaned;
-            loanable = item.loanable;
-            console.log("ITEM: " + quantity + " AAA " + loaned + "AAA" + loanable);
-            if ((quantity == loaned) || loanable == false || discriminator == 'Magazines') {
-                errorString.concat(imap.get(JSON.parse(req.session.cart[i]).title) + "cannot be loaned. \n");
-            }
+            //console.log("ITEM: " + JSON.stringify(item));
+            quantity = item.results[0].quantity;
+            loaned = item.results[0].loaned;
+            loanable = item.results[0].loanable;
+            //console.log("ITEM: " + quantity + ", " + loaned + ", " + loanable);
+            if (discriminator == 'Magazines' || quantity == loaned || loanable == false)
+                errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
         }
         console.error("errorString for CART: \n" + errorString);
         return errorString;

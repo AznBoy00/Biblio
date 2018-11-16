@@ -10,10 +10,9 @@ module.exports.updateItem = async function(item_id, discriminator) {
 module.exports.checkLoanable = async function(item_id, discriminator) {
     // build the query string
     try {
-        const client = await pool.connect();
-        let result = "SELECT * FROM "  + discriminator + " WHERE item_id = " + item_id + ";";
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM ' + discriminator + ' WHERE item_id = ' + item_id + ';');
         const results = { 'results': (result) ? result.rows : null};
-        console.log("CHECK LOANABLE: " + JSON.stringify(results));
         client.release();
         return results;
     } catch (err) {
