@@ -17,8 +17,12 @@ module.exports.getCatalog = async function(){
     (resultMovie != null) ? result.items = result.items.concat(resultMovie.rows) : null;
     (resultMusic != null) ? result.items = result.items.concat(resultMusic.rows) : null;
 
+    result.items.sort(function (a, b) {
+        return a.item_id - b.item_id;
+    });
+
     return result;
-}
+};
 
 //filter Module
 module.exports.getCatalogAlphaOrder = async function(type){
