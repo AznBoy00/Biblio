@@ -49,8 +49,8 @@ router.get('/filter/:filterType', async (req, res) => {
     try {
         let filteredList;
         //filter A to Z
-        if (req.params.filterType === '1' || req.params.filterType === '2' ) {
-            let list = await catalog.getCatalogAlphaOrder(req.params.filterType);
+        if (req.params.filterType === '1' || req.params.filterType === '2' || req.params.filterType === '3' || req.params.filterType === '4' || req.params.filterType === '5') {
+            let list = await catalog.getFilteredCatalog(req.params.filterType);
             filteredList = await list;
         }
         let activeList = req.query.active;

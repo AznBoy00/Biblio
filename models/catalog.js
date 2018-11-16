@@ -41,10 +41,10 @@ module.exports.getCatalog = async function() {
 }
 
 //Get list of filtered catalog items by alphabets type = 1 is for ascending and type = 2 is for descending
-module.exports.getCatalogAlphaOrder = async function(type) {
+module.exports.getFilteredCatalog = async function(type) {
     try {
         //let foundCatalog = imap.checkFullCatalog();
-        let result = await tdg.getCatalogAlphaOrder(type);
+        let result = await tdg.getFilteredCatalog(type);
 
         // if full catalog not found in imap, get from tdg
         //if (!foundCatalog)
