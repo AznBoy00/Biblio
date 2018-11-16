@@ -12,7 +12,7 @@ var uow = require('../uow/uow');
 const pool = require('../db');
 
 // ====================================== //
-// ====== Get Items From Cart ======= //
+// ====== Get Items From Cart =========== //
 // ====================================== //
 module.exports.getCartCatalog = async function(req) {
     try {
@@ -67,9 +67,9 @@ module.exports.deleteAllItemsFromCart = async function(req) {
     } 
 }
 
-// ====================================== //
+// ========================================================== //
 // ======= Check the cart if items are checkoutable ======== //
-// ====================================== //
+// ======================================================== //
 module.exports.checkCart = async function(req) {
     let errorString = "";
     let item, quantity, loaned,loanable, discriminator, imapItem;
