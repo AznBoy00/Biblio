@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <%- include('../partials/_header'); -%>
+</head>
+
+<body>
+<%- include('../partials/_navbar'); -%>
+<div class="container main">
+
+    <div class="row">
+        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+            <h2>Active Users <small>(admin)</small></h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+
+            <%- include('../partials/_error'); -%>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col">user_id</th>
+                        <th scope="col">f_name</th>
+                        <th scope="col">l_name</th>
+                        <th scope="col">email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<% console.log('hi', results)%>-->
+                    <% for(var i = 0; i < results.results.length; i++) { %>
+                        <tr>
+                             <td><%= results.results[i].user_id %></td>
+                            <td><%= results.results[i].f_name %></td>
+                            <td><%= results.results[i].l_name %></td>
+                            <td><%= results.results[i].email %></td>
+                        </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <!-- ./ end table responsive -->
+        </div>
+        <!-- ./ end col -->
+    </div>
+    <!-- ./ end row -->
+
+</div>
+<!-- ./ end container -->
+<%- include('../partials/_footer') -%>
+</body>
+
+</html>
