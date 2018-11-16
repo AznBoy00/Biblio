@@ -94,27 +94,26 @@
                     </h4>
                 </div>
                 <div class="row">
-                        <!-- <span class="h4 align-middle ml-3 mb-0">Filters</span> -->
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Order by</a>
-                            <div class="dropdown-menu bg-light border border-success">
-                                <a id="#az" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('1');"> A-Z </a>
-                                <a id="#za" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('2')"> Z-A </a>
-                                <a id="#newdate" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('3')"> Date New to Old </a>
-                                <a id="#old" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('4')"> Date Old to New </a>
-                                <a id="#loanable" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('5')"> Loanable </a>
-                            </div>
+                    <div class="dropdown">
+                        <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Type</a>
+                        <div class="dropdown-menu bg-light border border-dark">
+                            <button id="#books" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('books'); return false;">Book</button>
+                            <button id="#magazines" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('magazines'); return false;">Magazine</button>
+                            <button id="#music" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('music'); return false;">Music</button>
+                            <button id="#movies" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('movies'); return false;">Movie</button>
                         </div>
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Type</a>
-                            <div class="dropdown-menu bg-light border border-dark">
-                                <button id="#books" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('books'); return false;">Book</button>
-                                <button id="#magazines" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('magazines'); return false;">Magazine</button>
-                                <button id="#music" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('music'); return false;">Music</button>
-                                <button id="#movies" type="button" class="dropdown-item btn btn-sm btn-outline-warning font-italic px-1 py-1" onclick="hideOthers('movies'); return false;">Movie</button>
-                            </div>
+                    </div>
+                    <div class="dropdown">
+                        <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sort by</a>
+                        <div class="dropdown-menu bg-light border border-success">
+                            <a id="#az" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('1');"> A-Z </a>
+                            <a id="#za" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('2')"> Z-A </a>
+                            <a id="#newdate" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('3')"> Date New to Old </a>
+                            <a id="#old" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('4')"> Date Old to New </a>
+                            <a id="#loanable" class="dropdown-item btn btn-sm btn-outline-success font-italic px-1 py-1" href="#" onclick="getFilterUrl('5')"> Loanable </a>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger my-md-2 my-1 mr-2" onclick="window.location.replace('/catalog');">Clear Filters</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger my-md-2 my-1 mr-2" onclick="window.location.replace('/catalog');">Clear Filters</button>
                 </div>
 
                 <div class="table-responsive">
