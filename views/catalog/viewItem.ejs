@@ -3,7 +3,13 @@
 
 <head>
     <%- include('../partials/_header') -%>
-    <script>function redirect(){window.location="/";}</script>
+    <script>
+        function redirect(){window.location="/";}
+        function getItemURL(item_id){
+            var curr = window.location.href;
+            window.location.replace(curr.substring(0, curr.lastIndexOf('/') + 1) + item_id);
+        }
+    </script>
 </head>
 
 <body>
@@ -78,7 +84,7 @@
                                         
                                         <!--  update an item -->
                                         <a class="form-group btn btn-sm btn-outline-warning form-group mr-1 mt-2"
-                                            href="/catalog/update/<%= results.results[0].discriminator %>/<%= results.results[0].item_id %>">
+                                            href="/catalog/update/<%= results.results[0].item_id %>">
                                             Update
                                         </a>
 
@@ -92,7 +98,24 @@
                                 <% } %>
 
                                 <!-- go back to the catalog --> 
-                                <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>	
+                                <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back to Catalog</a>
+                                <!-- go to the next item in catalog -->
+                                <% for(var i = 0; i < results.itemIdArray.length; i++){
+                                    if (results.itemIdArray[i].item_id === results.results[0].item_id){
+                                        if (i < results.itemIdArray.length - 1){
+                                            results.nextItemId = results.itemIdArray[++i].item_id;
+                                            i--;
+                                        }
+                                        break;
+                                    }
+                                }
+                                %>
+
+
+                                <% if (results.results[0].item_id !== results.itemIdArray[results.itemIdArray.length - 1].item_id) { %>
+                                    <button type="button" class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" onclick="getItemURL(<%- JSON.stringify(results.nextItemId)%>);">Next Item</button>
+                                <%}%>
+
                             </form>
                         </div>
                     </div>
