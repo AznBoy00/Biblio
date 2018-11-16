@@ -106,11 +106,17 @@
                                             results.nextItemId = results.itemIdArray[++i].item_id;
                                             i--;
                                         }
+                                        if (i != 0){
+                                            results.previousItemId = results.itemIdArray[--i].item_id;
+                                        }
                                         break;
                                     }
                                 }
                                 %>
 
+                                <% if (results.results[0].item_id !== results.itemIdArray[0].item_id) { %>
+                                    <button type="button" class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" onclick="getItemURL(<%- JSON.stringify(results.previousItemId)%>);">Previous Item</button>
+                                <%}%>
 
                                 <% if (results.results[0].item_id !== results.itemIdArray[results.itemIdArray.length - 1].item_id) { %>
                                     <button type="button" class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" onclick="getItemURL(<%- JSON.stringify(results.nextItemId)%>);">Next Item</button>
