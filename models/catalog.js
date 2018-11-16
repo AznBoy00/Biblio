@@ -92,6 +92,7 @@ module.exports.insertNewItem = async function(req, discriminator) {
 // if not found IMAP.add() then IMAP.get()
 module.exports.getItemById = async function(item_id) {
     try {
+        let itemIdArray = await tdg.getAllIds();
         let item;
         let foundInImap = await imap.find(item_id);
 
@@ -113,6 +114,7 @@ module.exports.getItemById = async function(item_id) {
             console.log(item.results[0]);
             console.log("---------------------------------------");
         }
+        item.itemIdArray = itemIdArray;
         return await item;
     } catch (err) {
         console.error(err);
