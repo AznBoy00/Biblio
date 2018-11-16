@@ -30,27 +30,181 @@
                     <!-- display the attribute artist || publisher || author || director -->
                     <!-- depending on if it is typ music || magazine || book || movie -->
                     <!-- respectively -->
-                    <% if (results.results[0].discriminator == "Books"){ %>
+                    <% if (results.results[0].author){ %>
                         <%- "<p class='lead'>by "+results.results[0].author+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Magazines"){ %>
+                    <% } if (results.results[0].publisher){ %>
                         <%- "<p class='lead'>by "+results.results[0].publisher+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Movies"){ %>
+                    <% } if (results.results[0].director){ %>
                         <%- "<p class='lead'>by "+results.results[0].director+"</p>" %> 
-                    <% } if (results.results[0].discriminator == "Music"){ %>
+                    <% } if (results.results[0].artist){ %>
                         <%- "<p class='lead'>by "+results.results[0].artist+"</p>" %>
                     <% } %>
 
                     <!-- Loop over item attributes and display them-->
                     <% for (let i in results.results[0]){ %>
                         <div class="row mb-2">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <!-- the attribute title -->
+                                <% if (i == "magazine_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Magazine ID" %>
+                                    <strong><%= updateName %></strong>
+                                <% }
+                                else if (i == "book_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Book ID" %>
+                                    <strong><%= updateName %></strong>
+                                <% } 
+                                else if (i == "music_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Music ID" %>
+                                    <strong><%= updateName %></strong>
+
+                               <% }
+                               else if (i == "movie_id"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Movie ID" %>
+                                    <strong><%= updateName %></strong>
+                               <% }
+                               else if (i == "item_id"){ %>
+                                <% let updateName = results.results[i] %>
+                                <% updateName = "Item ID" %>
+                                <strong><%= updateName %></strong>
+                           <% }
+                                else if (i == "discriminator"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Discriminator" %>
+                                    <strong><%= updateName %></strong>
+                           <% }
+                                else if (i == "loan_period"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loan Period" %>
+                                    <strong><%= updateName %></strong>
+                           <% }
+                                else if (i == "loanable"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loanable" %>
+                                    <strong><%= updateName %></strong>
+                           <% }
+                                else if (i == "quantity"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Quantity" %>
+                                    <strong><%= updateName %></strong>
+                           <% }
+                                else if (i == "loaned"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Loaned" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "title"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Title" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "author"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Author" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "format"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Format" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "pages"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Pages" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "publisher"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Publisher" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "language"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Language" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "release_date"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Release Date" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "isbn13"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "ISBN13" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "isbn10"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "ISBN10" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "director"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Director" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "producers"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Producers" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "dubbed"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Dubbed" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "subtitles"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Subtitles" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "actors"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Actors" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "run_time"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Run Time" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "type"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Type" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "artist"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Artist" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "label"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "Label" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else if (i == "asin"){ %>
+                                    <% let updateName = results.results[i] %>
+                                    <% updateName = "ASIN" %>
+                                    <strong><%= updateName %></strong>
+                            <% }
+                                else { %>
                                 <strong><%= i %></strong>
+                                <% } %>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 <!-- the attribute value -->
                                 <!-- Converting the string to a date format in order to make it work-->
-                                <% if (i == "release_date"){ %>
+                                <% if (i == "loan_period"){ %>
+                                    <span><%= results.results[0][i] %> days</span>
+                                <% } else if (i == "quantity"){ %>
+                                    <span><%= results.results[0][i] %> in stock</span>
+                                <% } else if (i == "loaned"){ %>
+                                    <span><%= results.results[0][i] %> loaned out</span>
+                                <% } else if (i == "release_date"){ %>
                                     <% let datestring = results.results[0][i] %>
                                     <% let release = new Date(datestring) %>
                                     <% let day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
@@ -58,7 +212,16 @@
                                     <% let year = release.getFullYear() %>
                                     <% let newdate = year+"-"+month+"-"+day %>
                                     <span><%= newdate %></span>
-                                <% } else{ %>
+                                <% } 
+                                <!-- converts the isbn13 in the appropriate format -->
+                                else if (i == "isbn13"){ %>
+                                    <% let isbn_13 = results.results[0][i] %>
+                                    <% first3 = isbn_13.toString().slice(0, 3) %>
+                                    <% last10 = isbn_13.toString().slice(4, 13) %>
+                                    <% newISBN13 = first3+"-"+last10 %>
+                                    <span><%= newISBN13 %></span>
+                                <% } 
+                                else{ %>
                                     <span><%= results.results[0][i] %></span>
                                 <% } %>
                             </div>
@@ -73,10 +236,16 @@
                                 <!-- cahnge the href, it should go to the cart -->
                                 <!-- loan item -->
                                 <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin && !JSON.stringify(cart).includes(results.results[0].item_id)){ %>
-                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
+                                    <% if(results.results[0].discriminator == "Magazines") { %> 
+                                        <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
+                                    <% } else if (results.results[0].loanable == false) { %>
+                                        <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
+                                    <% } else { %>
+                                        <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
                                             href="/cart/add/<%= results.results[0].item_id %>">
-                                        Add to cart
-                                    </a>
+                                            Add to cart
+                                        </a>
+                                    <% } %>
                                <% } %>
 
                                 <% if (typeof is_logged !== 'undefined' && is_logged){ %>

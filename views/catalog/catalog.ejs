@@ -52,10 +52,19 @@
                 for(var i = 0; i < activeL.length; i++) {
                     hideOthers(activeL[i]);
                 }
-                if (window.location.href.includes("1")){
+                if (window.location.href.includes("filter/1")){
                     document.getElementById('#az').classList.add('active');
-                } else if (window.location.href.includes("2")){
+                } else if (window.location.href.includes("filter/2")){
                     document.getElementById('#za').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/3")){
+                    document.getElementById('#newdate').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/4")){
+                    document.getElementById('#old').classList.add('active');
+                }
+                else if (window.location.href.includes("filter/5")){
+                    document.getElementById('#loanable').classList.add('active');
                 }
             }
         }
@@ -85,18 +94,27 @@
                     </h4>
                 </div>
                 <div class="row">
-                    <h4 class="ml-3">Filters</h4>
-                </div>
-                <div class="row">
                     <div class="col-12">
-                        <!-- <span class="h4 align-middle ml-3 mb-0">Filters</span> -->
-                        Order by:  <a id="#az" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2 ml-2" href="#" onclick="getFilterUrl('1');"> A-Z </a>
-                        <a id="#za" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" href="#" onclick="getFilterUrl('2')"> Z-A </a>
-                        Type: <button id="#books" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2 ml-2" onclick="hideOthers('books'); return false;">Book</button>
-                        <button id="#magazines" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('magazines'); return false;">Magazine</button>
-                        <button id="#music" type="button" class="btn btn-sm btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('music'); return false;">Music</button>
-                        <button id="#movies" type="button" class="btn btn-sm  btn-outline-success my-md-2 my-1 mr-2" onclick="hideOthers('movies'); return false;">Movie</button>
-                        <button type="button" class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-2" onclick="window.location.replace('/catalog');">Clear Filters</button>
+                        <div class="dropdown list-inline-item">
+                            <a class="btn btn-sm btn-outline-dark my-md-2 my-1 mr-1 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Type</a>
+                            <div class="dropdown-menu">
+                                <button id="#books" type="button" class="dropdown-item px-1 py-1 type-dropdown" onclick="hideOthers('books'); return false;">Book</button>
+                                <button id="#magazines" type="button" class="dropdown-item px-1 py-1 type-dropdown" onclick="hideOthers('magazines'); return false;">Magazine</button>
+                                <button id="#music" type="button" class="dropdown-item px-1 py-1 type-dropdown" onclick="hideOthers('music'); return false;">Music</button>
+                                <button id="#movies" type="button" class="dropdown-item px-1 py-1 type-dropdown" onclick="hideOthers('movies'); return false;">Movie</button>
+                            </div>
+                        </div>
+                        <div class="dropdown list-inline-item">
+                            <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-1 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sort by</a>
+                            <div class="dropdown-menu">
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="#" onclick="getFilterUrl('1');"> Title: A-Z </a>
+                                <a id="#za" class="dropdown-item px-1 py-1 sort-dropdown" href="#" onclick="getFilterUrl('2')"> Title: Z-A </a>
+                                <a id="#newdate" class="dropdown-item px-1 py-1 sort-dropdown" href="#" onclick="getFilterUrl('3')"> Date New to Old </a>
+                                <a id="#old" class="dropdown-item px-1 py-1 sort-dropdown" href="#" onclick="getFilterUrl('4')"> Date Old to New </a>
+                                <a id="#loanable" class="dropdown-item px-1 py-1 sort-dropdown" href="#" onclick="getFilterUrl('5')"> Loanable </a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger my-md-2 my-1 mr-2 list-inline-item" onclick="window.location.replace('/catalog');">Clear Filters</button>
                     </div>
                 </div>
 
@@ -141,10 +159,16 @@
                                         <td><%= list['items'][j].quantity %></td>
                                         <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                             <td>
-                                                <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
-                                                    href="/cart/add/<%= list['items'][j].item_id %>">
-                                                    Add to cart
-                                                </a>
+                                                <% if(list['items'][j].discriminator == 'Magazines') { %> 
+                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Not loanable</a>
+                                                <% } else if (list['items'][j].loanable == false) { %>
+                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
+                                                <% } else { %>
+                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
+                                                        href="/cart/add/<%= list['items'][j].item_id %>">
+                                                        Add to cart
+                                                    </a>
+                                                <% } %>
                                             </td>
                                         <% } %>
                                     </tr>
