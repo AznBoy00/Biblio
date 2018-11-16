@@ -71,19 +71,18 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 // ====================================== //
 module.exports.canCheckCart = async function(req) {
     let errorString = "";
-    let item;
-    let quantity;
-    let loaned;
-    let loanable;
+    let item, quantity, loaned,loanable, discriminator, imapItem;
     try {
         for (let i = 0; i < req.session.cart.length; i++) {
-            item = tdg.checkLoanable(JSON.parse(req.session.cart[i]), imap.get(JSON.parse(req.session.cart[i])).discriminator);
-            console.log("ITEM: " + item);
+            imapItem = await (imap.get(JSON.parse(req.session.cart[i])));
+            discriminator = imapItem.results[0].discriminator;
+            item = await tdg.checkLoanable(JSON.parse(req.session.cart[i]), discriminator);
+            console.log("ITEM: " + JSON.stringify(item));
             quantity = item.quantity;
             loaned = item.loaned;
             loanable = item.loanable;
             console.log("ITEM: " + quantity + " AAA " + loaned + "AAA" + loanable);
-            if ((quantity == loaned) || loanable == false) {
+            if ((quantity == loaned) || loanable == false || discriminator == 'Magazines') {
                 errorString.concat(imap.get(JSON.parse(req.session.cart[i]).title) + "cannot be loaned. \n");
             }
         }
