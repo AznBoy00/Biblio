@@ -97,7 +97,7 @@ module.exports.updateReturnTransaction = async function(transaction_id, item_id,
 
     const client = await pool.connect();
     let query = await client.query("UPDATE " + discriminator + " SET loaned = loaned-1 WHERE item_id = " + item_id + "; " +
-         "UPDATE transactions SET return_date = CURRENT_DATE WHERE transaction_id = " + transaction_id + ";");
+         "UPDATE transactions SET return_date = CURRENT_TIMESTAMP WHERE transaction_id = " + transaction_id + ";");
     client.release();
 }
 
