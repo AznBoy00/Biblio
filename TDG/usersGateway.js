@@ -93,16 +93,11 @@ module.exports.getUserInfo = async function(email){
     return results;
 }
 
-module.exports.updateReturnTransaction = async function(req){
-    let discriminator = req.sessions.discriminator;
-    let item_id = req.sessions.item_id;
-    let transaction_id = req.sessions.transaction_id;
-    console.log("discriminator ", discriminator);
-    console.log("item_id ",item_id);
-    console.log("transaction_id ",transaction_id);
+module.exports.updateReturnTransaction = async function(transaction_id, item_id, discriminator){
+
     const client = await pool.connect();
-    let query = await 'UPDATE ' + discriminator + ' SET loaned = loaned-1 WHERE item_id = ' + item_id + '; ' +
-            'UPDATE transactions SET return_date = CURRENT_DATE WHERE tranaction_id = ' + transaction_id + ';'
+    let query = await client.query("UPDATE " + discriminator + " SET loaned = loaned-1 WHERE item_id = " + item_id + "; " +
+         "UPDATE transactions SET return_date = CURRENT_DATE WHERE transaction_id = " + transaction_id + ";");
     client.release();
 }
 
@@ -122,4 +117,29 @@ module.exports.updateUserInfo = async function(newUserInfo, email){
         client.release();
 }
 
+module.exports.getDiscriminator = async function(item_id) {
+    let query = "SELECT items.discriminator FROM items WHERE items.item_id = " + item_id;
+    
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    client.release();
 
+    const result1 = (res1 != null) ? res1.rows : null;
+    let discriminator = await result1[0].discriminator;
+
+    return discriminator;
+}
+
+module.exports.getItemId = async function(transactions_id){
+    let query = "SELECT transactions.item_id FROM transactions WHERE transactions.transaction_id = " + transactions_id;
+
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    client.release();
+
+    const result1 = (res1 != null) ? res1.rows : null;
+    let item_id = await result1[0].item_id;
+
+    return item_id;
+
+}
