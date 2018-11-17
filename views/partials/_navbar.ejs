@@ -27,6 +27,10 @@
                     <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
                         <a class="nav-link my-md-2 my-1" href="/catalog/transactions">View Transactions</a>
                     </li>
+                <% }else { %>
+                    <li <%- title === "Admin CP" ? 'class="nav-item\ active"'  : "class='nav-item'" %> >
+                        <a class="nav-link my-md-2 my-1" href="/catalog/transactions">View Your Transactions</a>
+                    </li>
                 <% } %>
             <% } %>
         </ul>
