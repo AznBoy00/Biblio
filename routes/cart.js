@@ -38,7 +38,9 @@ router.get('/add/:item_id', async (req, res) => {
         if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
         // Add Item to cart
         cart.addItemToCart(req);
-        // console.log("ITEM_ID: " + req.params.item_id);
+        console.log("---------------------------------------");
+        console.log("Added item to cart with ID " + req.params.item_id);
+        console.log("---------------------------------------");
         }
         res.redirect('back');
     } catch (err) {
@@ -53,7 +55,9 @@ router.get('/add/:item_id', async (req, res) => {
 router.get('/remove/:i', async (req, res) => {
     try {
       cart.deleteItemFromCart(req);
-      // Remove Item from cart
+      console.log("---------------------------------------");
+      console.log("Removed item from UOW with ID " + i);
+      console.log("---------------------------------------");
       res.redirect('/cart');
     } catch (err) {
       console.error(err);
@@ -67,13 +71,13 @@ router.get('/remove/:i', async (req, res) => {
 router.get('/checkout', async (req, res) => {
   try {
     let list = await cart.getCartCatalog(req);
-    let errors = await cart.checkCart(req);
-    if (!req.session.is_admin && errors == "") {
+    let err = await cart.checkCart(req);
+    if (!req.session.is_admin && err.length == 0) {
       await cart.checkoutCart(req);
       res.redirect('back');
     } else {
       console.log('CART HAS ERROR');
-      res.render('cart', { title: 'Cart', errors: [{msg: errors}], is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
+      res.render('cart', { title: 'Cart', err: [{msg: err}], is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
     }
   } catch (err) {
     console.error(err);

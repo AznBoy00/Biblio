@@ -58,7 +58,9 @@ router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
     if (currentUserIsAdmin(req)) {
         try {
             user.toggleAdminStatus(req.params.userid, false);
-            console.log("PROMOTING: " + req.params.userid);
+            console.log("---------------------------------------");
+            console.log("PROMOTING user with ID " + req.params.userid);
+            console.log("---------------------------------------");
             res.redirect('/users/admincp/manageusers');
         } catch (err) {
             console.error(err);
@@ -74,7 +76,9 @@ router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
             user.toggleAdminStatus(req.params.userid, true);
-            console.log("DEMOTING: "+ req.params.userid);
+            console.log("---------------------------------------");
+            console.log("DEMOTING user with ID "+ req.params.userid);
+            console.log("---------------------------------------");
             res.redirect('/users/admincp/manageusers');
         } catch (err) {
             console.error(err);
@@ -156,9 +160,10 @@ router.post('/login', async function (req, res) {
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
                 req.session.cart = [];
+                req.session.loaned_items = [];
                 req.session.is_active = true;
+                await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
-
                 res.redirect('/');
             } else {
                 return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
@@ -242,7 +247,7 @@ router.post('/usercp', async (req, res) => {
                 }
                 results = await user.getUserInfo(email);
                 const success = ['Update Complete!'];
-                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged});
+                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged, cart: req.session.cart});
             } catch (err) {
                 console.error(err);
                 res.render('error', {error: err});

@@ -1,7 +1,7 @@
 // Table Data Gateway
 var tdg = require('../TDG/itemsGateway');
 // Identity Mapper
- var imap = require('../IMAP/identitymap');
+var imap = require('../IMAP/identitymap');
 // Unit of Work
 var uow = require('../uow/uow');
 // Database Connection
@@ -114,7 +114,7 @@ module.exports.getItemById = async function(item_id) {
             // console.log("---------------------------------------");
         }
         item.itemIdArray = itemIdArray;
-        console.log(item.itemIdArray);
+        // console.log(item.itemIdArray);
         return await item;
     } catch (err) {
         console.error(err);
@@ -152,7 +152,8 @@ module.exports.getSearchResults = async function(searched) {
     try {
         let search = searched.toLowerCase();
         let result = await tdg.getSearchResults(search);
-        console.log("Result from model:", result);
+        // console.log("Search result:", result);
+        console.log("Searching for: \""+searched+"\"");
         return await result;
     } catch (err) {
         console.error(err);
@@ -250,7 +251,6 @@ module.exports.getUserTransactionItems = async function(email) {
     try {        
         let result = await tdg.getAllUserTransactions(email);
         await imap.loadFullTransactionTable(result);
-
         return await result;
     } catch (err) {
         console.error(err);

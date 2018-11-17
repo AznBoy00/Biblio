@@ -32,7 +32,6 @@ module.exports.getFilteredCatalog = async function(type){
         'UNION SELECT item_id, discriminator, title, director, release_date, quantity, loanable FROM movies ' +
         'UNION SELECT item_id, discriminator, title, artist, release_date, quantity, loanable FROM music )'+ getFilterType(type));
     client.release();
-
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : [];
 

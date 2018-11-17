@@ -1,6 +1,6 @@
 var tdg = require('../TDG/usersGateway');
 const bcrypt = require('bcrypt-nodejs');
-
+var catalog = require('../models/catalog');
 
 //registers a new user to the DB
 module.exports.insertNewUser = async function(newUser) {
@@ -146,8 +146,7 @@ module.exports.getNewUserInfo = async function(email, req) {
 // update user information to database
 module.exports.updateUserInfo = async function(newUserInfo, email) {
     try {
-    return await tdg.updateUserInfo(newUserInfo, email);
-
+        return await tdg.updateUserInfo(newUserInfo, email);
     } catch (err) {
         console.error(err);
     }
@@ -162,5 +161,22 @@ module.exports.returnItemTransaction = async function(req) {
 
     } catch (err) {
         console.error(err);
+    }
+}
+
+module.exports.getLoanedItems = async function(req) {
+    try {
+        // Only users get to use this feature
+        if (!req.session.is_admin) {
+            let loaned = await catalog.getUserTransactionItems(req.session.email);
+            req.session.loaned_items = [];
+            for (var i = 0; i < loaned.items.length; i++) {
+                // Check for not returned items (NULL)
+                if (loaned.items[i].return_date == null)
+                    req.session.loaned_items.push(loaned.items[i].item_id);
+            }
+        }
+    } catch(err) {
+        console.log(err);
     }
 }
