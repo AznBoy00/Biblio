@@ -61,7 +61,7 @@ module.exports.getSearchResultTransactions = async function(search, req) {
     this.createTransactionViewTable();
     let resultSearch;
     const client = await pool.connect();
-    if (req.session.is_Admin) {
+    if (req.session.is_admin) {
         resultSearch = await client.query("SELECT * FROM transactions_view WHERE Lower(movie_title) LIKE '%" + search + "%' OR LOWER(book_title) LIKE '%" + search + "%' OR LOWER(music_title) LIKE '%" + search + "%';");
     } else {
         resultSearch = await client.query("SELECT * FROM transactions_view WHERE Lower(movie_title) LIKE '%" + search + "%' OR LOWER(book_title) LIKE '%" + search + "%' OR LOWER(music_title) LIKE '%" + search + "%' INTERSECT SELECT * FROM transactions_view WHERE email = '"+ req.session.email +"';");
