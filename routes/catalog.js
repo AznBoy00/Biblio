@@ -96,16 +96,7 @@ router.get('/view/:item_id', async (req, res) => {
         let discriminator;
         let results = await catalog.getItemById(req.params.item_id);
         discriminator = await results.results[0].discriminator;
-        //copy the values to another variable because we need the item_id in all cases
         results.currentItemId = results.results[0].item_id;
-        //WHATEVER BELOW WAS NOT TESTED AND IS BREAKING THE WEBSITE
-        /*if (!req.session.is_admin){
-            for (var i in results.results[0]){
-                if (i == "book_id" || i == "magazine_id" || i == "music_id" || i == "movie_id"
-                    || i == "item_id" || i == "discriminator" || i == "loaned")
-                    delete results.results[0][i];
-            }
-        }*/
         res.render('catalog/viewItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
     } catch (err) {
         console.error(err);
@@ -164,18 +155,14 @@ router.get('/create/:discriminator', function (req, res) {
 // == POST Requests for Creating Items === //
 // ====================================== //
 router.post('/create/:discriminator', async (req, res) => {
-if (currentUserIsAdmin(req)){
-    try {
-        await catalog.insertNewItem(req, req.params.discriminator);
-        // let results = await catalog.insertNewItem(req, req.params.discriminator);
-        // let item_id = results.item_id.rows[0].currval;
-        // let discriminator = req.params.discriminator;
-        // res.redirect('/catalog/view/'+discriminator+'/'+item_id);
-        res.redirect('/catalog');
-    } catch (err) {
-        console.error(err);
-        res.render('error', { error: err });
-        }
+    if (currentUserIsAdmin(req)){
+        try {
+            await catalog.insertNewItem(req, req.params.discriminator);
+            res.redirect('/catalog');
+        } catch (err) {
+            console.error(err);
+            res.render('error', { error: err });
+            }
     } else {
         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
     }
@@ -208,7 +195,6 @@ router.post('/update/:item_id', async (req, res) => {
         try {
             let item_id = req.params.item_id;
             await catalog.updateItem(req, item_id);
-            // res.redirect('/catalog');
             res.redirect('/catalog/view/'+item_id);
         } catch (err) {
             console.error(err);
