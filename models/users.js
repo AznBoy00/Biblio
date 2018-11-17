@@ -155,7 +155,10 @@ module.exports.updateUserInfo = async function(newUserInfo, email) {
 
 module.exports.returnItemTransaction = async function(req) {
     try {
-    return await tdg.updateReturnTransaction(req);
+        let transaction_id = req.params.transaction;
+        let item_id = await tdg.getItemId(transaction_id);
+        let discriminator = await tdg.getDiscriminator(item_id);
+        return await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
 
     } catch (err) {
         console.error(err);
