@@ -255,11 +255,13 @@ router.post('/usercp', async (req, res) => {
 });
 
 
-router.get('/return', async (req, res) => {
+router.post('/return/:transaction', async (req, res) => {
     try {
         // Add return time stamp to transaction
-        console.log("YOU HAVE CLCIKED THE RETURN BUTTON!");
         let result = await user.returnItemTransaction(req);
+        
+        let list = await catalog.getUserTransactionItems(req.session.email);
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionReturn', is_logged: req.session.logged, is_admin: req.session.is_admin});
     } catch (err) {
         console.error(err);
         res.send("error " + err);
