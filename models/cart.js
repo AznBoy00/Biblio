@@ -87,7 +87,7 @@ module.exports.checkCart = async function(req) {
             if (discriminator == 'Magazines' || quantity <= loaned || loanable == false)
                 errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
         }
-        console.error("errorString for CART: \n" + errorString);
+        // console.error("errorString for CART: \n" + errorString);
         return errorString;
     } catch (err) {
         console.error(err);
@@ -134,7 +134,7 @@ module.exports.checkoutCart = async function (req){
                     }
                     let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, timestamp);
                     client.query(query);
-                    console.log("This item has been checkedout: " + loanableitem.title);
+                    console.log(loanableitem.title+" has been checkedout");
                 }
             }
         }
