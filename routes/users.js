@@ -244,7 +244,7 @@ router.post('/usercp', async (req, res) => {
                 }
                 results = await user.getUserInfo(email);
                 const success = ['Update Complete!'];
-                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged});
+                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged, cart: req.session.cart});
             } catch (err) {
                 console.error(err);
                 res.render('error', {error: err});
