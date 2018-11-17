@@ -27,13 +27,15 @@ module.exports.getCatalog = async function(){
 //filter Module
 module.exports.getFilteredCatalog = async function(type){
     const client = await pool.connect();
-    console.log(getFilterType(type));
+    console.log("----------------------------------------------");
+    console.log("Filter by: "+ getFilterType(type));
+    console.log("----------------------------------------------");
     const resultBook = await client.query('SELECT * FROM (SELECT item_id, discriminator, title, author, release_date, quantity, loanable FROM books ' +
         'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity, loanable FROM magazines ' +
         'UNION SELECT item_id, discriminator, title, director, release_date, quantity, loanable FROM movies ' +
         'UNION SELECT item_id, discriminator, title, artist, release_date, quantity, loanable FROM music )'+ getFilterType(type));
     client.release();
-    console.log( await resultBook);
+    // console.log( await resultBook);
 
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : [];

@@ -58,7 +58,9 @@ router.get('/admincp/manageusers/promote/:userid', async (req, res) => {
     if (currentUserIsAdmin(req)) {
         try {
             user.toggleAdminStatus(req.params.userid, false);
-            console.log("PROMOTING: " + req.params.userid);
+            console.log("---------------------------------------");
+            console.log("PROMOTING user with ID " + req.params.userid);
+            console.log("---------------------------------------");
             res.redirect('/users/admincp/manageusers');
         } catch (err) {
             console.error(err);
@@ -74,7 +76,9 @@ router.get('/admincp/manageusers/demote/:userid', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
             user.toggleAdminStatus(req.params.userid, true);
-            console.log("DEMOTING: "+ req.params.userid);
+            console.log("---------------------------------------");
+            console.log("DEMOTING user with ID "+ req.params.userid);
+            console.log("---------------------------------------");
             res.redirect('/users/admincp/manageusers');
         } catch (err) {
             console.error(err);
@@ -160,8 +164,10 @@ router.post('/login', async function (req, res) {
                 req.session.is_active = true;
                 await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
-                console.log("LOGGING IN: "+ email);
-                console.log(req.session);
+                console.log("---------------------------------------");
+                console.log("LOGGING IN user "+ email);
+                console.log("With session "+req.session);
+                console.log("---------------------------------------");
 
                 res.redirect('/');
             } else {

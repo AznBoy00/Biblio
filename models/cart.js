@@ -96,7 +96,7 @@ module.exports.checkCart = async function(req) {
                 }
             }
         }
-        console.error("errorString for CART: \n" + errorString);
+        // console.error("errorString for CART: \n" + errorString);
         return errorString;
     } catch (err) {
         console.error(err);
@@ -143,7 +143,7 @@ module.exports.checkoutCart = async function (req){
                     }
                     let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, timestamp);
                     client.query(query);
-                    console.log("This item has been checkedout: " + loanableitem.title);
+                    console.log(loanableitem.title+" has been checkedout");
                 }
             }
         }

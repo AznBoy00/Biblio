@@ -114,7 +114,7 @@ module.exports.getItemById = async function(item_id) {
             // console.log("---------------------------------------");
         }
         item.itemIdArray = itemIdArray;
-        console.log(item.itemIdArray);
+        // console.log(item.itemIdArray);
         return await item;
     } catch (err) {
         console.error(err);
@@ -152,7 +152,8 @@ module.exports.getSearchResults = async function(searched) {
     try {
         let search = searched.toLowerCase();
         let result = await tdg.getSearchResults(search);
-        console.log("Result from model:", result);
+        // console.log("Search result:", result);
+        console.log("Searching for: \""+searched+"\"");
         return await result;
     } catch (err) {
         console.error(err);

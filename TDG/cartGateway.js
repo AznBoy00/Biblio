@@ -8,7 +8,7 @@ module.exports.loan = async function(item_id, discriminator, client_id, return_d
                 client_id + ', ' +
                 item_id + ', ' +
                 "CURRENT_DATE + INTERVAL '" + return_date + " day 23:59:59');";
-    console.log(query);
+    // console.log(query);
     return query;
 }
 
