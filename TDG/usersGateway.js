@@ -96,7 +96,7 @@ module.exports.getUserInfo = async function(email){
 module.exports.updateReturnTransaction = async function(transaction_id, item_id, discriminator){
 
     const client = await pool.connect();
-    let query = await client.query("UPDATE " + discriminator + " SET loaned = loaned-1 WHERE item_id = " + item_id + "; " +
+    let query = await client.query("UPDATE " + discriminator + " SET loaned = loaned-1 WHERE item_id = " + item_id + "; set timezone TO 'GMT+5';" +
          "UPDATE transactions SET return_date = CURRENT_TIMESTAMP WHERE transaction_id = " + transaction_id + ";");
     client.release();
 }
