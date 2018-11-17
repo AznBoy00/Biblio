@@ -187,7 +187,7 @@ module.exports.getAllUserTransactions = async function(email){
     const result1 = await client.query("SELECT * FROM transactions_view WHERE email = '" + email + "' ORDER BY loan_date ASC;");
     client.release();
     
-    console.log("TDG RESULT", result1)
+    // console.log("TDG RESULT", result1);
     
     let result = [];
     result.items = (result1 != null) ? result1.rows : null;

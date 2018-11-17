@@ -156,7 +156,9 @@ router.post('/login', async function (req, res) {
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
                 req.session.cart = [];
+                req.session.loaned_items = [];
                 req.session.is_active = true;
+                await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
                 console.log("LOGGING IN: "+ email);
                 console.log(req.session);
