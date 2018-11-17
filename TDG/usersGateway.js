@@ -93,6 +93,19 @@ module.exports.getUserInfo = async function(email){
     return results;
 }
 
+module.exports.updateReturnTransaction = async function(req){
+    let discriminator = req.sessions.discriminator;
+    let item_id = req.sessions.item_id;
+    let transaction_id = req.sessions.transaction_id;
+    console.log("discriminator ", discriminator);
+    console.log("item_id ",item_id);
+    console.log("transaction_id ",transaction_id);
+    const client = await pool.connect();
+    let query = await 'UPDATE ' + discriminator + ' SET loaned = loaned-1 WHERE item_id = ' + item_id + '; ' +
+            'UPDATE transactions SET return_date = CURRENT_DATE WHERE tranaction_id = ' + transaction_id + ';'
+    client.release();
+}
+
 //updateUserInfo Model
 module.exports.updateUserInfo = async function(newUserInfo, email){
     const client = await pool.connect();
@@ -108,3 +121,5 @@ module.exports.updateUserInfo = async function(newUserInfo, email){
                 );
         client.release();
 }
+
+
