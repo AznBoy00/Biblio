@@ -37,7 +37,7 @@ Check out the [wiki](https://github.com/AznBoy00/soen343team5/wiki/Getting-Start
 |-------------------|------------|-----------------------------|------------------------------------------------------------|
 | Abdulla Alhaj Zin | 40013496   | abdullah.hzen@gmail.com     | [@abdullahzen](https://github.com/abdullahzen)             |
 | Nizar Belhassan   | 27519443   | M.nizar.belhassan@gmail.com | [@Legendary-Griffin](https://github.com/Legendary-Griffin) |
-| Dave Bhardwaj     | 40000679   | davebhardwaj1@gmail.com     | [@WolfOfTheNorth](https://github.com/WolfOfTheNorth)       |
+| Dave Bhardwaj     | 40000679   | davebhardwaj1@gmail.com     | [@WolfOfTheNorth](https://github.com/WolfOfTheNorth), [@davebhardwajaero](https://github.com/davebhardwajaero)       |
 | Kenza Boulisfane  | 40043521   | kenza.boulisfane@gmail.com  | [@bkenza](https://github.com/bkenza)                       |
 | Kevin Camellini   | 26771009   | kevincamellini@gmail.com    | [@kcamcam](https://github.com/kcamcam)                     |
 | Kayne Herrmann    | 40007153   | kh_group@outlook.com        | [@kkhh001](https://github.com/kkhh001)                     |
