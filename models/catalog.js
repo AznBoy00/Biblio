@@ -152,7 +152,8 @@ module.exports.getSearchResults = async function(searched) {
     try {
         let search = searched.toLowerCase();
         let result = await tdg.getSearchResults(search);
-        console.log("Search result:", result);
+        // console.log("Search result:", result);
+        console.log("Searching for: \""+searched+"\"");
         return await result;
     } catch (err) {
         console.error(err);
