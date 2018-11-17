@@ -27,13 +27,11 @@ module.exports.getCatalog = async function(){
 //filter Module
 module.exports.getFilteredCatalog = async function(type){
     const client = await pool.connect();
-    console.log(getFilterType(type));
     const resultBook = await client.query('SELECT * FROM (SELECT item_id, discriminator, title, author, release_date, quantity, loanable FROM books ' +
         'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity, loanable FROM magazines ' +
         'UNION SELECT item_id, discriminator, title, director, release_date, quantity, loanable FROM movies ' +
         'UNION SELECT item_id, discriminator, title, artist, release_date, quantity, loanable FROM music )'+ getFilterType(type));
     client.release();
-    console.log( await resultBook);
 
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : [];
@@ -131,7 +129,6 @@ module.exports.getItemByID = async function(item_id){
     
     const client = await pool.connect();
     const res1 = await client.query(query);
-    //console.log(await res1.rows);
     const result1 = (res1 != null) ? res1.rows : null;
 
     let discriminator = await result1[0].discriminator;
@@ -182,13 +179,9 @@ module.exports.getAllTransactions = async function(){
 module.exports.getAllUserTransactions = async function(email){
     
     this.createTransactionViewTable();
-    console.log("EMAIL: " + email);
     const client = await pool.connect();
     const result1 = await client.query("SELECT * FROM transactions_view WHERE email = '" + email + "' ORDER BY loan_date ASC;");
     client.release();
-    
-    console.log("TDG RESULT", result1)
-    
     let result = [];
     result.items = (result1 != null) ? result1.rows : null;
     return result;
