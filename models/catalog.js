@@ -152,7 +152,7 @@ module.exports.getSearchResults = async function(searched) {
     try {
         let search = searched.toLowerCase();
         let result = await tdg.getSearchResults(search);
-        console.log("Result from model:", result);
+        console.log("Search result:", result);
         return await result;
     } catch (err) {
         console.error(err);
