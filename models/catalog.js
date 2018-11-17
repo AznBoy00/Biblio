@@ -263,7 +263,6 @@ module.exports.filterTransactions = async function(req, asc) {
         let result = await tdg.filterTransactions(req, asc);
         await imap.filterTransactionTable(result);
 
-        let result2 = await imap.filterTransactionTable();
         return await result;
     } catch (err) {
         console.error(err);
