@@ -59,7 +59,11 @@
                                  <% for(var j in list['items']) { %>
                                     <tr class="<%= list['items'][j]%>">
                                          <% if(typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin) { %>
-                                            <td><button method="POST" action="/users/return" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Return</button></td>
+                                            <form class="search-form form-inline mb-0" method="POST" action="/users/return/<%= list['items'][j].transaction_id %>" onSubmit="return checkblank(this);">
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit" <% if(list['items'][j].return_date !== null) { %>disabled background-color: grey;<% } %>>Return</button> 
+                                                </td>
+                                            </form>    
                                          <% } %>
                                         <td><%= list['items'][j].transaction_id %> </td>
                                         <td><%= list['items'][j].client_id %></td>
