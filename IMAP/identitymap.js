@@ -1,3 +1,7 @@
+//Initialize map as empty.
+var imap=[];
+var fullCatalogLoaded = false;
+
 // Authors: Kevin Yau and Kevin Camellini 
 // Date: November 8, 2018
 // Description:
@@ -7,10 +11,6 @@
 // IMAP array. If found, it will return that instead of making another databse call
 // if it is not found, it will call and ask the database for that object, once
 // retrieved it will store that newly retrieved object in the IMAP object.
-
-//Initialize map as empty.
-var imap=[];
-var fullCatalogLoaded = false;
 
 //Check if full catalog has been loaded once.
 module.exports.findFullCatalog = async function(){
@@ -27,15 +27,18 @@ module.exports.findFullCatalog = async function(){
 module.exports.find = async function(item_id){
     try{
         let found = false;
-        for(i=0; i<imap.length; i++){
-            if(imap[i].results[0].item_id == item_id){
-                found = true;
-                return found;
+        if (typeof imap !== 'undefined' && imap.length > 0){
+            for(i=0; i<imap.length; i++){
+                if(imap[i].results[0].item_id == item_id){
+                    found = true;
+                    return found;
+                }
             }
+            return found;
         }
-        return found;
     }catch(err){
         console.error(err);
+        return false;
     }
 }
 
@@ -46,6 +49,10 @@ module.exports.loadFullCatalog = async function(catalog){
         imap = [];
         for (var i in catalog['items']){//catalog[book], catalog[magazine]...
             let results = {'results': [catalog['items'][i]]};
+            results.results.dirtybit = null; //Access through item.results.dirtybit
+            results.results.cleanbit = null;
+            results.results.newbit = null;
+            results.results.deletebit = null; 
             this.addItemToMap(results);
         }
         fullCatalogLoaded = true;
@@ -72,14 +79,17 @@ module.exports.getFullCatalog = async function(){
     }
 }
 
+var inTransaction = false;
+var transactionMap=[];
 module.exports.loadFullTransactionTable = async function(transactions){
     try{
-        imap = [];
-        for (var i in transactions['items']){
+        transactionMap = [];
+        inTransaction = true;
+        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
             let results = {'results': [transactions['items'][i]]};
             this.addItemToMap(results);
         }
-
+        inTransaction = false;
         //this.showAllMap();
     }catch(err){
         console.error(err);
@@ -137,7 +147,16 @@ module.exports.updateItem = async function(item, item_id){
 // if an item is not found, get query from the databse then store that item into the IMAP
 module.exports.addItemToMap = async function(item){
     try{
-        imap.push(item);
+        item.results.dirtybit = null; //Access through item.results.dirtybit
+        item.results.cleanbit = null;
+        item.results.newbit = null;
+        item.results.deletebit = null; 
+
+        if(inTransaction==false){
+            imap.push(item);
+        }else if(inTransaction==true){
+            transactionMap.push(item);
+        }
     }catch(err){
         console.error(err);
     }
@@ -154,7 +173,7 @@ module.exports.deleteItemFromMap = async function(item_id){
                 imap.splice(i, 1);
             }
         }
-        this.showAllMap(); //show the IMAP after an item has been deleted
+        // this.showAllMap(); //show the IMAP after an item has been deleted
     }catch(err){
         console.error(err);
     }
@@ -167,6 +186,28 @@ module.exports.showAllMap = async function(){
         for(i = 0; i < imap.length; i++){
             console.log("Imap["+i+"] \n" + JSON.stringify(imap[i].results[0]));
             console.log("=======================================================");
+        }
+    }catch(err){
+        console.error(err);
+    }
+}
+
+//reset the imap array to empty, and the check fullCatalogLoaded to false.
+//this allows the imap to start fresh with new login/logout
+module.exports.resetImap = async function(){
+    try{
+        imap = [];
+        fullCatalogLoaded = false;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+//return last item in catalog
+module.exports.isLastItem = async function(item_id){
+    try{
+        if (imap.length !== 0){
+            return imap[imap.length -1].results[0].item_id == item_id;
         }
     }catch(err){
         console.error(err);

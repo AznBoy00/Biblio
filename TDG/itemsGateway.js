@@ -1,4 +1,5 @@
 // DB Connection
+// once the UOW is implemented the DB connection should no longer reside in here
 const pool = require('../db');
 
 // getCatalog Module
@@ -16,17 +17,23 @@ module.exports.getCatalog = async function(){
     (resultMovie != null) ? result.items = result.items.concat(resultMovie.rows) : null;
     (resultMusic != null) ? result.items = result.items.concat(resultMusic.rows) : null;
 
+    result.items.sort(function (a, b) {
+        return a.item_id - b.item_id;
+    });
+
     return result;
-}
+};
 
 //filter Module
-module.exports.getCatalogAlphaOrder = async function(type){
+module.exports.getFilteredCatalog = async function(type){
     const client = await pool.connect();
-    const resultBook = await client.query('SELECT item_id, discriminator, title, author FROM books ' +
-        'UNION SELECT item_id, discriminator, title, publisher FROM magazines ' +
-        'UNION SELECT item_id, discriminator, title, director FROM movies ' +
-        'UNION SELECT item_id, discriminator, title, artist FROM music ORDER BY title  ' + (type === '1' ? 'ASC' : 'DESC'));
+    console.log(getFilterType(type));
+    const resultBook = await client.query('SELECT * FROM (SELECT item_id, discriminator, title, author, release_date, quantity, loanable FROM books ' +
+        'UNION SELECT item_id, discriminator, title, publisher, release_date, quantity, loanable FROM magazines ' +
+        'UNION SELECT item_id, discriminator, title, director, release_date, quantity, loanable FROM movies ' +
+        'UNION SELECT item_id, discriminator, title, artist, release_date, quantity, loanable FROM music )'+ getFilterType(type));
     client.release();
+    console.log( await resultBook);
 
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : [];
@@ -69,9 +76,9 @@ module.exports.getSearchResultTransactions = async function(search, req) {
 
 
 // insertNewItem Module
-module.exports.insertNewItem = async function(newItem,req, discriminator){
+module.exports.insertNewItem = async function(newItem, discriminator){
 
-    // build the query string in the format: 
+    // build the query string in the format:
     // insert into the Item table first, in order to get the item_id later
     let itemQuery = "INSERT INTO Items (discriminator) VALUES (\'"+discriminator+"\');";
     let query = "INSERT INTO " + discriminator + " (item_id, ";
@@ -81,7 +88,7 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
             query = query + i + ", ";
         }
     }
-        //remove the last comma
+    //remove the last comma
     query = query.slice(0, -2);
     query = query + ") SELECT select_id, "
     // iterate over attribute values
@@ -95,26 +102,44 @@ module.exports.insertNewItem = async function(newItem,req, discriminator){
     query = query + " FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;"
     
     let result = [];
-    // open the connection as late as possible
-    const client = await pool.connect();
-    // now query the database with the pre-built string
-    result.insert1 = await client.query(itemQuery);
-    result.insert2 = await client.query(query);
-    result.item_id = await client.query('SELECT CURRVAL(\'items_item_id_seq\')');
-    client.release();        
-    
+      
+    result.itemQuery = itemQuery;
+    result.discriminatorQuery = query;
     return result;
 }
 
-// getItemByID Module
-module.exports.getItemByID = async function(item_id, discriminator){
-
-    let query = "SELECT * FROM " + discriminator + " WHERE item_id = " + item_id + ";";
-    
-    const client = await pool.connect()
-    let result = await client.query(query);
+//get all Ids
+module.exports.getAllIds = async function() {
+    let query = "SELECT item_id FROM Items";
+    const client = await pool.connect();
+    const result = await client.query(query);
     client.release();
+    return result.rows;
+}
 
+// get the most recent item insterted into the item table
+// this query makes use of the auto generated postgresql items_item_id_seq table
+module.exports.getMostRecentItemId = async function(){
+    //accessed as varaibleName.rows[0].item_id
+    return "SELECT currval('items_item_id_seq') AS item_id;";
+}
+
+// getItemByID Module
+module.exports.getItemByID = async function(item_id){
+
+    let query = "SELECT items.discriminator FROM items WHERE items.item_id = " + item_id;
+    
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    //console.log(await res1.rows);
+    const result1 = (res1 != null) ? res1.rows : null;
+
+    let discriminator = await result1[0].discriminator;
+
+    let query2 = "SELECT * FROM " + discriminator + " WHERE item_id = " + item_id + ";";
+    let result = await client.query(query2);
+
+    client.release();
     const results = { 'results': (result) ? result.rows : null};
     return await results;
 }
@@ -128,30 +153,17 @@ module.exports.updateItem = async function(newItem, item_id, discriminator){
         if(newItem[i] != null){
             // set attribute name = attribute value
             query = query + i + " = \'" + newItem[i] + "\', ";
-            // console.log(i+": "+newItem[i]);
         }
     }
     query = query.slice(0, -2); //remove the last comma
     query = query + " WHERE item_id = " + item_id + ";";
-    // console.log(query);
-
-    // open the connection as late as possible
-    const client = await pool.connect();
-    // now query the database with the pre-built string
-    let result = await client.query(query);
-    // close the connection
-    client.release();
-
-    return result;
-}    
+    return query;
+}
 
 //delete Module
 module.exports.deleteItem = async function(item_id){
     let query = "DELETE FROM Items WHERE item_id = " + item_id + ";"
-    
-    const client = await pool.connect();
-    let result = await client.query(query);
-    client.release();
+    return query;
 }
 
 module.exports.getAllTransactions = async function(){
@@ -181,7 +193,6 @@ module.exports.getAllUserTransactions = async function(email){
     result.items = (result1 != null) ? result1.rows : null;
     return result;
 }
-
 
 module.exports.filterTransactions = async function(req, asc) {
     this.createTransactionViewTable();
@@ -230,4 +241,17 @@ module.exports.createTransactionViewTable = async function() {
     }
     
     client.release();
+}
+
+let getFilterType = function (type) {
+    if(type === '1')
+        return 'AS U ORDER BY title ASC';
+    else if(type === '2')
+        return 'AS U ORDER BY title DESC';
+    else if(type === '3')
+        return 'AS U ORDER BY release_date DESC';
+    else if(type === '4')
+        return 'AS U ORDER BY release_date ASC';
+    else if(type === '5')
+        return "AS U WHERE loanable = 't' ORDER BY item_id ASC";
 }

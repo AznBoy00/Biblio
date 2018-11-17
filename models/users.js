@@ -66,6 +66,15 @@ module.exports.displayAllUsers = async function() {
 	}
 };
 
+//display active users
+module.exports.displayActiveUsers = async function() {
+    try{
+        return await tdg.getActiveUsers();
+    } catch (err){
+        console.error(err);
+    }
+};
+
 //check for user if he's an admin or not
 async function checkIsAdmin(userid) {
 
@@ -79,6 +88,24 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
         console.error(err);
     }
 };
+
+//toggles the user status
+module.exports.setUserStatusActive = async function(email) {
+    try {
+        await tdg.setUserStatusActive(email);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports.setUserStatusInactive = async function(email) {
+    try {
+        await tdg.setUserStatusInactive(email);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 //getter for user profile information
 module.exports.getUserInfo = async function(email) {
     try {

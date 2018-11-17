@@ -4,17 +4,17 @@
 </head>
 
 <body>
-    <%- include('../partials/_navbar'); -%>
-    <div class="container main">
-        
-        <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
-                <h2>Manage Users <small>(admin)</small></h2>
-            </div>
-        </div>        
-        
-        <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+<%- include('../partials/_navbar'); -%>
+<div class="container main">
+
+    <div class="row">
+        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+            <h2>Manage Users <small>(admin)</small></h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2">
 
                 <%- include('../partials/_error'); -%>
                 
@@ -33,43 +33,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% for(var i = 0; i < results.results.length; i++) { %>
-                                <tr>
-                                    <!-- USES BOOLEAN -->
-                                    <% if(results.results[i].user_id == 1) { %>
-                                        <td>
-                                            
-                                        </td>
-                                    <% } else if(results.results[i].is_admin == false) { %>
-                                        <td>
-                                            <a class="btn btn-sm btn-outline-primary" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
-                                        </td>
-                                    <% } else { %>
-                                        <td>
-                                            <a class="btn btn-sm btn-outline-danger" href="/users/admincp/manageusers/demote/<%= results.results[i].user_id %>">Demote</a>
-                                        </td>
-                                    <% } %>
-                                    <td style="text-transform: uppercase;"><%= results.results[i].is_admin %></td>
-                                    <td><%= results.results[i].user_id %></td>
-                                    <td><%= results.results[i].f_name %></td>
-                                    <td><%= results.results[i].l_name %></td>
-                                    <td><%= results.results[i].email %></td>
-                                    <td><%= results.results[i].address %></td>
-                                    <td><%= results.results[i].num_permitted_items %></td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- ./ end table responsive -->
-			</div>
-			<!-- ./ end col -->
-		</div>
-		<!-- ./ end row -->
 
-	</div>
-	<!-- ./ end container -->
-	<%- include('../partials/_footer') -%>   
+                        <% for(var i = 0; i < results.results.length; i++) { %>
+                            <tr>
+                                <!-- USES BOOLEAN -->
+                                <% if(results.results[i].user_id == 1 || admin_email == results.results[i].email) { %>
+                                    <td>
+
+                                    </td>
+                                <% } else if(results.results[i].is_admin == false) { %>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary" href="/users/admincp/manageusers/promote/<%= results.results[i].user_id %>">Promote</a>
+                                    </td>
+                                <% } else { %>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-danger" href="/users/admincp/manageusers/demote/<%= results.results[i].user_id %>">Demote</a>
+                                    </td>
+                                <% } %>
+                                <td style="text-transform: uppercase;"><%= results.results[i].is_admin %></td>
+                                <td><%= results.results[i].user_id %></td>
+                                <td><%= results.results[i].f_name %></td>
+                                <td><%= results.results[i].l_name %></td>
+                                <td><%= results.results[i].email %></td>
+                                <td><%= results.results[i].address %></td>
+                                <td><%= results.results[i].num_permitted_items %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <!-- ./ end table responsive -->
+        </div>
+        <!-- ./ end col -->
+    </div>
+    <!-- ./ end row -->
+
+</div>
+<!-- ./ end container -->
+<%- include('../partials/_footer') -%>
 </body>
 
 </html>

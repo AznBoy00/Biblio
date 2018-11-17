@@ -1,0 +1,102 @@
+// Config Variables
+var session = require('express-session');
+var express = require('express');
+var router = express.Router();
+router.use(session({
+    secret : '2C44-4D44-WppQ38S',
+    resave : true,
+    saveUninitialized : true
+}));
+var expressValidator = require('express-validator');
+router.use(expressValidator());
+var cart = require('../models/cart');
+var user = require('../models/users');
+var catalog = require('../models/catalog');
+
+// ====================================== //
+// == Get shopping cart page === //
+// ====================================== //
+router.get('/', async (req, res) => {
+    if (!currentUserIsAdmin(req)){
+        try {
+            let list = await cart.getCartCatalog(req);
+            res.render('cart', { title: 'Cart', is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
+        } catch (err) {
+            console.error(err);
+            res.render('error', { error: err });
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "Admins can not loan items"}]});
+    }
+});
+
+// ====================================== //
+// == Add item to shopping cart === //
+// ====================================== //
+router.get('/add/:item_id', async (req, res) => {
+    try {
+        if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
+        // Add Item to cart
+        cart.addItemToCart(req);
+        // console.log("ITEM_ID: " + req.params.item_id);
+        }
+        res.redirect('back');
+    } catch (err) {
+      console.error(err);
+      res.render('error', { error: err });
+    }
+});
+  
+// ====================================== //
+// ==  Delete item from shopping cart === //
+// ====================================== //
+router.get('/remove/:i', async (req, res) => {
+    try {
+      cart.deleteItemFromCart(req);
+      // Remove Item from cart
+      res.redirect('/cart');
+    } catch (err) {
+      console.error(err);
+      res.render('error', { error: err });
+    }
+});
+
+// ====================================== //
+// == Checkout entire shopping cart === //
+// ====================================== //
+router.get('/checkout', async (req, res) => {
+  try {
+    let list = await cart.getCartCatalog(req);
+    let errors = await cart.checkCart(req);
+    if (!req.session.is_admin && errors == "") {
+      await cart.checkoutCart(req);
+      res.redirect('back');
+    } else {
+      console.log('CART HAS ERROR');
+      res.render('cart', { title: 'Cart', errors: [{msg: errors}], is_logged: req.session.logged, is_admin: req.session.is_admin, list: await list, filter: false, cart: req.session.cart});
+    }
+  } catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+  }
+});
+
+// ====================================== //
+// == Clear entire shopping cart === //
+// ====================================== //
+router.get('/clear', async (req, res) => {
+  try {
+    cart.deleteAllItemsFromCart(req);
+    res.redirect('/cart');
+  } catch (err) {
+    console.error(err);
+    res.render('error', { error: err });
+  }
+});
+
+//keep the next line at the end of this script
+module.exports = router;
+
+let currentUserIsAdmin = function (req){
+  return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
+};

@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+    <%- include('./partials/_header'); -%>
+</head>
+
+<body>
+    <%- include('./partials/_navbar'); -%>
+    <div class="container main">
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+                <h2>List of Items in the Cart</h2>
+                <%- include('./partials/_error'); -%>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>Item #</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>By</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterate over items in cart -->
+                                <% for(var i in list) { %>
+                                    <tr class="<%= list[i].results[0].discriminator%>">
+                                        <td><%= list[i].results[0].item_id %></td>
+                                        <td><%= list[i].results[0].discriminator %></td>
+                                        <td>
+                                            <a href="/catalog/view/<%= list[i].results[0].item_id %>">
+                                                <%= list[i].results[0].title %>
+                                            </a>
+                                        </td>
+                                        <% if (list[i].results[0].discriminator == "Books" || filter){ %>
+                                            <td><%= list[i].results[0].author %></td>
+                                        <% } else if (list[i].results[0].discriminator == "Magazines"){%>
+                                            <td><%= list[i].results[0].publisher %></td>
+                                        <% } else if (list[i].results[0].discriminator == "Movies"){%>
+                                            <td><%= list[i].results[0].director %></td>
+                                        <% } else if (list[i].results[0].discriminator == "Music"){%>
+                                            <td><%= list[i].results[0].artist %></td>
+                                        <% } %>
+                                        <td>
+                                            <a class="form-group btn btn-sm btn-outline-danger mr-1 mt-2" href="/cart/remove/<%= i %>">
+                                                X
+                                            </a>
+                                        </td>
+                                        </tr>
+                                <% } %>
+                            <!-- End of iteration for cart item(s) -->
+                        </tbody>
+                    </table>
+                </div>
+                <a class="form-group btn btn-sm btn-outline-primary mr-1 mt-2" href="javascript:history.back()">Go back</a>
+                <% if(typeof is_admin !== 'undefined' && !is_admin) {%>
+                    <a class="form-group btn btn-sm btn-outline-success mr-1 mt-2" style="float:right" href="/cart/checkout" onclick="return confirm('Are you sure you want to checkout all the items in the cart?');">Checkout</a>	
+                <% } %>
+                <a class="form-group btn btn-sm btn-outline-danger mr-1 mt-2" style="float:right" href="/cart/clear" onclick="return confirm('Are you sure you want to clear all the items in the cart?');">Clear Cart</a>	
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/_footer') -%>
+</body>
+
+</html>
