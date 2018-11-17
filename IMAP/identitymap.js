@@ -96,6 +96,21 @@ module.exports.loadFullTransactionTable = async function(transactions){
     }
 }
 
+
+module.exports.filterTransactionTable =  async function(transactions){
+    //Properties: transaction_id, client_id, item_id, email
+    try{
+        imap = [];
+        for (var i in transactions['items']){
+            let results = {'results': [transactions['items'][i]]};
+            this.addItemToMap(results);
+        }
+
+        //this.showAllMap();
+    }catch(err){
+        console.error(err);
+    }
+}
 // if find returns true, return that item from IMAP instead of making a databse call
 module.exports.get = async function(item_id){ 
     try{

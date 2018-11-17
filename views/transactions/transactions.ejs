@@ -8,36 +8,70 @@
 
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
-                <h2>Loan Transactions: </h2>
+                <h2>Loan Transactions</h2>
+                <form class="search-form form-inline mb-0" method="POST" action="/catalog/searchtransactions" onSubmit="return checkblank(this);">
+                    <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search For Items" aria-label="Search">
+                    <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button>
+                </form>
             </div>
+            <div class="row">
+                    <div class="col-12">
+                        <div class="dropdown list-inline-item">
+                            <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-1 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sort by</a>
+                            <div class="dropdown-menu">
+                            <% if(typeof is_admin !== 'undefined' && is_admin) { %>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/transaction_id"> Transaction ID </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/client_id"> Client ID </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/item_id"> Item ID </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/f_name"> Customer Name </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/l_name"> Customer Name </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/email"> Customer E-Mail </a>                                 
+                            <% } %>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/loan_date"> Loan Date </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/due_date"> Due Date </a>
+                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/return_date"> Return Date </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
 
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
                             <tr>
-                                <th>Transaction ID</th>
-                                <th>Client ID</th>
-                                <th>Item ID</th>
-                                <th>Loan Made On</th>
-                                <th>Due By</th>
-                                <th>Returned On</th>
+                                <a href=""><th>Transaction ID</th></a>
+                                <a href=""><th>Client ID</th></a>
+                                <a href=""><th>Item ID</th></a>
+                                <a href=""><th>Customer Name</th></a>
+                                <a href=""><th>Customer Email</th></a>
+                                <a href=""><th>Item Name</th></a>
+                                <a href=""><th>Loan Made On</th></a>
+                                <a href=""><th>Due By</th></a>
+                                <a href=""><th>Returned On</th></a>
                             </tr>
                         </thead>
 
                         <tbody>
                                  <% for(var j in list['items']) { %>
                                     <tr class="<%= list['items'][j]%>">
-                                        <td>
-                                        <a id="btn" onclick="display()">
-                                            <%= list['items'][j].transaction_id %>
-                                        </a>
-                                        </td>
+                                        <td><%= list['items'][j].transaction_id %> </td>
                                         <td><%= list['items'][j].client_id %></td>
                                         <td><%= list['items'][j].item_id %></td>
+                                        <td><%= list['items'][j].f_name + " "  + list['items'][j].l_name %></td>
+                                        <td><%= list['items'][j].email %></td>
+                                        <% if (list['items'][j].book_title != null) {%>
+                                            <td><%= list['items'][j].book_title %></td>
+                                        <%}else if (list['items'][j].music_title != null){%>
+                                            <td><%= list['items'][j].music_title %></td>
+                                        <%}else{%>
+                                            <td><%= list['items'][j].movie_title %></td>
+                                        <%}%>
                                         <td><%= list['items'][j].loan_date %></td>
                                         <td><%= list['items'][j].due_date %></td>
                                         <td><%= list['items'][j].return_date %></td>
+
+
                                     </tr>
                                 <% } %>
                         </tbody>
