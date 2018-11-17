@@ -17,19 +17,19 @@ module.exports.getCatalog = async function() {
         let result;
         // if full catalog found in imap
         if (foundCatalog){
-            console.log("----------------------------------------------");
-            console.log("Catalog has already been loaded into the IMAP:");
+            //console.log("----------------------------------------------");
+            //console.log("Catalog has already been loaded into the IMAP:");
             result = await imap.getFullCatalog();
-            console.log("Loading "+result.items.length+" items from the IMAP");
-            console.log("----------------------------------------------");
+            //console.log("Loading "+result.items.length+" items from the IMAP");
+            //console.log("----------------------------------------------");
             // console.log(result);
         // else get full catalog from imap
         } else{
-            console.log("----------------------------------------------");
-            console.log("Catalog was not found in the IMAP:");
+            // console.log("----------------------------------------------");
+            // console.log("Catalog was not found in the IMAP:");
             result = await tdg.getCatalog();
-            console.log("Loading "+result.items.length+" items from the DB");
-            console.log("----------------------------------------------");
+            // console.log("Loading "+result.items.length+" items from the DB");
+            // console.log("----------------------------------------------");
             // console.log(result);
             await imap.loadFullCatalog(result);
         }
@@ -110,8 +110,8 @@ module.exports.getItemById = async function(item_id) {
             console.log("---------------------------------------");
             console.log("Item not found in IMAP: Loading from DB");
             item = await imap.get(item_id);
-            console.log(item.results[0]);
-            console.log("---------------------------------------");
+            // console.log(item.results[0]);
+            // console.log("---------------------------------------");
         }
         item.itemIdArray = itemIdArray;
         // console.log(item.itemIdArray);
@@ -154,6 +154,21 @@ module.exports.getSearchResults = async function(searched) {
         let result = await tdg.getSearchResults(search);
         // console.log("Search result:", result);
         console.log("Searching for: \""+searched+"\"");
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ====================================== //
+// ====== Search Items Handler ======= //
+// ====================================== //
+module.exports.getSearchResultsTransactions = async function(req) {
+    try {
+        let searched = req.body.search;
+        let search = searched.toLowerCase();
+        let result;
+        result = await tdg.getSearchResultTransactions(search, req);
         return await result;
     } catch (err) {
         console.error(err);
@@ -226,7 +241,32 @@ module.exports.getTransactionItems = async function() {
         
         let result = await tdg.getAllTransactions();
         await imap.loadFullTransactionTable(result);
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports.getUserTransactionItems = async function(email) {
+    try {        
+        console.log("In get User Transaction" + email);
+        let result = await tdg.getAllUserTransactions(email);
+        await imap.loadFullTransactionTable(result);
+        console.log("TSHLSJHDBJSHAD", result);
+
+        return await result;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports.filterTransactions = async function(req, asc) {
+    try {        
         
+        let result = await tdg.filterTransactions(req, asc);
+        await imap.filterTransactionTable(result);
+
+        let result2 = await imap.filterTransactionTable();
         return await result;
     } catch (err) {
         console.error(err);

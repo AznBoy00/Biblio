@@ -28,16 +28,43 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/transactions', async (req, res) => {
-    if (currentUserIsAdmin(req)){
-        try {
-            let list = await catalog.getTransactionItems();
-            res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin});
-        } catch (err) {
-            console.error(err);
-            res.render('error', { error: err });
-        }
-    } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+    try {
+        let list;
+        console.log("In Transaactions!")
+        if(req.session.is_admin) list = await catalog.getTransactionItems();
+        else list = await catalog.getUserTransactionItems(req.session.email);
+
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.render('error', { error: err });
+    }
+});
+
+// ============================================= //
+// ======== View Search Transaction Page ======= //
+// ============================================= //
+router.post('/searchtransactions', async (req, res) => {
+    try {
+        
+        let list = await catalog.getSearchResultsTransactions(req);
+        console.log("Search list object :", list)
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionSearch', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error("Error Has Occured during search :" + err);
+        res.render('error', { error: err });
+    }
+});
+
+router.get('/filtert/:f', async (req, res) => {
+    try {
+        
+        let list = await catalog.filterTransactions(req, true);
+        console.log(JSON.stringify(list));
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionSearch', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error("Error Has Occured during search :" + err);
+        res.render('error', { error: err });
     }
 });
 

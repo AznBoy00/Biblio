@@ -59,6 +59,23 @@ module.exports.getSearchResults = async function(search) {
     return await result;
 }
 
+module.exports.getSearchResultTransactions = async function(search, req) {
+    this.createTransactionViewTable();
+    let resultSearch;
+    const client = await pool.connect();
+    if (req.session.is_admin) {
+        resultSearch = await client.query("SELECT * FROM transactions_view WHERE Lower(movie_title) LIKE '%" + search + "%' OR LOWER(book_title) LIKE '%" + search + "%' OR LOWER(music_title) LIKE '%" + search + "%';");
+    } else {
+        resultSearch = await client.query("SELECT * FROM transactions_view WHERE Lower(movie_title) LIKE '%" + search + "%' OR LOWER(book_title) LIKE '%" + search + "%' OR LOWER(music_title) LIKE '%" + search + "%' INTERSECT SELECT * FROM transactions_view WHERE email = '"+ req.session.email +"';");
+    }
+    client.release();
+    
+    let result = [];
+    result.items = (resultSearch != null) ? resultSearch.rows : null;
+    console.log("My Search Result: " + result);
+    return await result;
+}
+
 
 // insertNewItem Module
 module.exports.insertNewItem = async function(newItem, discriminator){
@@ -152,13 +169,80 @@ module.exports.deleteItem = async function(item_id){
 }
 
 module.exports.getAllTransactions = async function(){
+    
+    this.createTransactionViewTable();
+    
     const client = await pool.connect();
-    const resultTransaction = await client.query('SELECT * FROM transactions ORDER BY transaction_id ASC');
+    const result1 = await client.query("SELECT * FROM transactions_view ORDER BY loan_date ASC;");
     client.release();
-
+    
     let result = [];
-    result.items = (resultTransaction != null) ? resultTransaction.rows : null;
+    result.items = (result1 != null) ? result1.rows : null;
     return result;
+}
+
+module.exports.getAllUserTransactions = async function(email){
+    
+    this.createTransactionViewTable();
+    console.log("EMAIL: " + email);
+    const client = await pool.connect();
+    const result1 = await client.query("SELECT * FROM transactions_view WHERE email = '" + email + "' ORDER BY loan_date ASC;");
+    client.release();
+    
+    console.log("TDG RESULT", result1)
+    
+    let result = [];
+    result.items = (result1 != null) ? result1.rows : null;
+    return result;
+}
+
+module.exports.filterTransactions = async function(req, asc) {
+    this.createTransactionViewTable();
+    const filterType = req.params.f;
+    let result1;
+
+    const client = await pool.connect();
+    let order;
+
+    if(asc){order = "ASC"} else {order = "DSC"}
+
+    if(req.session.is_admin) {
+        result1 = await client.query("SELECT * FROM transactions_view ORDER BY " + filterType +" "+ order + ";");
+    }else{
+        result1 = await client.query("SELECT * FROM transactions_view WHERE email = '"+ req.session.email+"' ORDER BY " + filterType +" "+ order + ";");
+    }
+    client.release();
+    
+    let result = [];
+    result.items = (result1 != null) ? result1.rows : null;
+    return result;
+
+
+}
+
+module.exports.createTransactionViewTable = async function() {
+    const client = await pool.connect();
+    try{
+        const checkTableExists = await client.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables  WHERE table_schema = 'public' AND table_name = 'transactions_view');");
+        
+        //Check is the Table Exists before recreating it
+        if(!checkTableExists.rows[0].exists) {
+            const result1 = await client.query("CREATE VIEW transactions_view AS "+
+            "SELECT DISTINCT transactions.transaction_id, transactions.client_id, transactions.item_id, " +
+            "users.f_name, users.l_name, users.email,transactions.loan_date, transactions.due_date, " +
+            "transactions.return_date, (SELECT title FROM Books, users Where users.user_id = transactions.client_id AND books.item_id = transactions.item_id) AS book_title, "+
+            "(SELECT title FROM Music, users Where users.user_id = transactions.client_id AND music.item_id = transactions.item_id) AS music_title, " +
+            "(SELECT title FROM movies, users Where users.user_id = transactions.client_id AND movies.item_id = transactions.item_id) AS movie_title " +
+            "FROM transactions, music, movies, books, users " +
+            "Where (users.user_id = transactions.client_id AND books.item_id = transactions.item_id) " +
+            "OR (users.user_id = transactions.client_id AND music.item_id = transactions.item_id)" +
+            "OR (users.user_id = transactions.client_id AND movies.item_id = transactions.item_id);");
+        }
+    }catch(err){
+        console.log("Oops: Transaction_view already exists! ", err)
+    }
+    
+    client.release();
 }
 
 let getFilterType = function (type) {
