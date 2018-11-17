@@ -152,3 +152,12 @@ module.exports.updateUserInfo = async function(newUserInfo, email) {
         console.error(err);
     }
 }
+
+module.exports.returnItemTransaction = async function(req) {
+    try {
+    return await tdg.updateReturnTransaction(req);
+
+    } catch (err) {
+        console.error(err);
+    }
+}
