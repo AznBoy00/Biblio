@@ -158,8 +158,6 @@ router.post('/login', async function (req, res) {
                 req.session.cart = [];
                 req.session.is_active = true;
                 await user.setUserStatusActive(email);
-                console.log("LOGGING IN: "+ email);
-                console.log(req.session);
 
                 res.redirect('/');
             } else {
@@ -252,6 +250,19 @@ router.post('/usercp', async (req, res) => {
         }
     } else {
         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not a user!"}]});
+    }
+
+});
+
+
+router.get('/return', async (req, res) => {
+    try {
+        // Add return time stamp to transaction
+        console.log("YOU HAVE CLCIKED THE RETURN BUTTON!");
+        let result = await user.returnItemTransaction(req);
+    } catch (err) {
+        console.error(err);
+        res.send("error " + err);
     }
 
 });
