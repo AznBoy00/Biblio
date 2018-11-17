@@ -75,7 +75,7 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 // ======= Check the cart if items are checkoutable ======== //
 // ======================================================== //
 module.exports.checkCart = async function(req) {
-    let errorString = "";
+    let errorString = [];
     let item, quantity, loaned,loanable, discriminator, imapItem;
     try {
         for (let i = 0; i < req.session.cart.length; i++) {
@@ -89,10 +89,10 @@ module.exports.checkCart = async function(req) {
             //console.log("ITEM: " + quantity + ", " + loaned + ", " + loanable);
             //Magazines are not loanable by default || quantity - loaned = available copies || loanable boolean
             if (discriminator == 'Magazines' || quantity <= loaned || loanable == false)
-                errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned.";
+                errorString.push("" + (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned.");
             for (var j = 0; j < req.session.loaned_items.length; j++) {
                 if (req.session.cart[i] == req.session.loaned_items[j]) {
-                    errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned: You already loaned this item, please return it.";
+                    errorString.push("" + (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned: You already loaned this item.");
                 }
             }
         }
