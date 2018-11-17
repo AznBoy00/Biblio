@@ -1,7 +1,7 @@
 // Table Data Gateway
 var tdg = require('../TDG/itemsGateway');
 // Identity Mapper
- var imap = require('../IMAP/identitymap');
+var imap = require('../IMAP/identitymap');
 // Unit of Work
 var uow = require('../uow/uow');
 // Database Connection
@@ -249,11 +249,10 @@ module.exports.getTransactionItems = async function() {
 
 module.exports.getUserTransactionItems = async function(email) {
     try {        
-        console.log("In get User Transaction" + email);
+        // console.log("In get User Transaction" + email);
         let result = await tdg.getAllUserTransactions(email);
         await imap.loadFullTransactionTable(result);
-        console.log("TSHLSJHDBJSHAD", result);
-
+        // console.log("TSHLSJHDBJSHAD", result);
         return await result;
     } catch (err) {
         console.error(err);

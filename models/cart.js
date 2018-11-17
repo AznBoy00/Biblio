@@ -10,6 +10,8 @@ var imap = require('../IMAP/identitymap');
 var uow = require('../uow/uow');
 // Database Connection
 const pool = require('../db');
+// user
+var user = require('../models/users');
 
 // ====================================== //
 // ====== Get Items From Cart =========== //
@@ -17,6 +19,8 @@ const pool = require('../db');
 module.exports.getCartCatalog = async function(req) {
     try {
         let result = [];
+        // Refresh all loaned_items.
+        await user.getLoanedItems(req);
         // console.log("CART SIZE: " + req.session.cart.length);
         for(var i=0; i<req.session.cart.length; i++){
             // console.log("CART: " + JSON.stringify(req.session.cart));
@@ -71,7 +75,7 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 // ======= Check the cart if items are checkoutable ======== //
 // ======================================================== //
 module.exports.checkCart = async function(req) {
-    let errorString = "";
+    let errorString = [];
     let item, quantity, loaned,loanable, discriminator, imapItem;
     try {
         for (let i = 0; i < req.session.cart.length; i++) {
@@ -85,7 +89,12 @@ module.exports.checkCart = async function(req) {
             //console.log("ITEM: " + quantity + ", " + loaned + ", " + loanable);
             //Magazines are not loanable by default || quantity - loaned = available copies || loanable boolean
             if (discriminator == 'Magazines' || quantity <= loaned || loanable == false)
-                errorString += (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned. \n";
+                errorString.push("" + (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned.");
+            for (var j = 0; j < req.session.loaned_items.length; j++) {
+                if (req.session.cart[i] == req.session.loaned_items[j]) {
+                    errorString.push("" + (await imap.get(JSON.parse(req.session.cart[i]))).results[0].title + " cannot be loaned: You already loaned this item.");
+                }
+            }
         }
         // console.error("errorString for CART: \n" + errorString);
         return errorString;
@@ -142,8 +151,11 @@ module.exports.checkoutCart = async function (req){
         // close DB connection
         client.release();
 
-        //Reset the cart upon checkout.
+        // Reset the cart upon checkout.
         this.deleteAllItemsFromCart(req);
+
+        // Refresh all loaned_items.
+        await user.getLoanedItems(req);
 
         // Clean the cart after checkout
         await uow.rollback();

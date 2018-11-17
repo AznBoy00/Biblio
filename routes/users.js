@@ -160,7 +160,9 @@ router.post('/login', async function (req, res) {
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
                 req.session.cart = [];
+                req.session.loaned_items = [];
                 req.session.is_active = true;
+                await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
                 console.log("---------------------------------------");
                 console.log("LOGGING IN user "+ email);
@@ -250,7 +252,7 @@ router.post('/usercp', async (req, res) => {
                 }
                 results = await user.getUserInfo(email);
                 const success = ['Update Complete!'];
-                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged});
+                res.render('users/usercp', {results, success: success, title: 'User CP', is_logged: req.session.logged, cart: req.session.cart});
             } catch (err) {
                 console.error(err);
                 res.render('error', {error: err});
