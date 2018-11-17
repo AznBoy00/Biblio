@@ -75,14 +75,59 @@ module.exports.getFullCatalog = async function(){
 module.exports.loadFullTransactionTable = async function(transactions){
     try{
         imap = [];
-        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
+        for (var i in transactions['items']){
             let results = {'results': [transactions['items'][i]]};
             this.addItemToMap(results);
         }
-        this.showAllMap();
+
+        //this.showAllMap();
     }catch(err){
         console.error(err);
     }
+}
+
+
+module.exports.filterTransactionTable =  async function(transactions){
+    //Properties: transaction_id, client_id, item_id, email
+    try{
+        imap = [];
+        for (var i in transactions['items']){
+            let results = {'results': [transactions['items'][i]]};
+            this.addItemToMap(results);
+        }
+
+        //this.showAllMap();
+    }catch(err){
+        console.error(err);
+    }
+}
+
+var sort_by = function(field, reverse, primer){
+
+    var key = primer ? 
+        function(x) {return primer(x[field])} : 
+        function(x) {return x[field]};
+ 
+    reverse = !reverse ? 1 : -1;
+ 
+    return function (a, b) {
+        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+      } 
+ }
+
+module.exports.sortResults = async function(arr, prop, asc) {
+    //console.log(arr);
+    //[].slice.call(arr)
+    console.log("My Property ", prop);
+    arr = arr.sort(function(a, b) {
+        if (asc) {
+            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+        } else {
+            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+        }
+    });
+    console.log("ARRAY BEING SORTEED FIRST ELE", arr[0]);
+    return arr;
 }
 
 // if find returns true, return that item from IMAP instead of making a databse call
