@@ -20,7 +20,7 @@ var catalog = require('../models/catalog');
 router.get('/', async (req, res) => {
     try {
         let list = await catalog.getCatalog();
-        res.render('catalog/catalog', {filter: false, active: "", list: await list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
+        res.render('catalog/catalog', {filter: false, active: "", list: await list, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, search: ''});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -74,6 +74,7 @@ router.get('/filtert/:f', async (req, res) => {
 
 router.get('/filter/:filterType', async (req, res) => {
     try {
+        let filterAndSearch;
         let filteredList;
         //filter A to Z
         if (req.params.filterType === '1' || req.params.filterType === '2' || req.params.filterType === '3' || req.params.filterType === '4' || req.params.filterType === '5') {
@@ -81,7 +82,12 @@ router.get('/filter/:filterType', async (req, res) => {
             filteredList = await list;
         }
         let activeList = req.query.active;
-        res.render('catalog/catalog', {filter: true, active: activeList, list: await filteredList, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
+        let searched = req.query.searched;
+        if (searched !== ''){
+            let searchList = await catalog.getSearchResults(searched, 'true');
+            filterAndSearch = getItemIdOnly(filteredList, searchList);
+        }
+        res.render('catalog/catalog', {filter: true, active: activeList, list: (searched !== '') ?  await filterAndSearch : await filteredList, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, search: searched});
     } catch (err) {
         console.error(err);
         res.render('error', { error: err });
@@ -109,8 +115,8 @@ router.get('/view/:item_id', async (req, res) => {
 // ====================================== //
 router.post('/searchitems', async (req, res) => {
     try {
-        let list = await catalog.getSearchResults(req.body.search);
-        res.render('catalog/catalog', {filter: false, active: "", list: list, title: 'CatalogSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, search: req.body.search});
+        let list = await catalog.getSearchResults(req.body.search, '');
+        res.render('catalog/catalog', {filter: false, active: "", list: list, title: 'CatalogSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart, search: req.body.search, isSearch: true});
     } catch (err) {
         console.error("Error Has Occured during search :" + err);
         res.render('error', { error: err });
