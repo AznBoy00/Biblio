@@ -43,12 +43,12 @@ module.exports.getFilteredCatalog = async function(type){
     return result;
 }
 
-module.exports.getSearchResults = async function(search) {
+module.exports.getSearchResults = async function(search, isItemId) {
     const client = await pool.connect();
-    const resultBook = await client.query('SELECT * FROM books WHERE Lower(title) LIKE \'%' + search + '%\' OR LOWER(author) LIKE \'%'+ search +'%\' ORDER BY item_id ASC');
-    const resultMagazine = await client.query("SELECT * FROM magazines WHERE Lower(title) LIKE '%" + search + "%' ORDER BY item_id ASC");
-    const resultMovie = await client.query("SELECT * FROM movies WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(director) LIKE '%"+search+"%' OR LOWER(producers) LIKE '%"+search+"%' ORDER BY item_id ASC");
-    const resultMusic = await client.query("SELECT * FROM music WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(artist) LIKE '%"+search+"%' OR LOWER(label) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    const resultBook = await client.query('SELECT '+ await getIsItem(isItemId) + ' FROM books WHERE Lower(title) LIKE \'%' + search + '%\' OR LOWER(author) LIKE \'%'+ search +'%\' ORDER BY item_id ASC');
+    const resultMagazine = await client.query("SELECT " + await getIsItem(isItemId) + " FROM magazines WHERE Lower(title) LIKE '%" + search + "%' ORDER BY item_id ASC");
+    const resultMovie = await client.query("SELECT "+ await getIsItem(isItemId) + " FROM movies WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(director) LIKE '%"+search+"%' OR LOWER(producers) LIKE '%"+search+"%' ORDER BY item_id ASC");
+    const resultMusic = await client.query("SELECT "+ await getIsItem(isItemId) + " FROM music WHERE Lower(title) LIKE '%" + search + "%' OR LOWER(artist) LIKE '%"+search+"%' OR LOWER(label) LIKE '%"+search+"%' ORDER BY item_id ASC");
     client.release();
     let result = [];
     result.items = (resultBook != null) ? resultBook.rows : null;
