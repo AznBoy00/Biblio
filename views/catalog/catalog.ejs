@@ -42,7 +42,13 @@
                 }
             }
             active = active.substring(0, active.length - 1);
-            window.location.replace('/catalog/filter/' + filterType + '?active='+ active);
+            var search = <%- typeof search !== 'undefined' ? JSON.stringify(search) : 'undefined'%>;
+
+            if (typeof search !== 'undefined'){
+                window.location.replace('/catalog/filter/' + filterType + '?active='+ active + '&searched=' +  search);
+            } else {
+                window.location.replace('/catalog/filter/' + filterType + '?active='+ active + '&searched=');
+            }
         }
 
         function applyFilters(){
@@ -87,11 +93,11 @@
         <div class="row">
             <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1">
                 <div class="row">
+                    <% if(search !== ''){ %>
                     <h4 class="ml-3">Searched for: 
-                        <% if(typeof search !== 'undefined'){ %>
                             <em><%= search %></em>
-                        <% } %>
                     </h4>
+                    <% } %>
                 </div>
                 <div class="row">
                     <div class="col-12">
