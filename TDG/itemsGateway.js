@@ -257,3 +257,11 @@ let getFilterType = function (type) {
     else if(type === '5')
         return "AS U WHERE loanable = 't' ORDER BY item_id ASC";
 }
+
+let getIsItem = async function (isItemId){
+    if (isItemId === 'true'){
+        return 'item_id';
+    } else {
+        return '*';
+    }
+}
