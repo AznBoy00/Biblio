@@ -235,3 +235,19 @@ module.exports = router;
 let currentUserIsAdmin = function (req){
     return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
 };
+
+let getItemIdOnly = function (fullList, itemIdList) {
+    let filterAndSearch;
+    filterAndSearch = {};
+    filterAndSearch.items = [];
+    var count = 0;
+    for (var i = 0; i < fullList.items.length; i++){
+        for(var j = 0; j < itemIdList.items.length; j++){
+            if (fullList.items[i].item_id === itemIdList.items[j].item_id){
+                filterAndSearch.items[count] = fullList.items[i];
+                count++;
+            }
+        }
+    }
+    return filterAndSearch;
+}
