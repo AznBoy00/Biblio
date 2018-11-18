@@ -193,6 +193,39 @@ module.exports.deleteItem = async function (item_id){
     }        
 }
 
+// ======================================= //
+// ===== CHECK IF FIELDS ARE EMPTY ====== //
+// ======================================= //
+module.exports.checkValidItem = async function(req, discriminator){
+        req.checkBody('title').notEmpty();
+        req.checkBody('quantity').notEmpty();
+        if(discriminator == "Books" || discriminator == "Magazine"){
+            req.checkBody('author').notEmpty();
+            req.checkBody('format').notEmpty();
+            req.checkBody('pages').notEmpty();
+            req.checkBody('publisher').notEmpty();
+            req.checkBody('language').notEmpty();
+            req.checkBody('isbn10').notEmpty();
+            req.checkBody('isbn13').notEmpty();
+        }
+        else if (discriminator == "Movies"){
+            req.checkBody('director').notEmpty();
+            req.checkBody('producers').notEmpty();
+            req.checkBody('subtitles').notEmpty();
+            req.checkBody('dubbed').notEmpty();
+            req.checkBody('release_date').notEmpty();
+            req.checkBody('run_time').notEmpty();
+        }
+        else if (discriminator == "Movies"){
+            req.checkBody('artist', 'artist is required').notEmpty();
+            req.checkBody('type', 'type is required').notEmpty();
+            req.checkBody('label', 'label is required').notEmpty();
+            req.checkBody('asin', 'asin is required').notEmpty();
+        }
+        var errors = req.validationErrors();
+        return errors;
+}
+
 // ====================================== //
 // === GET NEW ITEM FROM THE HTML FORM == //
 // ====================================== //

@@ -157,22 +157,73 @@ router.get('/create/:discriminator', function (req, res) {
     }
 });
 
+// // ====================================== //
+// // == POST Requests for Creating Items === //
+// // ====================================== //
+// router.post('/create/:discriminator', async (req, res) => {
+//     if (currentUserIsAdmin(req)){
+//         try {
+//             await catalog.insertNewItem(req, req.params.discriminator);
+//             res.redirect('/catalog');
+//         } catch (err) {
+//             console.error(err);
+//             res.render('error', { error: err });
+//             }
+//     } else {
+//         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+//     }
+// });
+
+// // ====================================== //
+// // == POST Requests for Creating Items === //
+// // ====================================== //
+// router.post('/create/:discriminator', async (req, res) => {
+//     if (currentUserIsAdmin(req)){
+//         try {
+//             errors = await catalog.getItemFromForm(req);
+//             if (errors) {
+//                 console.log("Inside of errors");
+//                 discriminator = req.params.discriminator;
+//                 return res.render('catalog/createitem', {errors: [{msg: "An error occurred and your item could not be " +
+//                             "created. Please make sure none of the fields are empty!"}], discriminator, title: 'Create Item Error',
+//                     is_logged: req.session.logged, is_admin: req.session.is_admin});
+//             } else{
+//                 await catalog.insertNewItem(req, req.params.discriminator);
+//                 res.redirect('/catalog');
+//             }
+//         } catch (err) {
+//             console.error(err);
+//             res.render('error', { error: err });
+//         }
+//     } else {
+//         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+//     }
+// });
+
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
 router.post('/create/:discriminator', async (req, res) => {
     if (currentUserIsAdmin(req)){
         try {
+            errors = await catalog.getItemFromForm(req, req.params.discriminator);
+            if (!errors){
             await catalog.insertNewItem(req, req.params.discriminator);
             res.redirect('/catalog');
-        } catch (err) {
-            console.error(err);
-            res.render('error', { error: err });
+        } else if (errors) {
+                console.log("Inside of errors");
+                discriminator = req.params.discriminator;
+                res.render('catalog/createitem', {errors: [{msg: "An error occurred and your item could not be " +
+                            "created. Please make sure none of the fields are empty!"}], discriminator, title: 'Create Item Error',
+                    is_logged: req.session.logged, is_admin: req.session.is_admin});
             }
-    } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-    }
-});
+        }catch (err) {
+            console.error(err);
+            res.render('errors', { errors: err });
+        }
+    }else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]})
+
 
 // ====================================== //
 // == GET Requests for Updating Items === //
