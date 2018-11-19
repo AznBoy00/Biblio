@@ -85,12 +85,11 @@ module.exports.loadFullTransactionTable = async function(transactions){
     try{
         transactionMap = [];
         inTransaction = true;
-        for (var i in transactions['items']){//catalog[book], catalog[magazine]...
+        for (var i in transactions['items']){
             let results = {'results': [transactions['items'][i]]};
             this.addItemToMap(results);
         }
         inTransaction = false;
-        //this.showAllMap();
     }catch(err){
         console.error(err);
     }
@@ -118,6 +117,19 @@ module.exports.get = async function(item_id){
         for(i = 0; i < imap.length; i++){
             if((imap[i].results[0].item_id == item_id))
                 return await imap[i];
+        }
+    }catch(err){
+        console.error(err);
+    }
+}
+
+// if find returns true, return that item from transactionMap instead of making a databse call
+module.exports.getTransactionMap = async function(item_id){ 
+    try{
+        // this.showAllMap();
+        for(i = 0; i < transactionMap.length; i++){
+            if((transactionMap[i].results[0].item_id == item_id))
+                return await transactionMap[i];
         }
     }catch(err){
         console.error(err);
