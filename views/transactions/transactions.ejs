@@ -85,8 +85,10 @@
                                         <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
                                         <%  year = release.getFullYear() %>
                                         <%  loanDate = year+"-"+month+"-"+day %>
+                                        
                                         <td><%= loanDate %></td>
-
+                                        
+                                        <!-- Convert full date format into simple date format due date-->
                                         <%  datestring = list['items'][j].due_date%>
                                         <%  release = new Date(datestring) %>
                                         <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
@@ -95,7 +97,21 @@
                                         <%  dueDate = year+"-"+month+"-"+day %>
 
                                         <td><%= dueDate %></td>
-                                        <td><%= list['items'][j].return_date %></td>
+                                        
+                                        <!-- Convert full date format into simple date format return date-->
+                                        <%  if (list['items'][j].return_date !== null) {%>
+                                        <%  datestring = list['items'][j].return_date%>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  returnDate = year+"-"+month+"-"+day %>
+                                       
+                                        <td><%= returnDate %></td>
+                                        
+                                        <% } else {%>
+                                            <td> Not Yet Returned </td>
+                                        <% }%>
                                     </tr>
                                 <% } %>
                         </tbody>
