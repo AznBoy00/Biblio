@@ -162,7 +162,7 @@
                                         <% } %>
                                         <% let year = new Date(list['items'][j].release_date).getFullYear() %>
                                         <td><%= year %></td>
-                                        <td><%= list['items'][j].quantity %></td>
+                                        <td><%= (list['items'][j].quantity - list['items'][j].loaned) %></td>
                                         <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                             <td>
                                                 <% if(list['items'][j].discriminator == 'Magazines') { %> 
