@@ -170,10 +170,12 @@
                                                 <% } else if (list['items'][j].loanable == false) { %>
                                                     <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                                 <% } else { %>
+                                                <div id="hidden-div">
                                                     <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
-                                                        href="/cart/add/<%= list['items'][j].item_id %>">
+                                                        href="/cart/add/<%= list['items'][j].item_id %>" onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'">
                                                         Add to cart
                                                     </a>
+                                                <div>
                                                 <% } %>
                                             </td>
                                         <% } %>
