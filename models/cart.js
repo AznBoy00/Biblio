@@ -121,7 +121,7 @@ module.exports.checkoutCart = async function (req){
     try{
         //get the items from the uow
         let uowArray = await uow.commit();
-        //Kevin Link said cart is initialized as empty array when logging in
+        //Kevin Lin said cart is initialized as empty array when logging in
         let cart = await req.session.cart; 
         //2 days for loaning musics or movies, 7 days for loaning books
         var timestamp;

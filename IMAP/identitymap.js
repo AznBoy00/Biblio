@@ -1,6 +1,8 @@
 //Initialize map as empty.
 var imap=[];
 var fullCatalogLoaded = false;
+var inTransaction = false;
+var transactionMap=[];
 
 // Authors: Kevin Yau and Kevin Camellini 
 // Date: November 8, 2018
@@ -79,8 +81,6 @@ module.exports.getFullCatalog = async function(){
     }
 }
 
-var inTransaction = false;
-var transactionMap=[];
 module.exports.loadFullTransactionTable = async function(transactions){
     try{
         transactionMap = [];
