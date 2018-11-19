@@ -57,8 +57,11 @@ router.post('/searchtransactions', async (req, res) => {
 
 router.get('/filtert/:f', async (req, res) => {
     try {
-        
-        let list = await catalog.filterTransactions(req, true);
+        let list;
+        if(req.params.f == "loan_date" || req.params.f == "due_date" || req.params.f == "return_date")
+            list = await catalog.filterTransactions(req, false);
+        else
+            list = await catalog.filterTransactions(req, true);
         console.log(JSON.stringify(list));
         res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
     } catch (err) {
