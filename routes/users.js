@@ -164,11 +164,6 @@ router.post('/login', async function (req, res) {
                 req.session.is_active = true;
                 await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
-                console.log("---------------------------------------");
-                console.log("LOGGING IN user "+ email);
-                console.log("With session "+req.session);
-                console.log("---------------------------------------");
-
                 res.redirect('/');
             } else {
                 return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
@@ -260,6 +255,21 @@ router.post('/usercp', async (req, res) => {
         }
     } else {
         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not a user!"}]});
+    }
+
+});
+
+
+router.post('/return/:item_id', async (req, res) => {
+    try {
+        // Add return time stamp to transaction
+        let result = await user.returnItemTransaction(req);
+        
+        let list = await catalog.getUserTransactionItems(req.session.email);
+        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionReturn', is_logged: req.session.logged, is_admin: req.session.is_admin});
+    } catch (err) {
+        console.error(err);
+        res.send("error " + err);
     }
 
 });

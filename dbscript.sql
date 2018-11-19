@@ -330,3 +330,6 @@ INSERT INTO Music
 /* ===== Insert New Transaction ===== */
 /* (transaction_id, client_id, item_id, loan_date, due_date, return_date) */
 INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date);
+
+-- TIMEZONE TO EASTERN DST
+set timezone TO 'GMT+5';

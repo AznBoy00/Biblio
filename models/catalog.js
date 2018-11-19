@@ -249,10 +249,8 @@ module.exports.getTransactionItems = async function() {
 
 module.exports.getUserTransactionItems = async function(email) {
     try {        
-        // console.log("In get User Transaction" + email);
         let result = await tdg.getAllUserTransactions(email);
         await imap.loadFullTransactionTable(result);
-        // console.log("TSHLSJHDBJSHAD", result);
         return await result;
     } catch (err) {
         console.error(err);
@@ -265,7 +263,6 @@ module.exports.filterTransactions = async function(req, asc) {
         let result = await tdg.filterTransactions(req, asc);
         await imap.filterTransactionTable(result);
 
-        let result2 = await imap.filterTransactionTable();
         return await result;
     } catch (err) {
         console.error(err);

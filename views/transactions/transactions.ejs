@@ -40,21 +40,31 @@
                     <table class="table table-hover text-center">
                         <thead>
                             <tr>
-                                <a href=""><th>Transaction ID</th></a>
-                                <a href=""><th>Client ID</th></a>
-                                <a href=""><th>Item ID</th></a>
-                                <a href=""><th>Customer Name</th></a>
-                                <a href=""><th>Customer Email</th></a>
-                                <a href=""><th>Item Name</th></a>
-                                <a href=""><th>Loan Made On</th></a>
-                                <a href=""><th>Due By</th></a>
-                                <a href=""><th>Returned On</th></a>
+                                <% if(typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin) { %>
+                                    <th>Return Item</th>
+                                <% } %>
+                                <th>Transaction ID</th>
+                                <th>Client ID</th>
+                                <th>Item ID</th>
+                                <th>Customer Name</th>
+                                <th>Customer Email</th>
+                                <th>Item Name</th>
+                                <th>Loan Made On</th>
+                                <th>Due By</th>
+                                <th>Returned On</th>
                             </tr>
                         </thead>
 
                         <tbody>
                                  <% for(var j in list['items']) { %>
                                     <tr class="<%= list['items'][j]%>">
+                                         <% if(typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin) { %>
+                                            <form class="search-form form-inline mb-0" method="POST" action="/users/return/<%= list['items'][j].item_id %>" onSubmit="return checkblank(this);">
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit" <% if(list['items'][j].return_date !== null) { %>disabled background-color: grey;<% } %>>Return</button> 
+                                                </td>
+                                            </form>    
+                                         <% } %>
                                         <td><%= list['items'][j].transaction_id %> </td>
                                         <td><%= list['items'][j].client_id %></td>
                                         <td><%= list['items'][j].item_id %></td>
@@ -70,8 +80,6 @@
                                         <td><%= list['items'][j].loan_date %></td>
                                         <td><%= list['items'][j].due_date %></td>
                                         <td><%= list['items'][j].return_date %></td>
-
-
                                     </tr>
                                 <% } %>
                         </tbody>

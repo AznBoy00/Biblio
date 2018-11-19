@@ -30,7 +30,6 @@ router.get('/', async (req, res) => {
 router.get('/transactions', async (req, res) => {
     try {
         let list;
-        console.log("In Transaactions!")
         if(req.session.is_admin) list = await catalog.getTransactionItems();
         else list = await catalog.getUserTransactionItems(req.session.email);
 

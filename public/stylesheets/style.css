@@ -49,3 +49,8 @@ a {
 a:hover, .footer-links:hover{
     text-decoration: none;
 }
+.btn.disabled, .btn:disabled {
+    border-color: #343a40;
+    color:#343a40;
+    
+}
