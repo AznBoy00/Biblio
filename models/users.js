@@ -1,6 +1,7 @@
 var tdg = require('../TDG/usersGateway');
 const bcrypt = require('bcrypt-nodejs');
 var catalog = require('../models/catalog');
+var imap = require('../IMAP/identitymap');
 
 //registers a new user to the DB
 module.exports.insertNewUser = async function(newUser) {
@@ -154,9 +155,11 @@ module.exports.updateUserInfo = async function(newUserInfo, email) {
 
 module.exports.returnItemTransaction = async function(req) {
     try {
-        let transaction_id = req.params.transaction;
-        let item_id = await tdg.getItemId(transaction_id);
-        let discriminator = await tdg.getDiscriminator(item_id);
+        let item_id = req.params.item_id;
+        imapItem = await imap.getTransactionMap(item_id);
+        let transaction_id = imapItem.results[0].transaction_id;
+        let discriminatorObj = await tdg.getDiscriminator(item_id);
+        let discriminator = discriminatorObj.toLowerCase();
         return await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
 
     } catch (err) {
