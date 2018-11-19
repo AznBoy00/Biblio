@@ -77,6 +77,7 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 module.exports.checkCart = async function(req) {
     let errorString = [];
     let item, quantity, loaned,loanable, discriminator, imapItem;
+
     try {
         for (let i = 0; i < req.session.cart.length; i++) {
             imapItem = await (imap.get(JSON.parse(req.session.cart[i])));
@@ -135,6 +136,7 @@ module.exports.checkoutCart = async function (req){
                 if(uowArray[j].results.dirtybit == true && uowArray[j].results[0].item_id == cart[i]){
                     // loanableitem contains the full item (item_id, title, author, pages... etc)
                     loanableitem = await uowArray[j].results[0];
+                    loanableitem.loaned += 1; // +1 on loaned
                     let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, loanableitem.loan_period);
                     client.query(query);
                     console.log(loanableitem.title+" has been checkedout");
@@ -154,7 +156,6 @@ module.exports.checkoutCart = async function (req){
         // Clean the cart after checkout
         await uow.rollback();
         //for loop
-
     } catch(err) {
         console.error(err);
     }
