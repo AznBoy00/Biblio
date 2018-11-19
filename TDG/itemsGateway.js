@@ -194,7 +194,7 @@ module.exports.filterTransactions = async function(req, asc) {
     const client = await pool.connect();
     let order;
 
-    if(asc){order = "ASC"} else {order = "DSC"}
+    if(asc){order = "ASC"} else {order = "DESC"}
 
     if(req.session.is_admin) {
         result1 = await client.query("SELECT * FROM transactions_view ORDER BY " + filterType +" "+ order + ";");
