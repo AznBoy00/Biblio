@@ -148,10 +148,10 @@ module.exports.updateItem = async function(req, item_id) {
 // ====================================== //
 // ======== Search Items Handler ======== //
 // ====================================== //
-module.exports.getSearchResults = async function(searched) {
+module.exports.getSearchResults = async function(searched, isItemId) {
     try {
         let search = searched.toLowerCase();
-        let result = await tdg.getSearchResults(search);
+        let result = await tdg.getSearchResults(search, isItemId);
         // console.log("Search result:", result);
         console.log("Searching for: \""+searched+"\"");
         return await result;
