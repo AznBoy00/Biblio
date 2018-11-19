@@ -260,7 +260,7 @@ router.post('/usercp', async (req, res) => {
 });
 
 
-router.post('/return/:transaction', async (req, res) => {
+router.post('/return/:item_id', async (req, res) => {
     try {
         // Add return time stamp to transaction
         let result = await user.returnItemTransaction(req);
