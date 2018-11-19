@@ -150,6 +150,7 @@ router.post('/login', async function (req, res) {
         if (userExists){
             var passwordIsCorrect = await user.checkPassword(email, password);
             if (passwordIsCorrect){
+                console.log("FLUSHED IMAP");
                 catalog.flushImap(); //reset imap on login
                 var userRaw = await user.findUserByEmail(email);
                 var userInfo = await userRaw.rows[0];
@@ -162,7 +163,6 @@ router.post('/login', async function (req, res) {
                 req.session.cart = [];
                 req.session.loaned_items = [];
                 req.session.is_active = true;
-                await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
                 res.redirect('/');
             } else {
@@ -182,6 +182,7 @@ router.get("/logout", function(req, res){
         user.setUserStatusInactive(req.session.email);
         // console.log("LOGGING OUT: "+ req.params.email);
         req.session.destroy();
+        console.log("FLUSHED IMAP");
         catalog.flushImap();//reset imap on logout
         res.redirect('/');
     } catch (err) {
@@ -263,10 +264,9 @@ router.post('/usercp', async (req, res) => {
 router.post('/return/:item_id', async (req, res) => {
     try {
         // Add return time stamp to transaction
-        let result = await user.returnItemTransaction(req);
-        
-        let list = await catalog.getUserTransactionItems(req.session.email);
-        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionReturn', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        await user.returnItemTransaction(req);
+        await catalog.getUserTransactionItems(req.session.email);
+        res.redirect('back');
     } catch (err) {
         console.error(err);
         res.send("error " + err);
