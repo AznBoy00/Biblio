@@ -160,8 +160,9 @@ module.exports.returnItemTransaction = async function(req) {
         let transaction_id = imapItem.results[0].transaction_id;
         let discriminatorObj = await tdg.getDiscriminator(item_id);
         let discriminator = discriminatorObj.toLowerCase();
+        imapItem.results[0].loaned -= 1; // -1 loaned on imap for return
+        this.getLoanedItems(req);
         return await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
-
     } catch (err) {
         console.error(err);
     }
