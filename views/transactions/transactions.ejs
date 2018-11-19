@@ -77,8 +77,24 @@
                                         <%}else{%>
                                             <td><%= list['items'][j].movie_title %></td>
                                         <%}%>
-                                        <td><%= list['items'][j].loan_date %></td>
-                                        <td><%= list['items'][j].due_date %></td>
+                                        
+                                        <!-- Convert full date format into simple date format loan date-->
+                                        <%  datestring = list['items'][j].loan_date %>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  loanDate = year+"-"+month+"-"+day %>
+                                        <td><%= loanDate %></td>
+
+                                        <%  datestring = list['items'][j].due_date%>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  dueDate = year+"-"+month+"-"+day %>
+
+                                        <td><%= dueDate %></td>
                                         <td><%= list['items'][j].return_date %></td>
                                     </tr>
                                 <% } %>
