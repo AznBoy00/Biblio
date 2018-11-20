@@ -150,19 +150,21 @@ router.post('/login', async function (req, res) {
         if (userExists){
             var passwordIsCorrect = await user.checkPassword(email, password);
             if (passwordIsCorrect){
-                console.log("FLUSHED IMAP");
+                console.log("FLUSHED IMAP ON LOGIN");
                 catalog.flushImap(); //reset imap on login
                 var userRaw = await user.findUserByEmail(email);
                 var userInfo = await userRaw.rows[0];
                 req.session.logged = true;
-                req.session.fname = userInfo.fname;
+                req.session.fname = userInfo.f_name;
                 req.session.phone = userInfo.phone;
                 req.session.address = userInfo.address;
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
+                req.session.num_permitted_items = userInfo.num_permitted_items;
                 req.session.cart = [];
                 req.session.loaned_items = [];
                 req.session.is_active = true;
+
                 await user.setUserStatusActive(email);
                 res.redirect('/');
             } else {

@@ -37,10 +37,15 @@ router.get('/add/:item_id', async (req, res) => {
     try {
         if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
         // Add Item to cart
-        cart.addItemToCart(req);
-        console.log("---------------------------------------");
-        console.log("Added item to cart with ID " + req.params.item_id);
-        console.log("---------------------------------------");
+          if(req.session.cart.length + 1 <= req.session.num_permitted_items - req.session.loaned_items.length) {
+            cart.addItemToCart(req);
+            console.log("---------------------------------------");
+            console.log("Added item to cart with ID " + req.params.item_id);
+            console.log("---------------------------------------");
+          } else {
+            let err = "You cannot cannot loan more than " + req.session.num_permitted_items + " items.";
+            res.render('error', { error: err });
+          }
         }
         res.redirect('back');
     } catch (err) {
