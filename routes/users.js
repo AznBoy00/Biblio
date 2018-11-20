@@ -170,6 +170,7 @@ router.post('/login', async function (req, res) {
                 req.session.loaned_items = [];
                 req.session.is_active = true;
 
+                await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
                 res.redirect('/');
             } else {

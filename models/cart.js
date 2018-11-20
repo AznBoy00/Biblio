@@ -79,6 +79,11 @@ module.exports.checkCart = async function(req) {
     let item, quantity, loaned,loanable, discriminator, imapItem;
 
     try {
+        if (req.session.cart.length > req.session.num_permitted_items - req.session.loaned_items.length) {
+            errorString.push("You are only allowed to loan " + req.session.num_permitted_items + " items at a time.");
+            errorString.push("You already loaned " + req.session.loaned_items.length + " items, you can only loan " + (req.session.num_permitted_items - req.session.loaned_items.length) + " items for now.");
+            return errorString;
+        }
         for (let i = 0; i < req.session.cart.length; i++) {
             imapItem = await (imap.get(JSON.parse(req.session.cart[i])));
             discriminator = imapItem.results[0].discriminator;

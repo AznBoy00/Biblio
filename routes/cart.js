@@ -38,7 +38,7 @@ router.get('/add/:item_id', async (req, res) => {
     try {
         if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
         // Add Item to cart
-          if(req.session.cart.length + 1 <= req.session.num_permitted_items - req.session.loaned_items.length) {
+          if(req.session.cart.length + 1 <= req.session.num_permitted_items) {
             cart.addItemToCart(req);
             console.log("---------------------------------------");
             console.log("Added item to cart with ID " + req.params.item_id);
