@@ -143,3 +143,11 @@ module.exports.getItemId = async function(transactions_id){
     return item_id;
 
 }
+
+//Ran at startup of server to force logout all loggedin users
+module.exports.logoutAllUsers = async function(){
+    const client = await pool.connect();
+    const result = await client.query("UPDATE users SET is_active = 'f' WHERE is_active = 't';");
+    client.release();
+    return result;
+}
