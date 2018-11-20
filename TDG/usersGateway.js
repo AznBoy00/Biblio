@@ -52,6 +52,18 @@ module.exports.getActiveUsers = async function(){
     return results;
 }
 
+//check if user is active or not
+module.exports.isActiveUser = async function(email){
+    let query = "SELECT is_active FROM Users WHERE email = '" + email + "';";
+
+    const client = await pool.connect()
+    const result = await client.query(query);
+    client.release();
+
+    const results = { 'results': (result) ? result.rows : null};
+    return results;
+}
+
 
 // Set user to active
 module.exports.setUserStatusActive = async function(email){

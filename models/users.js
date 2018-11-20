@@ -90,6 +90,20 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
     }
 };
 
+//Check if user is active or not
+module.exports.isActiveUser = async function(email) {
+    try {
+        let result = await tdg.isActiveUser(email);
+        if(result.results[0].is_active) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 //toggles the user status
 module.exports.setUserStatusActive = async function(email) {
     try {

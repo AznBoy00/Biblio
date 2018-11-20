@@ -142,8 +142,13 @@ router.post('/login', async function (req, res) {
     req.checkBody('password', 'Password is required').notEmpty();
 
     var errors = req.validationErrors();
+    //check if user is logged in
+    let isActiveUser = await user.isActiveUser(email);
+    if (isActiveUser) {
+        return res.render('users/login', {errors: [{msg: "User is already logged in. Please try again later."}], title: "Login"});
+    }
     if (errors) {
-        return res.render('users/login', { errors: errors, title: "Login"});
+        return res.render('users/login', { errors: [{msg: errors}], title: "Login"});
     }
     else {
         var userExists  = await user.userExists(email);
@@ -168,10 +173,10 @@ router.post('/login', async function (req, res) {
                 await user.setUserStatusActive(email);
                 res.redirect('/');
             } else {
-                return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
+                return res.render('users/login', {errors: [{msg:"Incorrect password, please try again."}], title: "Login"});
             }
         } else {
-            return res.render('users/login', {errors: "No such account", title: "Login"});
+            return res.render('users/login', {errors: [{msg:"No such account exists in our database, please contact an administrator."}], title: "Login"});
 
         }
     }
