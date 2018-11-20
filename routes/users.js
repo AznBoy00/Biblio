@@ -274,6 +274,7 @@ router.post('/return/:item_id', async (req, res) => {
         // Add return time stamp to transaction
         await user.returnItemTransaction(req);
         await catalog.getUserTransactionItems(req.session.email);
+        await user.getLoanedItems(req);
         res.redirect('back');
     } catch (err) {
         console.error(err);
