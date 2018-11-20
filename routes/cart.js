@@ -34,6 +34,7 @@ router.get('/', async (req, res) => {
 // == Add item to shopping cart === //
 // ====================================== //
 router.get('/add/:item_id', async (req, res) => {
+  let err;
     try {
         if (!req.session.is_admin && !req.session.cart.includes(req.params.item_id)) {
         // Add Item to cart
@@ -43,8 +44,8 @@ router.get('/add/:item_id', async (req, res) => {
             console.log("Added item to cart with ID " + req.params.item_id);
             console.log("---------------------------------------");
           } else {
-            let err = "You cannot cannot loan more than " + req.session.num_permitted_items + " items.";
-            res.render('error', { error: err });
+            err = "You cannot cannot loan more than " + req.session.num_permitted_items + " items.";
+            res.render('error', { title: 'Error', is_logged: req.session.logged, is_admin: req.session.is_admin, error: err, cart: req.session.cart});
           }
         }
         res.redirect('back');
