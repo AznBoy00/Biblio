@@ -86,7 +86,7 @@
                                         <%  year = release.getFullYear() %>
                                         <%  loanDate = year+"-"+month+"-"+day %>
                                         
-                                        <td><%= loanDate %></td>
+                                        <td style="white-space: nowrap;"><%= loanDate %></td>
                                         
                                         <!-- Convert full date format into simple date format due date-->
                                         <%  datestring = list['items'][j].due_date%>
@@ -96,9 +96,10 @@
                                         <%  year = release.getFullYear() %>
                                         <%  dueDate = year+"-"+month+"-"+day %>
 
-                                        <td><%= dueDate %></td>
+                                        <td style="white-space: nowrap;"><%= dueDate %></td>
                                         
                                         <!-- Convert full date format into simple date format return date-->
+                                        <!-- Item might not be returned, so need to check if it is returned or not-->
                                         <%  if (list['items'][j].return_date !== null) {%>
                                         <%  datestring = list['items'][j].return_date%>
                                         <%  release = new Date(datestring) %>
@@ -107,7 +108,7 @@
                                         <%  year = release.getFullYear() %>
                                         <%  returnDate = year+"-"+month+"-"+day %>
                                        
-                                        <td><%= returnDate %></td>
+                                        <td style="white-space: nowrap;"><%= returnDate %></td>
                                         
                                         <% } else {%>
                                             <td> Not Yet Returned </td>
