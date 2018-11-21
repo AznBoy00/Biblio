@@ -169,13 +169,12 @@ module.exports.updateUserInfo = async function(newUserInfo, email) {
 
 module.exports.returnItemTransaction = async function(req) {
     try {
-        let item_id = req.params.item_id;
-        imapItem = await imap.getTransactionMap(item_id);
-        let transaction_id = imapItem.results[0].transaction_id;
+        let transaction_id = req.params.transaction_id;
+        let item_id = await tdg.getItemId(transaction_id);
         let discriminatorObj = await tdg.getDiscriminator(item_id);
         let discriminator = discriminatorObj.toLowerCase();
+
         await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
-        imapItem.results[0].loaned -= 1; // -1 loaned on imap for return
     } catch (err) {
         console.error(err);
     }

@@ -269,13 +269,16 @@ router.post('/usercp', async (req, res) => {
 });
 
 
-router.post('/return/:item_id', async (req, res) => {
+router.post('/return/:transaction_id', async (req, res) => {
     try {
+        console.log("TRANSACTION ID FRONT END: ", req.params.transaction_id);
         // Add return time stamp to transaction
         await user.returnItemTransaction(req);
-        await catalog.getUserTransactionItems(req.session.email);
+        let list = await catalog.getUserTransactionItems(req.session.email);
         await user.getLoanedItems(req);
-        res.redirect('back');
+        res.redirect('/catalog/transactions')
+        //res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
+        //res.redirect('back');
     } catch (err) {
         console.error(err);
         res.send("error " + err);
