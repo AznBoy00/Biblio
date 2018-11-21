@@ -77,9 +77,42 @@
                                         <%}else{%>
                                             <td><%= list['items'][j].movie_title %></td>
                                         <%}%>
-                                        <td><%= list['items'][j].loan_date %></td>
-                                        <td><%= list['items'][j].due_date %></td>
-                                        <td><%= list['items'][j].return_date %></td>
+                                        
+                                        <!-- Convert full date format into simple date format loan date-->
+                                        <%  datestring = list['items'][j].loan_date %>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  loanDate = year+"-"+month+"-"+day %>
+                                        
+                                        <td style="white-space: nowrap;"><%= loanDate %></td>
+                                        
+                                        <!-- Convert full date format into simple date format due date-->
+                                        <%  datestring = list['items'][j].due_date%>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  dueDate = year+"-"+month+"-"+day %>
+
+                                        <td style="white-space: nowrap;"><%= dueDate %></td>
+                                        
+                                        <!-- Convert full date format into simple date format return date-->
+                                        <!-- Item might not be returned, so need to check if it is returned or not-->
+                                        <%  if (list['items'][j].return_date !== null) {%>
+                                        <%  datestring = list['items'][j].return_date%>
+                                        <%  release = new Date(datestring) %>
+                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                        <%  year = release.getFullYear() %>
+                                        <%  returnDate = year+"-"+month+"-"+day %>
+                                       
+                                        <td style="white-space: nowrap;"><%= returnDate %></td>
+                                        
+                                        <% } else {%>
+                                            <td> Not Yet Returned </td>
+                                        <% }%>
                                     </tr>
                                 <% } %>
                         </tbody>
