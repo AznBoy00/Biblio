@@ -18,7 +18,7 @@ CREATE TABLE Users(
     address VARCHAR(50),
     f_name VARCHAR(50),
     l_name VARCHAR(50),
-    num_permitted_items INTEGER DEFAULT 0,
+    num_permitted_items INTEGER DEFAULT 5,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT FALSE,
 
@@ -137,7 +137,7 @@ INSERT INTO Users
     VALUES(
         '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
         5141234567,'admin@biblio.ca','123 Rue Guy,
-         Montreal','Bob','Lennox','999',TRUE);
+         Montreal','Bob','Lennox','0',TRUE);
 INSERT INTO Users 
     (password, phone, email, address, f_name, l_name, num_permitted_items, is_admin)
     VALUES(
@@ -329,7 +329,8 @@ INSERT INTO Music
     
 /* ===== Insert New Transaction ===== */
 /* (transaction_id, client_id, item_id, loan_date, due_date, return_date) */
-INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date);
+-- INSERT INTO Transactions (client_id, item_id, loan_date, due_date, return_date)
+    -- VALUES(2,2,CURRENT_TIMESTAMP,'2018-02-02 00:00:00','2018-03-03 00:00:00');
 
 -- TIMEZONE TO EASTERN DST
-set timezone TO 'GMT+5';
+-- set timezone TO 'GMT+5';
