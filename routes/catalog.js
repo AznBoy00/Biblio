@@ -231,17 +231,6 @@ router.get('/deleteitem/:item_id', async(req, res) => {
     }
 });
 
-// A route to flush the IMAP
-router.get('/refreshImap', async(req, res) => {
-    try {
-        await catalog.flushImap(); //reset imap on logout
-        res.redirect('/catalog'); //refresh the page with the new changes
-    } catch (err) {
-        console.error(err);
-        res.send("Error " + err);        
-    }
-});
-
 //keep the next line at the end of this script
 module.exports = router;
 
