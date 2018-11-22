@@ -143,13 +143,13 @@
                             <!-- Iterate over items -->
                             <% for(var j in list['items']) { %>
                                 <% if (typeof cart !== 'undefined' && !JSON.stringify(cart).includes(list['items'][j].item_id)){ %>
-                                    <tr class="<%= list['items'][j].discriminator%>">
+                                    <tr class="<%= list['items'][j].discriminator%> clickable-row" onclick="window.location='/catalog/view/<%= list['items'][j].item_id %>';">
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                <%= list['items'][j].title %>
-                                            </a>
+                                            <!-- old link to access a single item page -->
+                                            <!-- <a href="/catalog/view/<%# list['items'][j].item_id %>"> -->
+                                            <%= list['items'][j].title %>
                                         </td>
                                         <% if (list['items'][j].discriminator == "Books" || filter){ %>
                                             <td><%= list['items'][j].author %></td>
@@ -171,7 +171,7 @@
                                                     <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                                 <% } else { %>
                                                 <div id="hidden-div">
-                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
+                                                    <a class="form-group btn btn-sm btn-outline-success form-group mb-0"
                                                         href="/cart/add/<%= list['items'][j].item_id %>" onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'">
                                                         Add to cart
                                                     </a>
