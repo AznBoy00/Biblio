@@ -73,11 +73,23 @@
                                         <td><%= list['items'][j].f_name + " "  + list['items'][j].l_name %></td>
                                         <td><%= list['items'][j].email %></td>
                                         <% if (list['items'][j].book_title != null) {%>
-                                            <td><%= list['items'][j].book_title %></td>
+                                            <td>
+                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                    <%= list['items'][j].book_title %>
+                                                </a>
+                                            </td>
                                         <%}else if (list['items'][j].music_title != null){%>
-                                            <td><%= list['items'][j].music_title %></td>
+                                            <td>
+                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                    <%= list['items'][j].music_title %>
+                                                </a>
+                                            </td>
                                         <%}else{%>
-                                            <td><%= list['items'][j].movie_title %></td>
+                                            <td>
+                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                    <%= list['items'][j].movie_title %>
+                                                </a>
+                                            </td>
                                         <%}%>
                                         
                                         <!-- Convert full date format into simple date format loan date-->
