@@ -183,13 +183,13 @@
                                 <% } else if (typeof cart !== 'undefined' && JSON.stringify(cart).includes(list['items'][j].item_id)) { %>
                                 <!-- do nothing, dont display it  -->
                                 <% } else { %>
-                                    <tr class="<%= list['items'][j].discriminator%>">
+                                    <tr class="<%= list['items'][j].discriminator%> clickable-row" onclick="window.location='/catalog/view/<%= list['items'][j].item_id %>';">
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                <%= list['items'][j].title %>
-                                            </a>
+                                            <!-- old link to access a single item page -->
+                                            <!-- <a href="/catalog/view/<%# list['items'][j].item_id %>"> -->
+                                            <%= list['items'][j].title %>
                                         </td>
                                         <% if (list['items'][j].discriminator == "Books" || filter){ %>
                                             <td><%= list['items'][j].author %></td>
