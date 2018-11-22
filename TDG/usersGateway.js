@@ -52,6 +52,18 @@ module.exports.getActiveUsers = async function(){
     return results;
 }
 
+//check if user is active or not
+module.exports.isActiveUser = async function(email){
+    let query = "SELECT is_active FROM Users WHERE email = '" + email + "';";
+
+    const client = await pool.connect()
+    const result = await client.query(query);
+    client.release();
+
+    const results = { 'results': (result) ? result.rows : null};
+    return results;
+}
+
 
 // Set user to active
 module.exports.setUserStatusActive = async function(email){
@@ -93,6 +105,14 @@ module.exports.getUserInfo = async function(email){
     return results;
 }
 
+module.exports.updateReturnTransaction = async function(transaction_id, item_id, discriminator){
+
+    const client = await pool.connect();
+    let query = await client.query("UPDATE " + discriminator + " SET loaned = loaned-1 WHERE item_id = " + item_id + "; set timezone TO 'GMT+5';" +
+         "UPDATE transactions SET return_date = CURRENT_TIMESTAMP WHERE transaction_id = " + transaction_id + ";");
+    client.release();
+}
+
 //updateUserInfo Model
 module.exports.updateUserInfo = async function(newUserInfo, email){
     const client = await pool.connect();
@@ -107,4 +127,39 @@ module.exports.updateUserInfo = async function(newUserInfo, email){
                     "WHERE email = ($1);", [email]
                 );
         client.release();
+}
+
+module.exports.getDiscriminator = async function(item_id) {
+    let query = "SELECT items.discriminator FROM items WHERE items.item_id = " + item_id;
+    
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    client.release();
+
+    const result1 = (res1 != null) ? res1.rows : null;
+    let discriminator = await result1[0].discriminator;
+
+    return discriminator;
+}
+
+module.exports.getItemId = async function(transactions_id){
+    let query = "SELECT transactions.item_id FROM transactions WHERE transactions.transaction_id = " + transactions_id;
+
+    const client = await pool.connect();
+    const res1 = await client.query(query);
+    client.release();
+
+    const result1 = (res1 != null) ? res1.rows : null;
+    let item_id = await result1[0].item_id;
+
+    return item_id;
+
+}
+
+//Ran at startup of server to force logout all loggedin users
+module.exports.logoutAllUsers = async function(){
+    const client = await pool.connect();
+    const result = await client.query("UPDATE users SET is_active = 'f' WHERE is_active = 't';");
+    client.release();
+    return result;
 }

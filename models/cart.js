@@ -77,7 +77,13 @@ module.exports.deleteAllItemsFromCart = async function(req) {
 module.exports.checkCart = async function(req) {
     let errorString = [];
     let item, quantity, loaned,loanable, discriminator, imapItem;
+
     try {
+        if (req.session.cart.length > req.session.num_permitted_items - req.session.loaned_items.length) {
+            errorString.push("You are only allowed to loan " + req.session.num_permitted_items + " items at a time.");
+            errorString.push("You already loaned " + req.session.loaned_items.length + " items, you can only loan " + (req.session.num_permitted_items - req.session.loaned_items.length) + " items for now.");
+            return errorString;
+        }
         for (let i = 0; i < req.session.cart.length; i++) {
             imapItem = await (imap.get(JSON.parse(req.session.cart[i])));
             discriminator = imapItem.results[0].discriminator;
@@ -120,9 +126,8 @@ module.exports.checkoutCart = async function (req){
     try{
         //get the items from the uow
         let uowArray = await uow.commit();
-        //Kevin Link said cart is initialized as empty array when logging in
+        //Kevin Lin said cart is initialized as empty array when logging in
         let cart = await req.session.cart; 
-        let loanableitem;
         //2 days for loaning musics or movies, 7 days for loaning books
         var timestamp;
         let client_id = (await users_tdg.getUserInfo(req.session.email)).results[0].user_id;
@@ -136,12 +141,8 @@ module.exports.checkoutCart = async function (req){
                 if(uowArray[j].results.dirtybit == true && uowArray[j].results[0].item_id == cart[i]){
                     // loanableitem contains the full item (item_id, title, author, pages... etc)
                     loanableitem = await uowArray[j].results[0];
-                    if (loanableitem.discriminator == "Books") {
-                        timestamp = 7;
-                    } else {
-                        timestamp = 2;
-                    }
-                    let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, timestamp);
+                    loanableitem.loaned += 1; // +1 on loaned
+                    let query = await tdg.loan(loanableitem.item_id, loanableitem.discriminator, client_id, loanableitem.loan_period);
                     client.query(query);
                     console.log(loanableitem.title+" has been checkedout");
                 }
@@ -160,7 +161,6 @@ module.exports.checkoutCart = async function (req){
         // Clean the cart after checkout
         await uow.rollback();
         //for loop
-
     } catch(err) {
         console.error(err);
     }

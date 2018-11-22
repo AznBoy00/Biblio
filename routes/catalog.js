@@ -30,7 +30,6 @@ router.get('/', async (req, res) => {
 router.get('/transactions', async (req, res) => {
     try {
         let list;
-        console.log("In Transaactions!")
         if(req.session.is_admin) list = await catalog.getTransactionItems();
         else list = await catalog.getUserTransactionItems(req.session.email);
 
@@ -58,8 +57,11 @@ router.post('/searchtransactions', async (req, res) => {
 
 router.get('/filtert/:f', async (req, res) => {
     try {
-        
-        let list = await catalog.filterTransactions(req, true);
+        let list;
+        if(req.params.f == "loan_date" || req.params.f == "due_date" || req.params.f == "return_date")
+            list = await catalog.filterTransactions(req, false);
+        else
+            list = await catalog.filterTransactions(req, true);
         console.log(JSON.stringify(list));
         res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionSearch', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
     } catch (err) {
@@ -277,6 +279,17 @@ router.get('/deleteitem/:item_id', async(req, res) => {
         }
     } else {
         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
+    }
+});
+
+// A route to flush the IMAP
+router.get('/refreshImap', async(req, res) => {
+    try {
+        await catalog.flushImap(); //reset imap on logout
+        res.redirect('/catalog'); //refresh the page with the new changes
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);        
     }
 });
 

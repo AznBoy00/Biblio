@@ -24,7 +24,7 @@ footer{
 }
 /* buttons */
 .btn-outline-primary, .btn-primary{
-    color: var(--main-color);;
+    color: var(--main-color);
     border-color: var(--main-color);
 }
 .btn-outline-primary:hover, .btn-primary:hover{
@@ -36,6 +36,7 @@ footer{
 .type-dropdown.active, .type-dropdown:focus{
     background-color:#343a40;
 }
+
 /* Links */
 .footer-links{
     color: white;
@@ -48,4 +49,13 @@ a {
 }
 a:hover, .footer-links:hover{
     text-decoration: none;
+}
+.btn.disabled, .btn:disabled {
+    border-color: #343a40;
+    color:#343a40;
+    
+}
+.clickable-row:hover{
+    color: var(--main-color);
+    cursor: pointer;
 }
