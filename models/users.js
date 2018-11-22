@@ -196,3 +196,12 @@ module.exports.getLoanedItems = async function(req) {
         console.log(err);
     }
 }
+
+// nukem, logout all users and flush the imap
+module.exports.nukem = async function(newUserInfo, email) {
+    try {
+        return await tdg.logoutAllUsers();
+    } catch (err) {
+        console.error(err);
+    }
+}

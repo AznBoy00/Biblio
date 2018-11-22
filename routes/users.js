@@ -144,7 +144,7 @@ router.post('/login', async function (req, res) {
     var errors = req.validationErrors();
     //check if user is logged in
     let isActiveUser = await user.isActiveUser(email);
-    if (isActiveUser) {
+    if (isActiveUser && email !="admin@biblio.ca") { // dont lockout the root user
         return res.render('users/login', {errors: [{msg: "User is already logged in. Please try again later."}], title: "Login"});
     }
     if (errors) {
@@ -199,6 +199,34 @@ router.get("/logout", function(req, res){
     }
 });
 
+// Logout all users and flush imap
+router.get('/nukem', async (req, res) => {
+    if (currentUserIsAdmin(req)){
+        try {
+            // flush the imap
+            await catalog.flushImap();
+            console.log("Flushed IMAP");
+            // set all the users to is_active = false
+            await user.nukem();
+            console.log("Logged out all Users");
+            // keep the root user logged in
+            await user.setUserStatusActive('admin@biblio.ca');
+            // get a new list of active users 
+            let results = await user.displayActiveUsers();
+            res.render('users/viewactiveusers', {
+                results, title: 'Admin CP', 
+                is_logged: req.session.logged, is_admin: req.session.is_admin, 
+                admin_email: req.session.email, is_active: req.session.is_active,
+                errors: [{msg: "Users have been nuked 💣"}]
+            });
+        } catch (err) {
+            console.error(err);
+            res.render('error', { error: err });
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin 👿!"}]});
+    }        
+});
 // get request for updating user profile information
 router.get('/usercp', async (req, res) => {
     if (currentUserIsUser(req)){
