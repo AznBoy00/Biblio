@@ -7,18 +7,20 @@
     <div class="container main">
 
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 my-2">
+            
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0">
                 <h2>Loan Transactions</h2>
-                <form class="search-form form-inline mb-0" method="POST" action="/catalog/searchtransactions" onSubmit="return checkblank(this);">
-                    <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search For Items" aria-label="Search">
-                    <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button>
-                </form>
             </div>
-            <div class="row">
-                    <div class="col-12">
-                        <div class="dropdown list-inline-item">
-                            <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-1 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sort by</a>
-                            <div class="dropdown-menu">
+
+            <!-- filter buttons -->
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0">
+                <form class="search-form form-inline mb-0" method="POST" action="/catalog/searchtransactions" onSubmit="return checkblank(this);">
+                    <input class="form-control form-control-sm my-md-2 mr-2" type="search" name="search" placeholder="Search For Transactions">
+                    <!-- search -->
+                    <button class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit">Search</button>
+                    <div class="dropdown list-inline-item">
+                        <a class="btn btn-sm btn-outline-success my-md-2 my-1 mr-1 dropdown-toggle" data-toggle="dropdown" href="#" role="button">Sort by</a>
+                        <div class="dropdown-menu">
                             <% if(typeof is_admin !== 'undefined' && is_admin) { %>
                                 <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/transaction_id"> Transaction ID </a>
                                 <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/client_id"> Client ID </a>
@@ -27,15 +29,16 @@
                                 <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/l_name"> Customer Name </a>
                                 <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/email"> Customer E-Mail </a>                                 
                             <% } %>
-                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/loan_date"> Loan Date </a>
-                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/due_date"> Due Date </a>
-                                <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/return_date"> Return Date </a>
-                            </div>
+                            <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/loan_date"> Loan Date </a>
+                            <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/due_date"> Due Date </a>
+                            <a id="#az" class="dropdown-item px-1 py-1 sort-dropdown" href="/catalog/filtert/return_date"> Return Date </a>
                         </div>
                     </div>
-                </div>
-        </div>
+                </form>
+            </div>
+            <!-- ./ col -->
 
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0">
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
@@ -56,86 +59,89 @@
                         </thead>
 
                         <tbody>
-                                 <% for(var j in list['items']) { %>
-                                    <tr class="<%= list['items'][j]%>">
-                                         <% if(typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin) { %>
-                                            <form class="search-form form-inline mb-0" method="POST" action="/users/return/<%= list['items'][j].transaction_id %>" onSubmit="return checkblank(this);">
-                                                <td>
-                                                <div id="hidden-div">
-                                                    <button onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit" <% if(list['items'][j].return_date !== null) { %>disabled background-color: grey;<% } %>>Return</button> 
-                                                </div>
-                                                </td>
-                                            </form>    
-                                         <% } %>
-                                        <td><%= list['items'][j].transaction_id %> </td>
-                                        <td><%= list['items'][j].client_id %></td>
-                                        <td><%= list['items'][j].item_id %></td>
-                                        <td><%= list['items'][j].f_name + " "  + list['items'][j].l_name %></td>
-                                        <td><%= list['items'][j].email %></td>
-                                        <% if (list['items'][j].book_title != null) {%>
+                            <% for(var j in list['items']) { %>
+                                <tr class="<%= list['items'][j]%>">
+                                        <% if(typeof is_logged !== 'undefined' && is_logged && typeof is_admin !== 'undefined' && !is_admin) { %>
+                                        <form class="search-form form-inline mb-0" method="POST" action="/users/return/<%= list['items'][j].transaction_id %>" onSubmit="return checkblank(this);">
                                             <td>
-                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                    <%= list['items'][j].book_title %>
-                                                </a>
+                                            <div id="hidden-div">
+                                                <button onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'" class="btn btn-sm btn-outline-primary my-md-2 my-1 mr-2" type="submit" <% if(list['items'][j].return_date !== null) { %>disabled background-color: grey;<% } %>>Return</button> 
+                                            </div>
                                             </td>
-                                        <%}else if (list['items'][j].music_title != null){%>
-                                            <td>
-                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                    <%= list['items'][j].music_title %>
-                                                </a>
-                                            </td>
-                                        <%}else{%>
-                                            <td>
-                                                <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                    <%= list['items'][j].movie_title %>
-                                                </a>
-                                            </td>
-                                        <%}%>
-                                        
-                                        <!-- Convert full date format into simple date format loan date-->
-                                        <%  datestring = list['items'][j].loan_date %>
-                                        <%  release = new Date(datestring) %>
-                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
-                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
-                                        <%  year = release.getFullYear() %>
-                                        <%  loanDate = year+"-"+month+"-"+day %>
-                                        
-                                        <td style="white-space: nowrap;"><%= loanDate %></td>
-                                        
-                                        <!-- Convert full date format into simple date format due date-->
-                                        <%  datestring = list['items'][j].due_date%>
-                                        <%  release = new Date(datestring) %>
-                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
-                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
-                                        <%  year = release.getFullYear() %>
-                                        <%  dueDate = year+"-"+month+"-"+day %>
+                                        </form>    
+                                        <% } %>
+                                    <td><%= list['items'][j].transaction_id %> </td>
+                                    <td><%= list['items'][j].client_id %></td>
+                                    <td><%= list['items'][j].item_id %></td>
+                                    <td><%= list['items'][j].f_name + " "  + list['items'][j].l_name %></td>
+                                    <td><%= list['items'][j].email %></td>
+                                    <% if (list['items'][j].book_title != null) {%>
+                                        <td>
+                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                <%= list['items'][j].book_title %>
+                                            </a>
+                                        </td>
+                                    <%}else if (list['items'][j].music_title != null){%>
+                                        <td>
+                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                <%= list['items'][j].music_title %>
+                                            </a>
+                                        </td>
+                                    <%}else{%>
+                                        <td>
+                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
+                                                <%= list['items'][j].movie_title %>
+                                            </a>
+                                        </td>
+                                    <%}%>
+                                    
+                                    <!-- Convert full date format into simple date format loan date-->
+                                    <%  datestring = list['items'][j].loan_date %>
+                                    <%  release = new Date(datestring) %>
+                                    <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                    <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                    <%  year = release.getFullYear() %>
+                                    <%  loanDate = year+"-"+month+"-"+day %>
+                                    
+                                    <td style="white-space: nowrap;"><%= loanDate %></td>
+                                    
+                                    <!-- Convert full date format into simple date format due date-->
+                                    <%  datestring = list['items'][j].due_date%>
+                                    <%  release = new Date(datestring) %>
+                                    <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                    <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                    <%  year = release.getFullYear() %>
+                                    <%  dueDate = year+"-"+month+"-"+day %>
 
-                                        <td style="white-space: nowrap;"><%= dueDate %></td>
-                                        
-                                        <!-- Convert full date format into simple date format return date-->
-                                        <!-- Item might not be returned, so need to check if it is returned or not-->
-                                        <%  if (list['items'][j].return_date !== null) {%>
-                                        <%  datestring = list['items'][j].return_date%>
-                                        <%  release = new Date(datestring) %>
-                                        <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
-                                        <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
-                                        <%  year = release.getFullYear() %>
-                                        <%  returnDate = year+"-"+month+"-"+day %>
-                                       
-                                        <td style="white-space: nowrap;"><%= returnDate %></td>
-                                        
-                                        <% } else {%>
-                                            <td> Not Yet Returned </td>
-                                        <% }%>
-                                    </tr>
-                                <% } %>
+                                    <td style="white-space: nowrap;"><%= dueDate %></td>
+                                    
+                                    <!-- Convert full date format into simple date format return date-->
+                                    <!-- Item might not be returned, so need to check if it is returned or not-->
+                                    <%  if (list['items'][j].return_date !== null) {%>
+                                    <%  datestring = list['items'][j].return_date%>
+                                    <%  release = new Date(datestring) %>
+                                    <%  day = release.getDate().toString().length < 2 ? '0' + release.getDate() : release.getDate() %>
+                                    <%  month = (release.getMonth()+1).toString().length < 2 ? '0' + (release.getMonth()+1) : release.getMonth()+1 %>
+                                    <%  year = release.getFullYear() %>
+                                    <%  returnDate = year+"-"+month+"-"+day %>
+                                    
+                                    <td style="white-space: nowrap;"><%= returnDate %></td>
+                                    
+                                    <% } else {%>
+                                        <td> Not Yet Returned </td>
+                                    <% }%>
+                                </tr>
+                            <% } %>
                         </tbody>
                     </table>
-                    </div>
                 </div>
-			</div>
-		</div>
-	</div>
+                <!-- ./ table responsive div -->
+            </div>
+            <!-- ./ col -->
+        </div>
+        <!-- ./ row -->
+    </div>
+    <!-- ./ container -->
     <%- include('../partials/_footer') -%>
 </body>
 </html>
