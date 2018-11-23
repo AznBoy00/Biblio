@@ -143,25 +143,31 @@ INSERT INTO Users
     VALUES(
         '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
         5141234567,'u1@biblio.ca','123 Rue Guy,
-         Montreal','Momo','Taleb','5',FALSE);
+         Montreal','Chris','Miller','5',FALSE);
 INSERT INTO Users 
     (password, phone, email, address, f_name, l_name, num_permitted_items, is_admin)
     VALUES(
         '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
         5141234567,'u2@biblio.ca','123 Rue Guy,
-         Montreal','C','C','5',FALSE);
+         Montreal','Lucila','Polanco','5',FALSE);
 INSERT INTO Users 
     (password, phone, email, address, f_name, l_name, num_permitted_items, is_admin)
     VALUES(
         '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
         5141234567,'u3@biblio.ca','123 Rue Guy,
-         Montreal','Bob','Ghandi','5',FALSE);
+         Montreal','Shauna','Masters','5',FALSE);
 INSERT INTO Users 
     (password, phone, email, address, f_name, l_name, num_permitted_items, is_admin)
     VALUES(
         '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
         5141234567,'u4@biblio.ca','123 Rue Guy,
          Montreal','Marcus','Aurelius','5',FALSE);
+INSERT INTO Users 
+    (password, phone, email, address, f_name, l_name, num_permitted_items, is_admin)
+    VALUES(
+        '$2a$10$rPujXPqDTDjQWBkR4iPKrOhK0r2KJtAeoOqmMUgF/iruNsEEB18aa',
+        5141234567,'u5@biblio.ca','123 Rue Guy,
+         Montreal','Mike','Hunt','5',FALSE);         
 
 /* ======== Insert New Books ======== */
 /* (book_id, item_id, title, author, publisher, quantity, isbn10, isbn13) */
@@ -169,7 +175,7 @@ INSERT INTO Users
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'War Dogs', 'Michael J. Fox', 801, 'Anton', 5, '2018-10-01', 1234567890, 1234567890000
+    SELECT select_id, 'War Dogs', 'Greg Bear', 291, 'Orbit Books', 5, '2014-01-01', 1234567890, 1234567890000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
 INSERT INTO Items (discriminator) VALUES ('Books');
@@ -187,26 +193,38 @@ INSERT INTO Books
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'The Alchemist', 'Paolo Coelho', 661, 'Penguin', 2, '2010-10-10', 1234567893, 1234567893000      
+    SELECT select_id, 'The Alchemist', 'Paolo Coelho', 661, 'Penguin', 3, '2010-10-10', 1234567893, 1234567893000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;     
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'The Golden mean', 'Annabel Lyon', 772, 'Penguin', 1, '2011-05-20', 1234567897, 1234567893007      
+    SELECT select_id, 'The Golden mean', 'Annabel Lyon', 772, 'Penguin', 5, '2011-05-20', 1234567894, 1234567894000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;         
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'SPQR: A History of Ancient Rome', 'Mary Beard', 608, 'Liveright', 1, '2005-07-22', 1234564897, 1234564893007      
+    SELECT select_id, 'SPQR: A History of Ancient Rome', 'Mary Beard', 608, 'Liveright', 4, '2005-07-22', 1234567895, 1234567895000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'The Lessons of History', ' Will and Ariel Durant', 128, 'Simon & Schuster', 1, '1995-12-13', 1439149950, 9781439149959      
-    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
+    SELECT select_id, 'The Lessons of History', ' Will and Ariel Durant', 128, 'Simon & Schuster', 8, '1995-12-13', 1234567896, 1234567896000      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
+
+INSERT INTO Items (discriminator) VALUES ('Books');
+INSERT INTO Books 
+    (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Iliad', ' Homer', 704, 'Democratus', 4, '700-01-01', 1234567897, 1234567897000      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
+
+INSERT INTO Items (discriminator) VALUES ('Books');
+INSERT INTO Books 
+    (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
+    SELECT select_id, 'The Aeneid', ' Virgil', 464, 'Democratus', 4, '29-01-01', 1234567898, 1234567898000      
+    FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;           
 
 /* ====== Insert New Magazines ====== */
 /* (magazine_id, item_id, title, publisher, quantity, isbn10, isbn13) */
@@ -214,31 +232,31 @@ INSERT INTO Books
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'BMW Magazine', 'BMW', 1, '1997-05-08', 1234567899, 1234567899000
+    SELECT select_id, 'BMW Magazine', 'BMW', 1, '1997-05-08', 2234567890, 2234567890000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'Wired October', 'Wired', 2, '1998-03-03', 1234567900, 1234567900000
+    SELECT select_id, 'Wired October', 'Wired', 2, '1998-03-03', 2234567891, 2234567891000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
     
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'Wired November', 'Wired', 3, '2003-11-11', 1234567901, 1234567901000
+    SELECT select_id, 'Wired November', 'Wired', 3, '2003-11-11', 2234567892, 2234567892000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;        
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id,'Wired December','Wired', 6, '2006-06-15', 1234567902, 1234567902000
+    SELECT select_id,'Wired December','Wired', 6, '2006-06-15', 2234567893, 2234567893000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
 
 INSERT INTO Items (discriminator) VALUES ('Magazines');
 INSERT INTO Magazines
     (item_id, title, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id,'National Geographic','Wired', 1, '2014-04-20', 1234567903, 1234567902003
+    SELECT select_id,'National Geographic','Wired', 1, '2014-04-20', 2234567894, 2234567894000
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;           
 
 /* ======== Insert New Movies ======= */
