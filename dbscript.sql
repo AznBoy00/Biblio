@@ -104,7 +104,7 @@ CREATE TABLE Movies(
     language VARCHAR(50) DEFAULT 'English',
     dubbed VARCHAR(50),
     subtitles VARCHAR(50),
-    actors VARCHAR(50),
+    actors VARCHAR(280),
     release_date DATE, /* YYYY-MM-DD */
     run_time INT, /* in minutes (127 minutes) */
 
@@ -217,13 +217,13 @@ INSERT INTO Books
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'The Iliad', ' Homer', 704, 'Democratus', 4, '700-01-01', 1234567897, 1234567897000      
+    SELECT select_id, 'The Iliad', ' Homer', 704, 'Democratus', 4, '0700-01-01', 1234567897, 1234567897000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;  
 
 INSERT INTO Items (discriminator) VALUES ('Books');
 INSERT INTO Books 
     (item_id, title, author, pages, publisher, quantity, release_date, isbn10, isbn13)
-    SELECT select_id, 'The Aeneid', ' Virgil', 464, 'Democratus', 4, '29-01-01', 1234567898, 1234567898000      
+    SELECT select_id, 'The Aeneid', ' Virgil', 464, 'Democratus', 4, '0029-01-01', 1234567898, 1234567898000      
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;           
 
 /* ====== Insert New Magazines ====== */
@@ -265,29 +265,29 @@ INSERT INTO Magazines
 INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, quantity, release_date, run_time)
-    SELECT select_id, 'Oceans 11', 'Clint Eastwood', 'Michael Kane', 
-        'English', 'English', 'German', 'George Cloney, Brad Pitt', 5, '2001-09-04', 133
+    SELECT select_id, 'Oceans 11', 'Steven Soderbergh', 'Warner Bros', 
+        'English', 'English', 'German', 'George Clooney, Brad Pitt, Julia Roberts', 5, '2001-09-04', 133
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
 
 INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, quantity, release_date, run_time)
-    SELECT select_id, 'Oceans 12', 'Clint Eastwood', 'Michael Kane', 
-        'English', 'English', 'German', 'George Cloney, Brad Pitt', 4, '2004-09-05', 127
+    SELECT select_id, 'Oceans 12', 'Steven Soderbergh', 'Warner Bros', 
+        'English', 'English', 'German', 'George Clooney, Brad Pitt, Julia Roberts', 4, '2004-09-05', 127
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;    
     
 INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, quantity, release_date, run_time)
-    SELECT select_id, 'Oceans 13', 'Clint Eastwood', 'Michael Kane', 
-        'English', 'English', 'German', 'George Cloney, Brad Pitt', 10, '2005-09-05', 127
+    SELECT select_id, 'Oceans 13', 'Steven Soderbergh', 'Warner Bros', 
+        'English', 'English', 'German', 'George Clooney, Brad Pitt, Julia Roberts', 10, '2007-09-05', 127
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;      
 
 INSERT INTO Items (discriminator) VALUES ('Movies');
 INSERT INTO Movies 
     (item_id, title, director, producers, language, dubbed, subtitles, actors, quantity, release_date, run_time)
-    SELECT select_id, 'Oceans 14', 'Clint Eastwood', 'Michael Kane', 
-        'English', 'English', 'Spanish', 'George Cloney, Brad Pitt', 9, '2006-09-05', 127
+    SELECT select_id, 'Interstellar', 'Christopher Nolan', 'Paramount Pictures', 
+        'English', 'English', 'Spanish', 'Matthew McConaughey, Anne Hathaway', 9, '2006-09-05', 127
     FROM (SELECT CURRVAL('items_item_id_seq') select_id)q;
 
 INSERT INTO Items (discriminator) VALUES ('Movies');
