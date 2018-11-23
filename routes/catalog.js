@@ -159,159 +159,153 @@ router.get('/create/:discriminator', function (req, res) {
     }
 });
 
-// // ====================================== //
-// // == POST Requests for Creating Items === //
-// // ====================================== //
-// router.post('/create/:discriminator', async (req, res) => {
-//     if (currentUserIsAdmin(req)){
-//         try {
-//             await catalog.insertNewItem(req, req.params.discriminator);
-//             res.redirect('/catalog');
-//         } catch (err) {
-//             console.error(err);
-//             res.render('error', { error: err });
-//             }
-//     } else {
-//         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-//     }
-// });
-
-// // ====================================== //
-// // == POST Requests for Creating Items === //
-// // ====================================== //
-// router.post('/create/:discriminator', async (req, res) => {
-//     if (currentUserIsAdmin(req)){
-//         try {
-//             errors = await catalog.getItemFromForm(req);
-//             if (errors) {
-//                 console.log("Inside of errors");
-//                 discriminator = req.params.discriminator;
-//                 return res.render('catalog/createitem', {errors: [{msg: "An error occurred and your item could not be " +
-//                             "created. Please make sure none of the fields are empty!"}], discriminator, title: 'Create Item Error',
-//                     is_logged: req.session.logged, is_admin: req.session.is_admin});
-//             } else{
-//                 await catalog.insertNewItem(req, req.params.discriminator);
-//                 res.redirect('/catalog');
-//             }
-//         } catch (err) {
-//             console.error(err);
-//             res.render('error', { error: err });
-//         }
-//     } else {
-//         res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-//     }
-// });
-
 // ====================================== //
 // == POST Requests for Creating Items === //
 // ====================================== //
 router.post('/create/:discriminator', async (req, res) => {
-    if (currentUserIsAdmin(req)){
+    let err;
+    if (currentUserIsAdmin(req)) {
         try {
-            errors = await catalog.getItemFromForm(req, req.params.discriminator);
-            if (!errors){
-            await catalog.insertNewItem(req, req.params.discriminator);
-            res.redirect('/catalog');
-        } else if (errors) {
+           // errors = await catalog.getItemFromForm(req, req.params.discriminator);
+            errors = await catalog.getItemFromForm(req);
+            if (!errors) {
+                //await catalog.insertNewItem(req, req.params.discriminator);
+                await catalog.insertNewItem(req);
+                res.redirect('/catalog');
+            } else if (errors) {
                 console.log("Inside of errors");
                 discriminator = req.params.discriminator;
-                res.render('catalog/createitem', {errors: [{msg: "An error occurred and your item could not be " +
-                            "created. Please make sure none of the fields are empty!"}], discriminator, title: 'Create Item Error',
-                    is_logged: req.session.logged, is_admin: req.session.is_admin});
+                err = "An error occurred and your item could not be created. Please make sure none of the fields are empty!";
+                res.render('error', {
+                    title: 'Create Item Error',
+                    error: err,
+                    discriminator,
+                    is_logged: req.session.logged,
+                    is_admin: req.session.is_admin
+                });
             }
-        }catch (err) {
+        } catch (err) {
             console.error(err);
-            res.render('errors', { errors: err });
+            res.render('errors', {errors: err});
         }
-    }else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]})
+    } else {
+        res.render('index', {
+            title: 'Home',
+            is_logged: req.session.logged,
+            is_admin: req.session.is_admin,
+            error: [{msg: "You are not an admin!"}]
+        })
+    }
+});
 
 
 // ====================================== //
 // == GET Requests for Updating Items === //
 // ====================================== //
-router.get('/update/:item_id', async (req, res) => {
-    if (currentUserIsAdmin(req)){
-        try {
-            let results = await catalog.getItemById(req.params.item_id);
-            let discriminator = await results.results[0].discriminator;
-            res.render('catalog/updateItem', { results, discriminator, title: 'Catalog', is_logged: req.session.logged, is_admin: req.session.is_admin});
-        } catch (err) {
-            console.error(err);
-            res.render('error', { error: err });
-        }
-    } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-    }
-});
+        router.get('/update/:item_id', async (req, res) => {
+            if (currentUserIsAdmin(req)) {
+                try {
+                    let results = await catalog.getItemById(req.params.item_id);
+                    let discriminator = await results.results[0].discriminator;
+                    res.render('catalog/updateItem', {
+                        results,
+                        discriminator,
+                        title: 'Catalog',
+                        is_logged: req.session.logged,
+                        is_admin: req.session.is_admin
+                    });
+                } catch (err) {
+                    console.error(err);
+                    res.render('error', {error: err});
+                }
+            } else {
+                res.render('index', {
+                    title: 'Home',
+                    is_logged: req.session.logged,
+                    is_admin: req.session.is_admin,
+                    errors: [{msg: "You are not an admin!"}]
+                });
+            }
+        });
 
 
 // ======================================= //
 // == POST Requests for Updating Items === //
 // ======================================= //
-router.post('/update/:item_id', async (req, res) => {
-    if (currentUserIsAdmin(req)){
-        try {
-            let item_id = req.params.item_id;
-            await catalog.updateItem(req, item_id);
-            res.redirect('/catalog/view/'+item_id);
-        } catch (err) {
-            console.error(err);
-            res.render('error', { error: err });
-        } 
-    } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-    }
-});
+        router.post('/update/:item_id', async (req, res) => {
+            if (currentUserIsAdmin(req)) {
+                try {
+                    let item_id = req.params.item_id;
+                    await catalog.updateItem(req, item_id);
+                    res.redirect('/catalog/view/' + item_id);
+                } catch (err) {
+                    console.error(err);
+                    res.render('error', {error: err});
+                }
+            } else {
+                res.render('index', {
+                    title: 'Home',
+                    is_logged: req.session.logged,
+                    is_admin: req.session.is_admin,
+                    errors: [{msg: "You are not an admin!"}]
+                });
+            }
+        });
 
 // ====================================== //
 // == GET Requests for Deleting Items === //
 // ====================================== //
 // DELETE an ITEM from the database
-router.get('/deleteitem/:item_id', async(req, res) => {
-    if (currentUserIsAdmin(req)){
-        try {
-            await catalog.deleteItem(req.params.item_id);
-            res.redirect('/catalog'); //refresh the page with the new changes
-        } catch (err) {
-            console.error(err);
-            res.send("Error " + err);
-        }
-    } else {
-        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin!"}]});
-    }
-});
+        router.get('/deleteitem/:item_id', async (req, res) => {
+            if (currentUserIsAdmin(req)) {
+                try {
+                    await catalog.deleteItem(req.params.item_id);
+                    res.redirect('/catalog'); //refresh the page with the new changes
+                } catch (err) {
+                    console.error(err);
+                    res.send("Error " + err);
+                }
+            } else {
+                res.render('index', {
+                    title: 'Home',
+                    is_logged: req.session.logged,
+                    is_admin: req.session.is_admin,
+                    errors: [{msg: "You are not an admin!"}]
+                });
+            }
+        });
 
 // A route to flush the IMAP
-router.get('/refreshImap', async(req, res) => {
-    try {
-        await catalog.flushImap(); //reset imap on logout
-        res.redirect('/catalog'); //refresh the page with the new changes
-    } catch (err) {
-        console.error(err);
-        res.send("Error " + err);        
-    }
-});
+        router.get('/refreshImap', async (req, res) => {
+            try {
+                await catalog.flushImap(); //reset imap on logout
+                res.redirect('/catalog'); //refresh the page with the new changes
+            } catch (err) {
+                console.error(err);
+                res.send("Error " + err);
+            }
+        });
 
 //keep the next line at the end of this script
-module.exports = router;
+        module.exports = router;
 
-let currentUserIsAdmin = function (req){
-    return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
-};
+        let currentUserIsAdmin = function (req) {
+            return !!(typeof req.session.is_admin !== 'undefined' && req.session.is_admin);
+        };
 
-let getItemIdOnly = function (fullList, itemIdList) {
-    let filterAndSearch;
-    filterAndSearch = {};
-    filterAndSearch.items = [];
-    var count = 0;
-    for (var i = 0; i < fullList.items.length; i++){
-        for(var j = 0; j < itemIdList.items.length; j++){
-            if (fullList.items[i].item_id === itemIdList.items[j].item_id){
-                filterAndSearch.items[count] = fullList.items[i];
-                count++;
+        let getItemIdOnly = function (fullList, itemIdList) {
+            let filterAndSearch;
+            filterAndSearch = {};
+            filterAndSearch.items = [];
+            var count = 0;
+            for (var i = 0; i < fullList.items.length; i++) {
+                for (var j = 0; j < itemIdList.items.length; j++) {
+                    if (fullList.items[i].item_id === itemIdList.items[j].item_id) {
+                        filterAndSearch.items[count] = fullList.items[i];
+                        count++;
+                    }
+                }
             }
+            return filterAndSearch;
         }
-    }
-    return filterAndSearch;
-}
+
