@@ -259,7 +259,6 @@ module.exports.getUserTransactionItems = async function(email) {
 
 module.exports.filterTransactions = async function(req, asc) {
     try {        
-        
         let result = await tdg.filterTransactions(req, asc);
         await imap.filterTransactionTable(result);
 

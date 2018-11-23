@@ -90,6 +90,20 @@ module.exports.toggleAdminStatus = async function(userid, is_admin) {
     }
 };
 
+//Check if user is active or not
+module.exports.isActiveUser = async function(email) {
+    try {
+        let result = await tdg.isActiveUser(email);
+        if(result.results[0].is_active) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 //toggles the user status
 module.exports.setUserStatusActive = async function(email) {
     try {
@@ -155,13 +169,12 @@ module.exports.updateUserInfo = async function(newUserInfo, email) {
 
 module.exports.returnItemTransaction = async function(req) {
     try {
-        let item_id = req.params.item_id;
-        imapItem = await imap.getTransactionMap(item_id);
-        let transaction_id = imapItem.results[0].transaction_id;
+        let transaction_id = req.params.transaction_id;
+        let item_id = await tdg.getItemId(transaction_id);
         let discriminatorObj = await tdg.getDiscriminator(item_id);
         let discriminator = discriminatorObj.toLowerCase();
-        return await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
 
+        await tdg.updateReturnTransaction(transaction_id, item_id, discriminator);
     } catch (err) {
         console.error(err);
     }
@@ -181,5 +194,14 @@ module.exports.getLoanedItems = async function(req) {
         }
     } catch(err) {
         console.log(err);
+    }
+}
+
+// nukem, logout all users and flush the imap
+module.exports.nukem = async function(newUserInfo, email) {
+    try {
+        return await tdg.logoutAllUsers();
+    } catch (err) {
+        console.error(err);
     }
 }

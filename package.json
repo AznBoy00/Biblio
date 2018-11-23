@@ -16,7 +16,8 @@
     "express-validator": "^5.3.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "pg": "^7.5.0"
+    "pg": "^7.5.0",
+    "ssl-express-www": "^3.0.3"
   },
   "devDependencies": {
     "browser-sync": "^2.26.3"

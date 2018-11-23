@@ -84,14 +84,14 @@
         
         
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1 my-2">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0">
                 <h2>List of Items in the Catalog</h2>
                 <%- include('../partials/_error'); -%>
             </div>
         </div>
         
         <div class="row">
-            <div class="col-12 col-sm-10 offset-sm-1 col-md-10 offset-md-1">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0">
                 <div class="row">
                     <% if(search !== ''){ %>
                     <h4 class="ml-3">Searched for: 
@@ -143,13 +143,13 @@
                             <!-- Iterate over items -->
                             <% for(var j in list['items']) { %>
                                 <% if (typeof cart !== 'undefined' && !JSON.stringify(cart).includes(list['items'][j].item_id)){ %>
-                                    <tr class="<%= list['items'][j].discriminator%>">
+                                    <tr class="<%= list['items'][j].discriminator%> clickable-row" onclick="window.location='/catalog/view/<%= list['items'][j].item_id %>';">
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                <%= list['items'][j].title %>
-                                            </a>
+                                            <!-- old link to access a single item page -->
+                                            <!-- <a href="/catalog/view/<%# list['items'][j].item_id %>"> -->
+                                            <%= list['items'][j].title %>
                                         </td>
                                         <% if (list['items'][j].discriminator == "Books" || filter){ %>
                                             <td><%= list['items'][j].author %></td>
@@ -162,7 +162,7 @@
                                         <% } %>
                                         <% let year = new Date(list['items'][j].release_date).getFullYear() %>
                                         <td><%= year %></td>
-                                        <td><%= list['items'][j].quantity %></td>
+                                        <td><%= (list['items'][j].quantity - list['items'][j].loaned) %></td>
                                         <% if (typeof is_logged !== 'undefined' && is_logged && !is_admin){ %>
                                             <td>
                                                 <% if(list['items'][j].discriminator == 'Magazines') { %> 
@@ -170,10 +170,12 @@
                                                 <% } else if (list['items'][j].loanable == false) { %>
                                                     <a class="form-group btn btn-sm btn-outline-dark form-group mr-1 mt-2 disabled" href="#">Out of stock</a>
                                                 <% } else { %>
-                                                    <a class="form-group btn btn-sm btn-outline-success form-group mr-1 mt-2"
-                                                        href="/cart/add/<%= list['items'][j].item_id %>">
+                                                <div id="hidden-div">
+                                                    <a class="form-group btn btn-sm btn-outline-success form-group mb-0"
+                                                        href="/cart/add/<%= list['items'][j].item_id %>" onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'">
                                                         Add to cart
                                                     </a>
+                                                <div>
                                                 <% } %>
                                             </td>
                                         <% } %>
@@ -181,13 +183,13 @@
                                 <% } else if (typeof cart !== 'undefined' && JSON.stringify(cart).includes(list['items'][j].item_id)) { %>
                                 <!-- do nothing, dont display it  -->
                                 <% } else { %>
-                                    <tr class="<%= list['items'][j].discriminator%>">
+                                    <tr class="<%= list['items'][j].discriminator%> clickable-row" onclick="window.location='/catalog/view/<%= list['items'][j].item_id %>';">
                                         <td><%= list['items'][j].item_id %></td>
                                         <td><%= list['items'][j].discriminator %></td>
                                         <td>
-                                            <a href="/catalog/view/<%= list['items'][j].item_id %>">
-                                                <%= list['items'][j].title %>
-                                            </a>
+                                            <!-- old link to access a single item page -->
+                                            <!-- <a href="/catalog/view/<%# list['items'][j].item_id %>"> -->
+                                            <%= list['items'][j].title %>
                                         </td>
                                         <% if (list['items'][j].discriminator == "Books" || filter){ %>
                                             <td><%= list['items'][j].author %></td>
@@ -208,13 +210,16 @@
                     </table>
                 </div>
                 <!-- ./ end table responsive -->
-			</div>
+            </div>
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-12 offset-md-0 text-right">
+                <a class="btn btn-sm btn-light" href="/catalog/refreshImap">Reset Imap</a>
+            </div>
 			<!-- ./ end col -->
 		</div>
 		<!-- ./ end row -->
 
 	</div>
-	<!-- ./ end container -->
+    <!-- ./ end container -->
     <script> applyFilters() </script>
 
     <%- include('../partials/_footer') -%>

@@ -52,6 +52,18 @@ module.exports.getActiveUsers = async function(){
     return results;
 }
 
+//check if user is active or not
+module.exports.isActiveUser = async function(email){
+    let query = "SELECT is_active FROM Users WHERE email = '" + email + "';";
+
+    const client = await pool.connect()
+    const result = await client.query(query);
+    client.release();
+
+    const results = { 'results': (result) ? result.rows : null};
+    return results;
+}
+
 
 // Set user to active
 module.exports.setUserStatusActive = async function(email){
@@ -142,4 +154,12 @@ module.exports.getItemId = async function(transactions_id){
 
     return item_id;
 
+}
+
+//Ran at startup of server to force logout all loggedin users
+module.exports.logoutAllUsers = async function(){
+    const client = await pool.connect();
+    const result = await client.query("UPDATE users SET is_active = 'f' WHERE is_active = 't';");
+    client.release();
+    return result;
 }

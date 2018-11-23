@@ -142,34 +142,42 @@ router.post('/login', async function (req, res) {
     req.checkBody('password', 'Password is required').notEmpty();
 
     var errors = req.validationErrors();
+    //check if user is logged in
+    let isActiveUser = await user.isActiveUser(email);
+    if (isActiveUser && email !="admin@biblio.ca") { // dont lockout the root user
+        return res.render('users/login', {errors: [{msg: "User is already logged in. Please try again later."}], title: "Login"});
+    }
     if (errors) {
-        return res.render('users/login', { errors: errors, title: "Login"});
+        return res.render('users/login', { errors: [{msg: errors}], title: "Login"});
     }
     else {
         var userExists  = await user.userExists(email);
         if (userExists){
             var passwordIsCorrect = await user.checkPassword(email, password);
             if (passwordIsCorrect){
+                console.log("FLUSHED IMAP ON LOGIN");
                 catalog.flushImap(); //reset imap on login
                 var userRaw = await user.findUserByEmail(email);
                 var userInfo = await userRaw.rows[0];
                 req.session.logged = true;
-                req.session.fname = userInfo.fname;
+                req.session.fname = userInfo.f_name;
                 req.session.phone = userInfo.phone;
                 req.session.address = userInfo.address;
                 req.session.email = userInfo.email;
                 req.session.is_admin = userInfo.is_admin;
+                req.session.num_permitted_items = userInfo.num_permitted_items;
                 req.session.cart = [];
                 req.session.loaned_items = [];
                 req.session.is_active = true;
+
                 await user.getLoanedItems(req);
                 await user.setUserStatusActive(email);
                 res.redirect('/');
             } else {
-                return res.render('users/login', {errors: "Password Incorrect", title: "Login"});
+                return res.render('users/login', {errors: [{msg:"Incorrect password, please try again."}], title: "Login"});
             }
         } else {
-            return res.render('users/login', {errors: "No such account", title: "Login"});
+            return res.render('users/login', {errors: [{msg:"No such account exists in our database, please contact an administrator."}], title: "Login"});
 
         }
     }
@@ -182,6 +190,7 @@ router.get("/logout", function(req, res){
         user.setUserStatusInactive(req.session.email);
         // console.log("LOGGING OUT: "+ req.params.email);
         req.session.destroy();
+        console.log("FLUSHED IMAP");
         catalog.flushImap();//reset imap on logout
         res.redirect('/');
     } catch (err) {
@@ -190,6 +199,34 @@ router.get("/logout", function(req, res){
     }
 });
 
+// Logout all users and flush imap
+router.get('/nukem', async (req, res) => {
+    if (currentUserIsAdmin(req)){
+        try {
+            // flush the imap
+            await catalog.flushImap();
+            console.log("Flushed IMAP");
+            // set all the users to is_active = false
+            await user.nukem();
+            console.log("Logged out all Users");
+            // keep the root user logged in
+            await user.setUserStatusActive('admin@biblio.ca');
+            // get a new list of active users 
+            let results = await user.displayActiveUsers();
+            res.render('users/viewactiveusers', {
+                results, title: 'Admin CP', 
+                is_logged: req.session.logged, is_admin: req.session.is_admin, 
+                admin_email: req.session.email, is_active: req.session.is_active,
+                errors: [{msg: "Users have been nuked 💣"}]
+            });
+        } catch (err) {
+            console.error(err);
+            res.render('error', { error: err });
+        }
+    } else {
+        res.render('index', { title: 'Home', is_logged: req.session.logged, is_admin: req.session.is_admin, errors: [{msg: "You are not an admin 👿!"}]});
+    }        
+});
 // get request for updating user profile information
 router.get('/usercp', async (req, res) => {
     if (currentUserIsUser(req)){
@@ -260,13 +297,16 @@ router.post('/usercp', async (req, res) => {
 });
 
 
-router.post('/return/:item_id', async (req, res) => {
+router.post('/return/:transaction_id', async (req, res) => {
     try {
+        console.log("TRANSACTION ID FRONT END: ", req.params.transaction_id);
         // Add return time stamp to transaction
-        let result = await user.returnItemTransaction(req);
-        
+        await user.returnItemTransaction(req);
         let list = await catalog.getUserTransactionItems(req.session.email);
-        res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'TransactionReturn', is_logged: req.session.logged, is_admin: req.session.is_admin});
+        await user.getLoanedItems(req);
+        res.redirect('/catalog/transactions')
+        //res.render('transactions/transactions', {filter: false, active: "", list: await list, title: 'Transactions', is_logged: req.session.logged, is_admin: req.session.is_admin, cart: req.session.cart});
+        //res.redirect('back');
     } catch (err) {
         console.error(err);
         res.send("error " + err);
