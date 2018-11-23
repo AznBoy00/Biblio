@@ -217,7 +217,7 @@ router.get('/nukem', async (req, res) => {
                 results, title: 'Admin CP', 
                 is_logged: req.session.logged, is_admin: req.session.is_admin, 
                 admin_email: req.session.email, is_active: req.session.is_active,
-                errors: [{msg: "Users have been nuked 💣"}]
+                success: [{msg: "Users have been nuked 💣"}]
             });
         } catch (err) {
             console.error(err);
