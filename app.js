@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var secure = require('ssl-express-www');//ssl over https
+// cant serve ssl over freek heroku dyno
+// var secure = require('ssl-express-www');//ssl over https
 
 
 // Express setup
@@ -17,7 +18,7 @@ var cartRouter = require('./routes/cart');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(secure);//ssl over https
+// app.use(secure);//ssl over https
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
